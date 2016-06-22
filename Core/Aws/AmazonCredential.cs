@@ -8,10 +8,10 @@
         public AmazonCredential(string accessKey, string secretKey) {
             AccessKey = accessKey;
             SecretKey = secretKey;
-
-
+     
         }
         
     }
 
 }
+
