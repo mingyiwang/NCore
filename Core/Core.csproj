@@ -106,7 +106,7 @@
     <Compile Include="IO\Files.cs" />
     <Compile Include="IO\Properties.cs" />
     <Compile Include="IO\StringBuffer.cs" />
-    <Compile Include="Json\JSON.cs" />
+    <Compile Include="Json\JsonUtils.cs" />
     <Compile Include="Net\MimeTypes.cs" />
     <Compile Include="Collection\Bits.cs" />
     <Compile Include="Primitive\NumberFormatter.cs" />

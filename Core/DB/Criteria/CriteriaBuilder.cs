@@ -1,8 +1,9 @@
-﻿namespace Core.DB.Criteria {
+﻿namespace Core.DB.Criteria
+{
 
-    public class CriteriaBuilder {
-        
-         
+    public class CriteriaBuilder
+    {
+
 
     }
 

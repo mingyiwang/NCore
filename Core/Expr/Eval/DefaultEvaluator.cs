@@ -2,7 +2,7 @@
 {
     public class DefaultEvaluator : BaseEvaluator
     {
-        public static readonly DefaultEvaluator INSTANCE = new DefaultEvaluator();
+        public static readonly DefaultEvaluator Instance = new DefaultEvaluator();
     }
 
 }

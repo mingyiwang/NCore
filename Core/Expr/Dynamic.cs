@@ -78,7 +78,7 @@ namespace Core.Expr
                         }
 
                         var parent = stack.Pop();
-                        stack.Push(DefaultEvaluator.INSTANCE.EvalMemberAccess(memberOperator, parent, memberOperator.IsMethodAccess, args));
+                        stack.Push(DefaultEvaluator.Instance.EvalMemberAccess(memberOperator, parent, memberOperator.IsMethodAccess, args));
                     }
                     else
                     {
@@ -86,17 +86,17 @@ namespace Core.Expr
                         {
                             var args = stack.Pop(2);
                             args.Reverse();
-                            stack.Push(DefaultEvaluator.INSTANCE.EvalBinary(oper, args[0], args[1]));
+                            stack.Push(DefaultEvaluator.Instance.EvalBinary(oper, args[0], args[1]));
                         }
                         else if(oper.IsUnary)
                         {
-                            stack.Push(DefaultEvaluator.INSTANCE.EvalUnary(oper, stack.Pop()));
+                            stack.Push(DefaultEvaluator.Instance.EvalUnary(oper, stack.Pop()));
                         }
                         else if(oper.IsTernary)
                         {
                             var args = stack.Pop(3);
                             args.Reverse();
-                            stack.Push(DefaultEvaluator.INSTANCE.EvalCondition(oper, args[0], args[1], args[2]));
+                            stack.Push(DefaultEvaluator.Instance.EvalCondition(oper, args[0], args[1], args[2]));
                         }
                     }
                 }
