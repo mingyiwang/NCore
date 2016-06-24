@@ -7,9 +7,9 @@ namespace Core.Collection
     public sealed class Arrays
     {
 
-        public static byte[]   EmptyBytes  => Empty<byte>();
+        public static byte[] EmptyBytes => Empty<byte>();
         public static string[] EmptyString => Empty<string>();
-        public static int[]    EmptyInt    => Empty<int>();
+        public static int[] EmptyInt => Empty<int>();
 
         public static T[] Empty<T>()
         {
@@ -72,7 +72,7 @@ namespace Core.Collection
             {
                 throw new IndexOutOfRangeException();
             }
-            
+
             var resultLength = length - startIndex;
             var target = new T[resultLength];
             Array.Copy(source, startIndex, target, 0, Math.Min(resultLength, (originalLength - startIndex)));
@@ -102,7 +102,7 @@ namespace Core.Collection
             }
 
             var availableLength = target.Length - targetStartIndex;
-            if (length <= availableLength)
+            if(length <= availableLength)
             {
                 Array.Copy(source, startIndex, target, targetStartIndex, length);
             }
@@ -114,7 +114,7 @@ namespace Core.Collection
         }
 
         public static bool Equals<T>(T[] array1, T[] array2)
-        { 
+        {
             if(ReferenceEquals(array1, array2))
             {
                 return true;
@@ -127,7 +127,7 @@ namespace Core.Collection
 
             for(var i = 0; i < array1.Length; i++)
             {
-                if (!array1[i].Equals(array2[i]))
+                if(!array1[i].Equals(array2[i]))
                 {
                     return false;
                 }
@@ -136,7 +136,7 @@ namespace Core.Collection
             return true;
 
         }
-        
+
 
     }
 }
