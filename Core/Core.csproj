@@ -86,7 +86,7 @@
     <Compile Include="Concurrent\Reentrant.cs" />
     <Compile Include="Concurrent\CAS.cs" />
     <Compile Include="Concurrent\Threads.cs" />
-    <Compile Include="DB\Criteria\CriteriaBuilder.cs" />
+    <Compile Include="Persist\CriteriaBuilder.cs" />
     <Compile Include="Http\Entities\ContentType.cs" />
     <Compile Include="Http\Entities\HttpEntity.cs" />
     <Compile Include="Http\Entities\MultipartFormDataEntity.cs" />
@@ -110,8 +110,8 @@
     <Compile Include="Net\MimeTypes.cs" />
     <Compile Include="Collection\Bits.cs" />
     <Compile Include="Primitive\NumberFormatter.cs" />
-    <Compile Include="DB\PersistentService.cs" />
-    <Compile Include="DB\IPersistentService.cs" />
+    <Compile Include="Persist\PersistentService.cs" />
+    <Compile Include="Persist\IPersistentService.cs" />
     <Compile Include="Expr\Eval\RoslynEvaluator.cs" />
     <Compile Include="Expr\Eval\SimpleEvaluator.cs" />
     <Compile Include="Collection\ReadWriteHashMap.cs" />

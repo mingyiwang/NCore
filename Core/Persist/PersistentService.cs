@@ -1,6 +1,6 @@
 ﻿using Core.Service;
 
-namespace Core.DB
+namespace Core.Persist
 {
 
     public class PersistentService : AbstractService, IPersistentService

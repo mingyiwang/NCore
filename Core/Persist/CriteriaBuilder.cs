@@ -1,4 +1,4 @@
-﻿namespace Core.DB.Criteria
+﻿namespace Core.Persist
 {
 
     public class CriteriaBuilder
