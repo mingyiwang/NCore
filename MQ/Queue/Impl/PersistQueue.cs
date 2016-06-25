@@ -1,5 +1,4 @@
-﻿using Core.DB;
-using Core.Persist;
+﻿using Core.Persist;
 
 namespace MQ.Queue.Impl
 {
