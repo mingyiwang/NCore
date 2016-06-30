@@ -212,7 +212,7 @@ namespace Core.Collection
 
         public override string ToString()
         {
-            return AsString(OS.IS_LITTLE_ENDIAN);
+            return AsString(OS.IsLittleEndian);
         }
 
         public static Bits From(int value)

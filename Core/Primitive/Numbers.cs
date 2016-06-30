@@ -80,7 +80,7 @@ namespace Core.Primitive
 
         public static string BinaryOf(byte value)
         {
-            var bits = new Stack<int>(OS.BITS_PER_BYTE);
+            var bits = new Stack<int>(OS.BitsPerByte);
             int quotient;
             int input = value;
             do
@@ -95,12 +95,12 @@ namespace Core.Primitive
             );
 
             var count = bits.Count;
-            if(count >= OS.BITS_PER_BYTE)
+            if(count >= OS.BitsPerByte)
             {
                 return bits.AsString();
             }
 
-            for(var index = 1; index <= (OS.BITS_PER_BYTE - count); index++)
+            for(var index = 1; index <= (OS.BitsPerByte - count); index++)
             {
                 bits.Push(0);
             }
