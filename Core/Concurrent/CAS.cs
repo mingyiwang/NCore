@@ -4,9 +4,6 @@ using System.Threading;
 namespace Core.Concurrent
 {
 
-    /// <summary>
-    /// http://www.albahari.com/threading/part5.aspx#_SpinLock_and_SpinWait
-    /// </summary>
     public static class CAS
     {
 

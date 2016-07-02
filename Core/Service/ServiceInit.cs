@@ -11,9 +11,10 @@ namespace Core.Service
         {
             return LazyInitializer.EnsureInitialized(ref service, () => {
                 var initializedService = func();
-                func().Start().AwaitStarted();
+                initializedService.Start().AwaitStarted();
 
                 Preconditions.CheckEquals(initializedService.State.Code, ServiceState.Started);
+
                 return initializedService;
             });
         }

@@ -120,7 +120,7 @@
     <Compile Include="Aws\IAmazonTransferService.cs" />
     <Compile Include="Reflect\Reflection.cs" />
     <Compile Include="IO\Resources.cs" />
-    <Compile Include="UUID.cs" />
+    <Compile Include="Guids.cs" />
     <Compile Include="Preconditions.cs" />
     <Compile Include="Cache\ICache.cs" />
     <Compile Include="Csv\CsvReader.cs" />
@@ -163,7 +163,7 @@
     <Compile Include="Security\Certificates.cs" />
     <Compile Include="Service\AbstractScheduleService.cs" />
     <Compile Include="Service\IScheduledFuture.cs" />
-    <Compile Include="Service\QuartazService.cs" />
+    <Compile Include="Service\QuartzService.cs" />
     <Compile Include="Service\IScheduleService.cs" />
     <Compile Include="Service\ScheduleService.cs" />
     <Compile Include="Security\Encryptor.cs" />

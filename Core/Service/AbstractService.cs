@@ -6,29 +6,31 @@ namespace Core.Service
 
     public abstract class AbstractService : IService
     {
-        protected abstract void StartUp();
-        protected abstract void ShutDown();
-
-        public bool IsIdle { get; }
-        public ServiceState State { get; }
-        public string Id   { get; }
-        public string Name { get; }
 
         private readonly Reentrant _reentrant = new Reentrant();
 
-        public bool IsStarted => State.Code == ServiceState.Started;
-        private static readonly Func<ServiceState, bool> IsStart = state => state.Code == ServiceState.Started;
+        public bool IsIdle        { get; }
+        public ServiceState State { get; }
+        public string Id          { get; }
+        public string Name        { get; }
+
+        private static readonly Func<ServiceState, bool> IsStart   = state => state.Code == ServiceState.Started;
         private static readonly Func<ServiceState, bool> IsStopped = state => state.Code == ServiceState.Stopped;
-        private static readonly Func<ServiceState, bool> CanStart = state => (state.Code == ServiceState.Initialized) || (state.Code == ServiceState.Stopped);
-        private static readonly Func<ServiceState, bool> CanStop = state => (state.Code == ServiceState.Initialized) || (state.Code == ServiceState.Starting) || (state.Code == ServiceState.Started);
+        private static readonly Func<ServiceState, bool> CanStart  = state => (state.Code == ServiceState.Created) || (state.Code == ServiceState.Stopped);
+        private static readonly Func<ServiceState, bool> CanStop   = state => (state.Code == ServiceState.Created) || (state.Code == ServiceState.Starting) || (state.Code == ServiceState.Started);
+
+        protected abstract void StartUp();
+        protected abstract void ShutDown();
 
         protected AbstractService()
         {
-            Id     = UUID.NGuid;
+            Id     = Guids.NGuid;
             IsIdle = false;
             Name   = GetType().Name;
-            State  = new ServiceState(ServiceState.Initialized);
+            State  = new ServiceState(ServiceState.Created);
         }
+
+        public bool IsStarted => State.Code == ServiceState.Started;
 
         public IService Start()
         {
@@ -46,25 +48,22 @@ namespace Core.Service
                 {
                     switch(State.Code)
                     {
-                        case ServiceState.Initialized:
-                            {
-                                State.SetState(ServiceState.Stopped);
-                                break;
-                            }
-                        case ServiceState.Starting:
-                            {
-                                State.SetState(ServiceState.Starting, true);
-                                break;
-                            }
-                        case ServiceState.Started:
-                            {
-                                State.SetState(ServiceState.Stopping);
-                                StopAsync();
-                                break;
-                            }
-                        case ServiceState.Stopping:
-                        case ServiceState.Stopped: break;
-                        case ServiceState.Failed: throw new InvalidOperationException("Failed Service can not stopped.");
+                        case ServiceState.Created : {
+                            State.SetState(ServiceState.Stopped);
+                            break;
+                        }
+                        case ServiceState.Starting : {
+                            State.SetState(ServiceState.Starting, true);
+                            break;
+                        }
+                        case ServiceState.Started : {
+                            State.SetState(ServiceState.Stopping);
+                            StopAsync();
+                            break;
+                        }
+                        case ServiceState.Stopping :
+                        case ServiceState.Stopped  : break;
+                        case ServiceState.Failed   : throw new InvalidOperationException("Failed Service can not stopped.");
                     }
                 }
                 catch(Exception error)
@@ -104,7 +103,7 @@ namespace Core.Service
                     throw new InvalidOperationException("Only Starting Service can be started");
                 }
 
-                if(State.StopWhenStarting)
+                if(State.CanStopOnStarting)
                 {
                     State.SetState(ServiceState.Stopping);
                     StopAsync();
@@ -136,7 +135,7 @@ namespace Core.Service
 
         private void StartAsync()
         {
-            if(!IsIdle)
+            if (!IsIdle)
             {
                 DoStart();
             }
@@ -148,7 +147,7 @@ namespace Core.Service
 
         private void StopAsync()
         {
-            if(!IsIdle)
+            if (!IsIdle)
             {
                 DoStop();
             }
