@@ -160,7 +160,7 @@
     <Compile Include="Predicates.cs" />
     <Compile Include="Primitive\Numbers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Security\Certificates.cs" />
+    <Compile Include="Security\Certificator.cs" />
     <Compile Include="Service\AbstractScheduleService.cs" />
     <Compile Include="Service\IScheduledFuture.cs" />
     <Compile Include="Service\QuartzService.cs" />
