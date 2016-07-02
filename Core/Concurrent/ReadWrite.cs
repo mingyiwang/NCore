@@ -147,7 +147,7 @@ namespace Core.Concurrent
 
         public void Dispose()
         {
-            _readWriteLock?.Dispose();
+            _readWriteLock.Dispose();
         }
 
     }

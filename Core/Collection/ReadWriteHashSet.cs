@@ -2,90 +2,112 @@
 using System.Collections.Generic;
 using Core.Concurrent;
 
-namespace Core.Collection {
+namespace Core.Collection
+{
 
-    public class ReadWriteHashSet<T> : ISet<T> {
+    public class ReadWriteHashSet<T> : ISet<T>
+    {
 
         private readonly HashSet<T> _hashSet = new HashSet<T>();
         private readonly ReadWrite _lock = new ReadWrite();
 
         public bool IsReadOnly => false;
 
-        public int Count {
+        public int Count
+        {
             get {
+
                 return _lock.Read(() => _hashSet.Count);
             }
         }
 
-        void ICollection<T>.Add(T item) {
+        void ICollection<T>.Add(T item)
+        {
             _lock.Write(() => _hashSet.Add(item));
         }
 
-        public void UnionWith(IEnumerable<T> other) {
+        public void UnionWith(IEnumerable<T> other)
+        {
             _lock.Write(() => _hashSet.UnionWith(other));
         }
 
-        public void IntersectWith(IEnumerable<T> other) {
+        public void IntersectWith(IEnumerable<T> other)
+        {
             _lock.Write(() => _hashSet.IntersectWith(other));
         }
 
-        public void ExceptWith(IEnumerable<T> other) {
+        public void ExceptWith(IEnumerable<T> other)
+        {
             _lock.Write(() => _hashSet.ExceptWith(other));
         }
 
-        public void SymmetricExceptWith(IEnumerable<T> other) {
+        public void SymmetricExceptWith(IEnumerable<T> other)
+        {
             _lock.Write(() => _hashSet.SymmetricExceptWith(other));
         }
 
-        public bool IsSubsetOf(IEnumerable<T> other) {
+        public bool IsSubsetOf(IEnumerable<T> other)
+        {
             return _lock.Read(() => _hashSet.IsSubsetOf(other));
         }
 
-        public bool IsSupersetOf(IEnumerable<T> other) {
+        public bool IsSupersetOf(IEnumerable<T> other)
+        {
             return _lock.Read(() => _hashSet.IsSupersetOf(other));
         }
 
-        public bool IsProperSupersetOf(IEnumerable<T> other) {
+        public bool IsProperSupersetOf(IEnumerable<T> other)
+        {
             return _lock.Read(() => _hashSet.IsProperSupersetOf(other));
         }
 
-        public bool IsProperSubsetOf(IEnumerable<T> other) {
+        public bool IsProperSubsetOf(IEnumerable<T> other)
+        {
             return _lock.Read(() => _hashSet.IsProperSubsetOf(other));
         }
 
-        public bool Overlaps(IEnumerable<T> other) {
+        public bool Overlaps(IEnumerable<T> other)
+        {
             return _lock.Read(() => _hashSet.Overlaps(other));
         }
 
-        public bool SetEquals(IEnumerable<T> other) {
+        public bool SetEquals(IEnumerable<T> other)
+        {
             return _lock.Read(() => _hashSet.SetEquals(other));
         }
 
-        public bool Add(T item) {
+        public bool Add(T item)
+        {
             return _lock.Write(() => _hashSet.Add(item));
         }
 
-        public void Clear() {
+        public void Clear()
+        {
             _lock.Write(() => _hashSet.Clear());
         }
 
-        public bool Contains(T item) {
+        public bool Contains(T item)
+        {
             return _lock.Read(() => _hashSet.Contains(item));
         }
 
-        public void CopyTo(T[] array, int arrayIndex) {
+        public void CopyTo(T[] array, int arrayIndex)
+        {
             _lock.Write(() => _hashSet.CopyTo(array, arrayIndex));
         }
 
-        public bool Remove(T item) {
+        public bool Remove(T item)
+        {
             return _lock.Write(() => _hashSet.Remove(item));
         }
 
-        public IEnumerator<T> GetEnumerator() {
+        public IEnumerator<T> GetEnumerator()
+        {
             return _lock.Read(() => _hashSet.GetEnumerator());
         }
 
-        IEnumerator IEnumerable.GetEnumerator() {
+        IEnumerator IEnumerable.GetEnumerator()
+        {
             return GetEnumerator();
         }
 

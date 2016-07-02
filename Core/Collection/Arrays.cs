@@ -18,12 +18,17 @@ namespace Core.Collection
 
         public static T[] Empty<T>()
         {
-            return new T[0];
+            return Empty<T>(0);
+        }
+
+        public static T[] Empty<T>(int length)
+        {
+            return new T[length];
         }
 
         public static T[] Make<T>(int length)
         {
-            return new T[length];
+            return Make(length, default(T));
         }
 
         public static T[] Make<T>(int length, T defautValue)
@@ -38,13 +43,13 @@ namespace Core.Collection
 
         public static void Reverse<T>(ref T[] array)
         {
-            Preconditions.CheckNotNull(array, "Array can not be null");
+            Preconditions.CheckNotNull(array);
             array = array.Reverse().ToArray();
         }
 
         public static T[] Reverse<T>(T[] array)
         {
-            Preconditions.CheckNotNull(array, "Array can not be null");
+            Preconditions.CheckNotNull(array);
             var copy = Make<T>(array.Length);
             var j = 0;
             for(var i = array.Length - 1; i >= 0; i--)
@@ -52,6 +57,7 @@ namespace Core.Collection
                 copy[j] = array[i];
                 j++;
             }
+
             return copy;
         }
 
@@ -139,7 +145,6 @@ namespace Core.Collection
             }
 
             return true;
-
         }
 
 

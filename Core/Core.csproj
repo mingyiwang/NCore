@@ -75,8 +75,6 @@
     <Compile Include="Collection\Arrays.cs" />
     <Compile Include="Collection\CollectionExtension.cs" />
     <Compile Include="Collection\Collections.cs" />
-    <Compile Include="Collection\ConcurrentHashMap.cs" />
-    <Compile Include="Collection\ConcurrentHashSet.cs" />
     <Compile Include="Collection\ConcurrentLinkedQueue.cs" />
     <Compile Include="Collection\HashMap.cs" />
     <Compile Include="Collection\ReadWriteLinkedList.cs" />
@@ -125,7 +123,6 @@
     <Compile Include="UUID.cs" />
     <Compile Include="Preconditions.cs" />
     <Compile Include="Cache\ICache.cs" />
-    <Compile Include="Collection\ConcurrentLinkedList.cs" />
     <Compile Include="Csv\CsvReader.cs" />
     <Compile Include="Csv\CsvSerializer.cs" />
     <Compile Include="Csv\CsvWriter.cs" />

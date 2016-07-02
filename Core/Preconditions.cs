@@ -9,7 +9,7 @@ namespace Core
 
         public static void CheckNotNull(object obj)
         {
-            CheckNotNull(obj, "[Precondition Check Failed] - Object can not be null.");
+            CheckNotNull(obj, $"[Precondition Check Failed] - Object{obj.GetType()} can not be null.");
         }
 
         public static void CheckNotNull(object obj, string message)
@@ -35,11 +35,11 @@ namespace Core
             CheckNotEmpty<ArgumentException, TC>(collection, message);
         }
 
-        public static void CheckNotEmpty<T, TC>(ICollection<TC> collection, string message) where T : Exception
+        public static void CheckNotEmpty<TE, TC>(ICollection<TC> collection, string message) where TE : Exception
         {
             if(collection == null || collection.Count == 0)
             {
-                Fail<T>(message);
+                Fail<TE>(message);
             }
         }
 
@@ -80,7 +80,7 @@ namespace Core
         }
 
         public static void CheckEquals(int expected, int actual, string message){
-            if(expected != actual) {
+            if (expected != actual) {
                 Fail<ArgumentException>(message);
             }
         }
@@ -156,10 +156,10 @@ namespace Core
             
             if(constructor == null)
             {
-                throw new ArgumentException("Class[" + type.FullName + "] must have a constructor of a single string parameter");
+                throw new ArgumentException("Exception[" + type.FullName + "] must have a constructor of a single string parameter");
             }
 
-            throw (Exception)constructor.Invoke(new object[] {
+            throw (T) constructor.Invoke(new object[] {
                    message
             });
         }

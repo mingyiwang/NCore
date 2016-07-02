@@ -22,8 +22,7 @@ namespace Core.Collection
 
         public int Count
         {
-            get
-            {
+            get {
                 return _lock.Read(() => _list.Count);
             }
         }
@@ -32,15 +31,13 @@ namespace Core.Collection
 
         public T this[int index]
         {
-            get { throw new System.NotImplementedException(); }
-            set { throw new System.NotImplementedException(); }
+            get {
+                throw new System.NotImplementedException();
+            }
+            set {
+                throw new System.NotImplementedException();
+            }
         }
-
-        public void Add(T item) {_lock.Write(() => _list.AddLast(item));}
-        public void Clear() { _lock.Write(() => _list.Clear()); }
-        public bool Contains(T item) { return _lock.Read(() => _list.Contains(item)); }
-        public void CopyTo(T[] array, int arrayIndex) { _lock.Write(() => _list.CopyTo(array, arrayIndex)); }
-        public bool Remove(T item) { return _lock.Write(() => _list.Remove(item)); }
 
         public int IndexOf(T item)
         {
@@ -52,9 +49,39 @@ namespace Core.Collection
             throw new System.NotImplementedException();
         }
 
-        public void RemoveAt(int index) { _lock.Write(() => RemoveAt(index)); }
+        public void RemoveAt(int index)
+        {
+            _lock.Write(() =>
+            {
 
-        
+            });
+        }
+
+        public void Add(T item)
+        {
+            _lock.Write(() => _list.AddLast(item));
+        }
+
+        public void Clear()
+        {
+            _lock.Write(() => _list.Clear());
+        }
+
+        public bool Contains(T item)
+        {
+            return _lock.Read(() => _list.Contains(item));
+        }
+
+        public void CopyTo(T[] array, int arrayIndex)
+        {
+            _lock.Write(() => _list.CopyTo(array, arrayIndex));
+        }
+
+        public bool Remove(T item)
+        {
+            return _lock.Write(() => _list.Remove(item));
+        }
+
         public IEnumerator<T> GetEnumerator()
         {
             return _lock.Read(() => _list.GetEnumerator());
@@ -64,6 +91,7 @@ namespace Core.Collection
         {
             return GetEnumerator();
         }
+
     }
 
 }
