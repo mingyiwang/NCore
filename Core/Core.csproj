@@ -121,7 +121,7 @@
     <Compile Include="Reflect\Reflection.cs" />
     <Compile Include="IO\Resources.cs" />
     <Compile Include="Guids.cs" />
-    <Compile Include="Preconditions.cs" />
+    <Compile Include="PreConditions.cs" />
     <Compile Include="Cache\ICache.cs" />
     <Compile Include="Csv\CsvReader.cs" />
     <Compile Include="Csv\CsvSerializer.cs" />

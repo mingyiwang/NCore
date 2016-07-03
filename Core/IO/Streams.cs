@@ -21,8 +21,8 @@ namespace Core.IO
 
         public static TS Transfer<TS>(Stream input, TS output, Encoding encoding) where TS : Stream
         {
-            Preconditions.CheckNotNull(input,  "InputStream can not be null");
-            Preconditions.CheckNotNull(output, "OutputStream can not be null");
+            PreConditions.CheckNotNull(input,  "InputStream can not be null");
+            PreConditions.CheckNotNull(output, "OutputStream can not be null");
 
             if (encoding == null)
             {
@@ -79,8 +79,8 @@ namespace Core.IO
         /// <returns></returns>
         public static byte[] GetBytes(Stream s, int bufferSize)
         {
-            Preconditions.CheckNotNull(s, "Stream can not be null.");
-            Preconditions.CheckNotEquals(0, bufferSize, "Buffer size can not equal to zero.");
+            PreConditions.CheckNotNull(s, "Stream can not be null.");
+            PreConditions.CheckNotEquals(0, bufferSize, "Buffer size can not equal to zero.");
 
             if (!s.CanRead)
             {
@@ -120,7 +120,7 @@ namespace Core.IO
 
         public static void PutBytes(byte[] data, Stream output, Encoding encoding)
         {
-            Preconditions.CheckNotNull(output, "Output Stream can not be null.");
+            PreConditions.CheckNotNull(output, "Output Stream can not be null.");
             if (!output.CanWrite)
             {
                 throw new InvalidOperationException("Output Stream is not writable");

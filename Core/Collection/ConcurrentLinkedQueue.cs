@@ -43,7 +43,7 @@ namespace Core.Collection
             var t = h = new Node<T>(null);
             foreach(var item in collection)
             {
-                Preconditions.CheckNotNull(item);
+                PreConditions.CheckNotNull(item);
                 var node = new Node<T>(item);
                 t.UnsafeSet(node);
                 t = node;
@@ -55,7 +55,7 @@ namespace Core.Collection
 
         public bool TryAdd(T item)
         {
-            Preconditions.CheckNotNull(item);
+            PreConditions.CheckNotNull(item);
             var node = new Node<T>(item);
 
             Node<T> t;

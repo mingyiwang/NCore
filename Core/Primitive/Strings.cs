@@ -63,7 +63,7 @@ namespace Core.Primitive
 
         public static string[] Split(string input, StringSplitOptions options, params char[] characters)
         {
-            Preconditions.CheckNotNull(characters, "Seperator can not be null.");
+            PreConditions.CheckNotNull(characters, "Seperator can not be null.");
             return string.IsNullOrEmpty(input) ? Arrays.Empty<string>() : input.Split(characters, options);
         }
     }

@@ -101,14 +101,14 @@ namespace Core.Http
 
         public Uri Build()
         {
-            Preconditions.CheckNotBlank(Host, "Host can not be empty");
-            Preconditions.CheckNotBlank(Path, "Path can not be empty");
+            PreConditions.CheckNotBlank(Host, "Host can not be empty");
+            PreConditions.CheckNotBlank(Path, "Path can not be empty");
             return Uri = new Uri(ToString());
         }
 
         public static HttpUrl From(string url)
         {
-            Preconditions.CheckNotBlank(url, "Url can not be empty.");
+            PreConditions.CheckNotBlank(url, "Url can not be empty.");
 
             Uri uri;
             var succeed = Uri.TryCreate(url, UriKind.RelativeOrAbsolute, out uri);
