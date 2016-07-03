@@ -198,7 +198,7 @@ namespace Core.Collection
         }
 
         /// <summary>
-        /// Try Update Head Node of this Queue
+        /// Try Set Head Node of this Queue
         /// </summary>
         /// <param name="h"></param>
         /// <param name="p"></param>
@@ -240,12 +240,12 @@ namespace Core.Collection
 
         private bool CasHead(Node<T> comparand, Node<T> node)
         {
-            return CAS.TryCompareUpdate(ref _head, node, comparand);
+            return CAS.TryCompareSet(ref _head, node, comparand);
         }
 
         private void CasTail(Node<T> comparand, Node<T> node)
         {
-            CAS.TryCompareUpdate(ref _tail, node, comparand);
+            CAS.TryCompareSet(ref _tail, node, comparand);
         }
 
         class Iterator : IEnumerator<T>
@@ -311,12 +311,12 @@ namespace Core.Collection
 
         public void SetNext(Node<T> node)
         {
-            CAS.Update(ref _next, node);
+            CAS.Set(ref _next, node);
         }
 
         public bool CasNext(Node<T> comparand, Node<T> node)
         {
-            return CAS.TryCompareUpdate(ref _next, node, comparand);
+            return CAS.TryCompareSet(ref _next, node, comparand);
         }
 
         public void UnsafeSet(Node<T> node)
@@ -326,12 +326,12 @@ namespace Core.Collection
 
         public bool CasItem(T comparand, T item)
         {
-            return CAS.TryCompareUpdate(ref _item, item, comparand);
+            return CAS.TryCompareSet(ref _item, item, comparand);
         }
 
         public void SetItem(T item)
         {
-            CAS.Update(ref _item, item);
+            CAS.Set(ref _item, item);
         }
 
     }

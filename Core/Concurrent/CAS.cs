@@ -7,7 +7,7 @@ namespace Core.Concurrent
     public static class CAS
     {
 
-        public static void Update<T>(ref T location, T item) where T : class
+        public static void Set<T>(ref T location, T item) where T : class
         {
             var spinWait = new SpinWait();
             while(true)
@@ -22,7 +22,7 @@ namespace Core.Concurrent
             }
         }
 
-        public static void Update<T>(ref T location, Func<T> creator) where T : class
+        public static void Set<T>(ref T location, Func<T> creator) where T : class
         {
             var spinWait = new SpinWait();
             while(true)
@@ -38,7 +38,7 @@ namespace Core.Concurrent
             }
         }
 
-        public static void Update<T>(ref T location, Func<T, T> updator) where T : class
+        public static void Set<T>(ref T location, Func<T, T> updator) where T : class
         {
             var spinWait = new SpinWait();
             while(true)
@@ -53,25 +53,25 @@ namespace Core.Concurrent
             }
         }
 
-        public static bool TryUpdate<T>(ref T location, T item) where T : class
+        public static bool TrySet<T>(ref T location, T item) where T : class
         {
             var snapshot = location;
             return snapshot == Interlocked.CompareExchange(ref location, item, snapshot);
         }
 
-        public static bool TryUpdate<T>(ref T location, Func<T> creator) where T : class
+        public static bool TrySet<T>(ref T location, Func<T> creator) where T : class
         {
             var snapshot = location;
             return snapshot == Interlocked.CompareExchange(ref location, creator(), snapshot);
         }
 
-        public static bool TryUpdate<T>(ref T location, Func<T, T> updator) where T : class
+        public static bool TrySet<T>(ref T location, Func<T, T> updator) where T : class
         {
             var snapshot = location;
             return snapshot == Interlocked.CompareExchange(ref location, updator(snapshot), snapshot);
         }
 
-        public static bool TryCompareUpdate<T>(ref T location, T value, T comparand) where T : class
+        public static bool TryCompareSet<T>(ref T location, T value, T comparand) where T : class
         {
             return comparand == Interlocked.CompareExchange(ref location, value, comparand);
         }
