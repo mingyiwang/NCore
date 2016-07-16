@@ -84,6 +84,12 @@
     <Compile Include="Concurrent\Reentrant.cs" />
     <Compile Include="Concurrent\CAS.cs" />
     <Compile Include="Concurrent\Threads.cs" />
+    <Compile Include="Net\MediaType.cs" />
+    <Compile Include="Net\MimeType.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MimeType.resx</DependentUpon>
+    </Compile>
     <Compile Include="Persist\CriteriaBuilder.cs" />
     <Compile Include="Http\Entities\ContentType.cs" />
     <Compile Include="Http\Entities\HttpEntity.cs" />
@@ -184,7 +190,12 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Net\MimeType.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>MimeType.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

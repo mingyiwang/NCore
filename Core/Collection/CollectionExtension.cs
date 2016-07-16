@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Core.Collection {
 
@@ -30,6 +31,11 @@ namespace Core.Collection {
                 var referenceCopy = item;
                 action(index++, referenceCopy); // incase action is running in another thread
             }
+        }
+
+        public static HashSet<T> ToHashSet<T>(this IEnumerable<T> collection)
+        {
+           return new HashSet<T>(collection);
         }
 
         public static string AsString<T>(this IEnumerable<T> collection)

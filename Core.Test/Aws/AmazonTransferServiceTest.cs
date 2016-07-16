@@ -1,4 +1,6 @@
 ﻿
+using Core.Net;
+
 namespace Core.Test.Aws
 {
 
@@ -7,7 +9,7 @@ namespace Core.Test.Aws
 
         public void TestTransfer()
         {
-
+            MimeTypes.Instance.TypeOf("txt");
         }
 
     }
