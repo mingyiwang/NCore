@@ -3,7 +3,7 @@
     public sealed class XmlUtils
     {
 
-        private XmlUtils() {}
-
+        
     }
+
 }

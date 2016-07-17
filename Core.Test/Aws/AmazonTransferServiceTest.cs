@@ -9,7 +9,7 @@ namespace Core.Test.Aws
 
         public void TestTransfer()
         {
-            MimeTypes.Instance.TypeOf("txt");
+            MimeTypes.Instance.Of("txt");
         }
 
     }

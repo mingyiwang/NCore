@@ -1,13 +1,29 @@
-﻿namespace Core.Net
+﻿using System.Resources;
+
+namespace Core.Net
 {
 
     public sealed class MimeTypes
     {
 
-        private static MimeTypes _instance;
-        private static readonly object SyncObject = new object();
+        public const string ApplicationOctetStream = "application/octet-stream";
 
-        public static MimeTypes Instance
+        private static readonly object SyncObject = new object();
+        private ResourceManager _resourceManager;
+
+        public string Of(string fileExtension)
+        {
+            if (string.IsNullOrEmpty(fileExtension))
+            {
+                return ApplicationOctetStream;
+            }
+
+            return _resourceManager.GetString(fileExtension.TrimStart('.').ToLowerInvariant())
+                ?? ApplicationOctetStream;
+        }
+
+        private static MimeTypes _instance;
+        public  static MimeTypes Instance
         {
             get
             {
@@ -17,32 +33,23 @@
                     {
                         if (_instance == null)
                         {
-                            _instance = new MimeTypes();
-                            _instance.TypeOf("");
+                            _instance = new MimeTypes
+                            {
+                                _resourceManager = new ResourceManager(
+                                    typeof(MimeTypes).FullName,
+                                    typeof(MimeTypes).Assembly
+                                )
+
+                            };
                             return _instance;
                         }
                     }
-
                 }
                 return _instance;
             }
         }
 
-        public string TypeOf(string fileExtension)
-        {
-            // If doesn't found then returns an octect stream mime type
-            return MimeType.ResourceManager.GetString(fileExtension.TrimStart('.'));
-
-        }
-
-        public string ExtensionOf(string mimeType)
-        {
-            return MimeType.ResourceManager.GetString(mimeType);
-        }
-
-        private MimeTypes()
-        {
-        }
+        private MimeTypes(){}
 
     }
 

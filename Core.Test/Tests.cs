@@ -8,7 +8,7 @@ namespace Core.Test {
 
         public static int Test(int threads, Action action) {
 
-            PreConditions.CheckTrue(threads >=1, $"Threads[{threads}] is smaller then 1");
+            Checking.CheckTrue(threads >=1, $"Threads[{threads}] is smaller then 1");
 
             using (var countdown = new CountdownEvent(threads)) {
                 var watch = new Stopwatch();
@@ -34,7 +34,7 @@ namespace Core.Test {
                 watch.Stop();
                 Console.WriteLine("Operation took " + watch.Elapsed.Milliseconds + " MS");
 
-                PreConditions.CheckTrue(countdown.CurrentCount == 0,
+                Checking.CheckTrue(countdown.CurrentCount == 0,
                     $"Operation Failed : Count{countdown.CurrentCount}"
                 );
 

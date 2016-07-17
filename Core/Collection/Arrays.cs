@@ -43,13 +43,13 @@ namespace Core.Collection
 
         public static void Reverse<T>(ref T[] array)
         {
-            PreConditions.CheckNotNull(array);
+            Checking.CheckNotNull(array);
             array = array.Reverse().ToArray();
         }
 
         public static T[] Reverse<T>(T[] array)
         {
-            PreConditions.CheckNotNull(array);
+            Checking.CheckNotNull(array);
             var copy = Make<T>(array.Length);
             var j = 0;
             for(var i = array.Length - 1; i >= 0; i--)

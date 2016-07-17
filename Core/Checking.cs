@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Core
 {
 
-    public sealed class PreConditions
+    public sealed class Checking
     {
 
         public static void CheckNotNull(object obj)

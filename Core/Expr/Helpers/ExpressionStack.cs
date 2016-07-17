@@ -11,7 +11,7 @@ namespace Core.Expr.Helpers {
         public int Count => _stack.Count;
 
         public ExpressionStack(Stack<Expression> stack) {
-            PreConditions.CheckNotNull(stack);
+            Checking.CheckNotNull(stack);
             _stack = stack;
         }
 

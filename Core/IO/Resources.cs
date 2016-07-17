@@ -76,7 +76,7 @@ namespace Core.IO
         /// <returns>Resource</returns>
         private static Stream GetStream(string fileName, Type type)
         {
-            return type.Assembly.GetManifestResourceStream(type.Namespace + "." + fileName);
+            return type.Assembly.GetManifestResourceStream(type, fileName);
         }
 
     }

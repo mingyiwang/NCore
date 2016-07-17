@@ -9,6 +9,8 @@ namespace Core.IO
 
         private const int BufferSize = 1024 * 32; // 32K
 
+        public static MemoryStream Empty => new MemoryStream();
+
         public static MemoryStream MemoryStream(byte[] bytes)
         {
             return new MemoryStream(bytes);
@@ -21,8 +23,8 @@ namespace Core.IO
 
         public static TS Transfer<TS>(Stream input, TS output, Encoding encoding) where TS : Stream
         {
-            PreConditions.CheckNotNull(input,  "InputStream can not be null");
-            PreConditions.CheckNotNull(output, "OutputStream can not be null");
+            Checking.CheckNotNull(input,  "InputStream can not be null");
+            Checking.CheckNotNull(output, "OutputStream can not be null");
 
             if (encoding == null)
             {
@@ -79,8 +81,8 @@ namespace Core.IO
         /// <returns></returns>
         public static byte[] GetBytes(Stream s, int bufferSize)
         {
-            PreConditions.CheckNotNull(s, "Stream can not be null.");
-            PreConditions.CheckNotEquals(0, bufferSize, "Buffer size can not equal to zero.");
+            Checking.CheckNotNull(s, "Stream is null, please make sure Stream is reachable or the resource is Embedded Resource");
+            Checking.CheckNotEquals(0, bufferSize, "Buffer size must not be 0 or negative number.");
 
             if (!s.CanRead)
             {
@@ -91,36 +93,19 @@ namespace Core.IO
             {
                 s.Position = 0; // Make Sure we are in the first position of Stream if Stream is Seekable
             }
-
-            var buffer = new byte[bufferSize];
-            var result = new byte[bufferSize];
-
-            using(s)
+            
+            using (var reader = new BinaryReader(s))
             {
-                var bytesRead = 0;
-                do
-                {
-                    var position = bytesRead;
-                    var reads = s.Read(buffer, bytesRead, buffer.Length);
-                    bytesRead = bytesRead + reads;
-
-                    Array.Resize(ref result, bytesRead);
-                    Array.Copy(buffer, 0, result, position, reads);
-                    
-                    if (reads < buffer.Length)
-                    {
-                        return result;
-                    }
-
-                    buffer = new byte[Math.Min(BufferSize + buffer.Length, buffer.Length * 2)]; // double the length of buffer for the next run
-                }
-                while(true);
+                return reader.ReadBytes(BufferSize);
             }
+            
         }
 
         public static void PutBytes(byte[] data, Stream output, Encoding encoding)
         {
-            PreConditions.CheckNotNull(output, "Output Stream can not be null.");
+            Checking.CheckNotEmpty(data , "Collection can not be empty");
+            Checking.CheckNotNull(output, "Output Stream can not be null.");
+            
             if (!output.CanWrite)
             {
                 throw new InvalidOperationException("Output Stream is not writable");
