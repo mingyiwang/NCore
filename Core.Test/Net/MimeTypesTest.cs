@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using Core.Collection;
+using Core.Concurrent;
 using Core.IO;
 using Core.Net;
 using NUnit.Framework;
@@ -16,15 +18,20 @@ namespace Core.Test.Net
         [Test]
         public void TestGetString()
         {
-
             Console.WriteLine(MimeTypes.Instance.Of("atom"));
-            Console.WriteLine(MimeTypes.Instance.Of("pdf"));
-            Console.WriteLine(MimeTypes.Instance.Of("jpeg"));
-            Console.WriteLine(MimeTypes.Instance.Of("bng"));
-            Console.WriteLine(MimeTypes.Instance.Of("xml"));
-            Console.WriteLine(MimeTypes.Instance.Of("json"));
-            Console.WriteLine(MimeTypes.Instance.Of("txt"));
+        }
 
+        [Test]
+        public void TestAccess()
+        {
+            var hashCode = MimeTypes.Instance.GetHashCode();
+            Enumerable.Range(0, 100).ForEach(count =>
+            {
+                Threads.StartNew("Thread" + count, () =>
+                {
+                    Checking.CheckEquals(hashCode, MimeTypes.Instance.GetHashCode());
+                });
+            });
         }
 
         [Test]
