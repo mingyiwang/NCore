@@ -11,9 +11,7 @@ namespace Core.Test.Net
     public class MimeTypesTest
     {
         const string ResxTemplate = 
-            @"<data name =""{0}"" xml:space=""preserve"">
-    <value>{1}</value>
-</data>";
+            @"<data name =""{0}"" xml:space=""preserve""><value>{1}</value></data>";
 
         [Test]
         public void TestGetString()
