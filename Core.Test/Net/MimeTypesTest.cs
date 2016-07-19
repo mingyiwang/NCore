@@ -29,7 +29,7 @@ namespace Core.Test.Net
             {
                 Threads.StartNew("Thread" + count, () =>
                 {
-                    Checking.CheckEquals(hashCode, MimeTypes.Instance.GetHashCode());
+                    Check.Equals(hashCode, MimeTypes.Instance.GetHashCode());
                 });
             });
         }

@@ -149,7 +149,7 @@ namespace Core.Collection
 
         public Bits Remove(int index)
         {
-            Checking.CheckTrue(index < 32 && index > 0, "index is out of range.");
+            Check.IsTrue(index < 32 && index > 0, "index is out of range.");
             return And(new Bits(1 << (index % 32)).Not());
         }
 

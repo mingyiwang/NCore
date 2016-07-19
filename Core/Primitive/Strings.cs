@@ -6,51 +6,61 @@ namespace Core.Primitive
 
     public static class Strings
     {
-        
+
+        public static string Of(string value, string defaultIfNull)
+        {
+            return value ?? defaultIfNull;
+        }
+
         public static string Of(string value)
         {
             return Of(value, string.Empty);
         }
 
-        public static string Of(string value, string defaultValue)
+        public static string Of<T>(T obj, string defaultIfNull)
         {
-            return value ?? defaultValue;
+            return obj == null ? defaultIfNull : Of(obj.ToString(), defaultIfNull);
         }
 
         public static string Of<T>(T obj)
         {
-            return obj == null ? string.Empty : Of(obj.ToString(), string.Empty);
-        }
-
-        public static string Of<T>(T obj, string defaultValue)
-        {
-            return obj == null ? defaultValue : Of(obj.ToString(), defaultValue);
+            return Of(obj, string.Empty);
         }
 
         public static string Between(string input, int startIndex, int endIndex)
         {
-            return SubString(input, (startIndex + 1), (endIndex - 1));
+            if (startIndex == endIndex)
+            {
+                return string.Empty;
+            }
+
+            return Substring(input, startIndex + 1, endIndex - 1);
         }
 
-        public static string SubString(string input, int startIndex, int endIndex)
+        public static string Substring(string input, int startIndex, int endIndex)
         {
-            if(startIndex < 0)
+            if (startIndex < 0)
             {
                 throw new IndexOutOfRangeException($"Start Index[{startIndex}] is out of range.");
             }
 
-            if(endIndex > input.Length)
+            if (startIndex >= input.Length)
+            {
+                throw new IndexOutOfRangeException($"Start Index[{startIndex}] is out of range.");
+            }
+
+            if (endIndex >= input.Length)
             {
                 throw new IndexOutOfRangeException($"End Index[{endIndex}] is out of range.");
             }
 
-            var subLength = endIndex - startIndex;
-            if(subLength < 0)
+            var subLength = endIndex - startIndex + 1;
+            if (subLength < 0)
             {
-                throw new IndexOutOfRangeException($"String Length[{subLength}] is out of range.");
+                throw new IndexOutOfRangeException($"SubString Length[{subLength}] can not be negative.");
             }
 
-            return ((startIndex == 0) && (endIndex == input.Length))
+            return (startIndex == 0) && (endIndex == input.Length - 1)
                  ? input
                  : input.Substring(startIndex, subLength)
                  ;
@@ -63,7 +73,7 @@ namespace Core.Primitive
 
         public static string[] Split(string input, StringSplitOptions options, params char[] characters)
         {
-            Checking.CheckNotNull(characters, "Seperator can not be null.");
+            Check.NotNull(characters, "Seperator can not be null.");
             return string.IsNullOrEmpty(input) ? Arrays.Empty<string>() : input.Split(characters, options);
         }
     }

@@ -36,7 +36,7 @@ namespace Core.Http.Enums
 
         public HttpHeaders AddHeader(string name, string value)
         {
-            Checking.CheckFalse(IllegalHeaders.Contains(name), $"{name} must not set here.");
+            Check.NotTrue(IllegalHeaders.Contains(name), $"{name} must not set here.");
             _headers.Put(name, value);
             return this;
         }

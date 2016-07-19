@@ -23,8 +23,8 @@ namespace Core.IO
 
         public static TS Transfer<TS>(Stream input, TS output, Encoding encoding) where TS : Stream
         {
-            Checking.CheckNotNull(input,  "InputStream can not be null");
-            Checking.CheckNotNull(output, "OutputStream can not be null");
+            Check.NotNull(input,  "InputStream can not be null");
+            Check.NotNull(output, "OutputStream can not be null");
 
             if (encoding == null)
             {
@@ -81,8 +81,8 @@ namespace Core.IO
         /// <returns></returns>
         public static byte[] GetBytes(Stream s, int bufferSize)
         {
-            Checking.CheckNotNull(s, "Stream is null, please make sure Stream is reachable or the resource is Embedded Resource");
-            Checking.CheckNotEquals(0, bufferSize, "Buffer size must not be 0 or negative number.");
+            Check.NotNull(s, "Stream is null, please make sure Stream is reachable or the resource is Embedded Resource");
+            Check.NotEquals(0, bufferSize, "Buffer size must not be 0 or negative number.");
 
             if (!s.CanRead)
             {
@@ -103,8 +103,8 @@ namespace Core.IO
 
         public static void PutBytes(byte[] data, Stream output, Encoding encoding)
         {
-            Checking.CheckNotEmpty(data , "Collection can not be empty");
-            Checking.CheckNotNull(output, "Output Stream can not be null.");
+            Check.NotEmpty(data , "Collection can not be empty");
+            Check.NotNull(output, "Output Stream can not be null.");
             
             if (!output.CanWrite)
             {
