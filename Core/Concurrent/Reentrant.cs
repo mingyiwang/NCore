@@ -276,19 +276,19 @@ namespace Core.Concurrent
                     try
                     {
                         Monitor.Wait(_lock);
-                        flag = predicate();
                     }
                     finally
                     {
                         Interlocked.Decrement(ref _waitingCount);
                     }
+                    flag = predicate();
                 }
 
                 action();
             }
             finally
             {
-                if(lockToken)
+                if (lockToken)
                 {
                     Release();
                 }
@@ -315,12 +315,12 @@ namespace Core.Concurrent
                     try
                     {
                         Monitor.Wait(_lock);
-                        flag = predicate(model);
                     }
                     finally
                     {
                         Interlocked.Decrement(ref _waitingCount);
                     }
+                    flag = predicate(model);
                 }
                 action();
             }

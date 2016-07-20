@@ -1,4 +1,5 @@
 ﻿using System.Resources;
+using System.Threading;
 
 namespace Core.Net
 {
@@ -8,18 +9,18 @@ namespace Core.Net
 
         public const string ApplicationOctetStream = "application/octet-stream";
 
-        private static readonly object SyncObject = new object();
+        private static readonly object Lock = new object();
         private ResourceManager _resourceManager;
 
-        public string Of(string fileExtension)
+        public string TypeOf(string fileExtension)
         {
             if (string.IsNullOrEmpty(fileExtension))
             {
                 return ApplicationOctetStream;
             }
 
-            return _resourceManager.GetString(fileExtension.TrimStart('.').ToLowerInvariant())
-                ?? ApplicationOctetStream;
+            var ext = fileExtension.TrimStart('.').ToLowerInvariant();
+            return _resourceManager.GetString(ext) ?? ApplicationOctetStream;
         }
 
         private static MimeTypes _instance;
@@ -27,25 +28,28 @@ namespace Core.Net
         {
             get
             {
-                if (_instance == null)
+                if (_instance != null)
                 {
-                    lock (SyncObject)
-                    {
-                        if (_instance == null)
-                        {
-                            _instance = new MimeTypes
-                            {
-                                _resourceManager = new ResourceManager(
-                                    typeof(MimeTypes).FullName,
-                                    typeof(MimeTypes).Assembly
-                                )
+                    return _instance;
+                }
 
-                            };
-                            return _instance;
-                        }
+                var lockTaken = false;
+                try
+                {
+                    Monitor.Enter(Lock, ref lockTaken);
+                    return _instance ?? (_instance = new MimeTypes
+                    {
+                        _resourceManager = new ResourceManager(typeof(MimeTypes).FullName, typeof(MimeTypes).Assembly)
+                    });
+                }
+                finally
+                {
+                    if (lockTaken)
+                    {
+                        Monitor.Exit(Lock);
                     }
                 }
-                return _instance;
+                
             }
         }
 

@@ -18,7 +18,7 @@ namespace Core.Test.Net
         [Test]
         public void TestGetString()
         {
-            Console.WriteLine(MimeTypes.Instance.Of("atom"));
+            Console.WriteLine(MimeTypes.Instance.TypeOf("atom"));
         }
 
         [Test]
