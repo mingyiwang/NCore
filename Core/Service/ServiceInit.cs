@@ -13,7 +13,7 @@ namespace Core.Service
                 var initializedService = func();
                 initializedService.Start().AwaitStarted();
 
-                Check.Equals(initializedService.State.Code, ServiceState.Started);
+                Checks.Equals(initializedService.State.Code, ServiceState.Started);
 
                 return initializedService;
             });

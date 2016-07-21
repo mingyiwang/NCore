@@ -1,7 +1,7 @@
 ﻿namespace Core.Security
 {
 
-    public class Certificates
+    public class Certificator
     {
          
     }

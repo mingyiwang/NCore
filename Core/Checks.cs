@@ -4,8 +4,9 @@ using System.Collections.Generic;
 namespace Core
 {
 
-    public sealed class Check
+    public sealed class Checks
     {
+
         public static void NotNull(object obj)
         {
             NotNull(obj, $"[Precondition Check Failed] - Object{obj.GetType()} can not be null.");
@@ -24,9 +25,27 @@ namespace Core
             }
         }
 
+        public static void Null(object obj)
+        {
+            Null(obj, $"[Precondition Check Failed] - Object must be null.");
+        }
+
+        public static void Null(object obj, string message)
+        {
+            Null<ArgumentException>(obj, message);
+        }
+
+        public static void Null<T>(object obj, string message) where T : Exception
+        {
+            if (obj != null)
+            {
+                Fail<T>(message);
+            }
+        }
+
         public static void NotEmpty<TC>(ICollection<TC> collection)
         {
-            NotEmpty<ArgumentException, TC>(collection, "[Precondition Check Failed] - Collection can not be emtpy.");
+            NotEmpty<ArgumentException, TC>(collection, "[Precondition Checks Failed] - Collection can not be emtpy.");
         }
 
         public static void NotEmpty<TC>(ICollection<TC> collection, string message)
@@ -44,7 +63,7 @@ namespace Core
 
         public static void NotBlank(string s)
         {
-            NotBlank(s, "[Precondition Check Failed] - String can not be empty.");
+            NotBlank(s, "[Precondition Checks Failed] - String can not be empty.");
         }
 
         public static void NotBlank(string s, string message)
@@ -62,12 +81,12 @@ namespace Core
 
         public static void Equals(int expected, int actual)
         {
-            Equals<ArgumentException>(expected, actual, "[Precondition Check Failed] - value must be equal.");
+            Equals<ArgumentException>(expected, actual, "[Precondition Checks Failed] - value must be equal.");
         }
 
         public static void Equals(string expected, string actual)
         {
-            Equals<ArgumentException>(expected, actual, "[Precondition Check Failed] - value must be equal.");
+            Equals<ArgumentException>(expected, actual, "[Precondition Checks Failed] - value must be equal.");
         }
 
         public static void Equals<T>(T expected, T actual)
@@ -78,14 +97,9 @@ namespace Core
             }
         }
 
-        public static void Equals(int expected, int actual, string message){
-            if (expected != actual) {
-                Fail<ArgumentException>(message);
-            }
-        }
-
         public static void Equals<T>(object expected, object actual, string message) where T : Exception
         {
+
             if(!expected.Equals(actual))
             {
                 Fail<T>(message);
@@ -99,28 +113,28 @@ namespace Core
 
         public static void NotEquals(object expected, object actual)
         {
-            NotEquals<ArgumentException>(expected, actual, "[Precondition Check Failed] - value must not be equal.");
+            NotEquals<ArgumentException>(expected, actual, "[Precondition Checks Failed] - value must not be equal.");
         }
 
         public static void NotEquals<T>(object expected, object actual, string message) where T : Exception
         {
-            if(ReferenceEquals(expected, actual) || expected.Equals(actual))
+            if (ReferenceEquals(expected, actual) || expected.Equals(actual))
             {
                 Fail<T>(message);
             }
         }
 
-        public static void NotTrue(bool value)
+        public static void False(bool value)
         {
-            NotTrue(value, "[Precondition Check Failed] - Value must be false");
+            False(value, "[Precondition Checks Failed] - Value must be false");
         }
 
-        public static void NotTrue(bool value, string message)
+        public static void False(bool value, string message)
         {
-            NotTrue<ArgumentException>(value, message);
+            False<ArgumentException>(value, message);
         }
 
-        public static void NotTrue<T>(bool? value, string message) where T : Exception
+        public static void False<T>(bool? value, string message) where T : Exception
         {
             if(value != false)
             {
@@ -128,19 +142,51 @@ namespace Core
             }
         }
 
-        public static void IsTrue(bool value)
+        public static void True(bool value)
         {
-            IsTrue(value, "[Precondition Check Failed] - Value must be true.");
+            True(value, "[Precondition Checks Failed] - Value must be true.");
         }
 
-        public static void IsTrue(bool value, string message)
+        public static void True(bool value, string message)
         {
-            IsTrue<ArgumentException>(value, message);
+            True<ArgumentException>(value, message);
         }
 
-        public static void IsTrue<T>(bool value, string message) where T : Exception
+        public static void True<T>(bool value, string message) where T : Exception
         {
             if(value != true)
+            {
+                Fail<T>(message);
+            }
+        }
+
+        public static void LessThan<T>(int expected, int actual, string message) where T : Exception
+        {
+            if (actual >= expected)
+            {
+                Fail<T>(message);
+            }
+        }
+
+        public static void LessThanOrEqual<T>(int expected, int actual, string message) where T : Exception
+        {
+            if(actual > expected)
+            {
+                Fail<T>(message);
+            }
+        }
+
+        public static void GreaterThan<T>(int expected, int actual, string message) where T : Exception
+        {
+            if (actual <= expected)
+            {
+                Fail<T>(message);
+            }
+        }
+
+        public static void GreaterThanOrEqual<T>(int expected, int actual, string message) where T : Exception
+        {
+            if(actual < expected)
             {
                 Fail<T>(message);
             }

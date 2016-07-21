@@ -16,7 +16,7 @@ namespace Core.Concurrent
         }
 
         /// <summary>
-        /// Check whether current thread hold this lock
+        /// Checks whether current thread hold this lock
         /// </summary>
         public bool IsOccupiedByCurrentThread => Monitor.IsEntered(_lock);
 

@@ -6,7 +6,7 @@ using Core.Concurrent;
 namespace Core.Primitive
 {
    
-    public static class Numbers {
+    public sealed class Numbers {
        
         public static int IntOf(Enum input) {
             return Convert.ToInt32(input);

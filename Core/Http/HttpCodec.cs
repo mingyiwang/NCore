@@ -37,7 +37,7 @@ namespace Core.Http
         public string Encode(string value)
         {
 
-            Check.NotNull(value, "Encoding Value can not be null.");
+            Checks.NotNull(value, "Encoding Value can not be null.");
 
             var builder = new StringBuilder();
             value.ForEach(c =>

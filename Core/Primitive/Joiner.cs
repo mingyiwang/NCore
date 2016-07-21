@@ -1,9 +1,9 @@
 ﻿namespace Core.Primitive
 {
 
-    public class DateFormatter
+    public class Joiner
     {
-
+        
     }
 
 }

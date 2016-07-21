@@ -12,7 +12,7 @@ namespace Core.Expr.Parse {
         private int _pos;
 
         public SourceReader(string input) {
-            Check.NotNull(input);
+            Checks.NotNull(input);
             _input = input;
             _pos = 0;
         }

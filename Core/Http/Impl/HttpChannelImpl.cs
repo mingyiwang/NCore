@@ -38,7 +38,7 @@ namespace Core.Http.Impl {
         }
 
         public override HttpResponse Send() {
-            Check.NotNull(Entity, "HttpEntity can not be null.");
+            Checks.NotNull(Entity, "HttpEntity can not be null.");
 
             try {
                 var request = CreateHttpRequest(HttpMethod.Post);

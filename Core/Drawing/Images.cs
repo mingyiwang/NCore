@@ -23,9 +23,9 @@ namespace Core.Drawing
 
         public static Image Resize(Image image, int width, int height, bool keepRatio)
         {
-            Check.NotNull(image, "Source Image can not be null.");
-            Check.NotEquals(0, width, "width can not be zero.");
-            Check.NotEquals(0, height, "height can not be zero.");
+            Checks.NotNull(image, "Source Image can not be null.");
+            Checks.NotEquals(0, width, "width can not be zero.");
+            Checks.NotEquals(0, height, "height can not be zero.");
 
             if(keepRatio)
             {
@@ -81,9 +81,9 @@ namespace Core.Drawing
 
         public static Image Crop(Image image, int x, int y, int width, int height)
         {
-            Check.NotNull(image, "Source Image can not be null.");
-            Check.NotEquals(0, width, "width can not be zero.");
-            Check.NotEquals(0, height, "height can not be zero.");
+            Checks.NotNull(image, "Source Image can not be null.");
+            Checks.NotEquals(0, width, "width can not be zero.");
+            Checks.NotEquals(0, height, "height can not be zero.");
 
             var bitMap = GetBitmap(image);
 
@@ -101,7 +101,7 @@ namespace Core.Drawing
 
         public static Image Rotate(Image image, RotateFlipType flipType)
         {
-            Check.NotNull(image, "Source Image can not be null.");
+            Checks.NotNull(image, "Source Image can not be null.");
             var bitMap = GetBitmap(image);
             var cloned = bitMap.Clone(new Rectangle(0, 0, image.Width, image.Height), bitMap.PixelFormat);
             cloned.RotateFlip(flipType);

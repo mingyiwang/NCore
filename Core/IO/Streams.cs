@@ -16,48 +16,6 @@ namespace Core.IO
             return new MemoryStream(bytes);
         }
 
-        public static TS Transfer<TS>(Stream input, TS output) where TS : Stream
-        {
-            return Transfer(input, output, Encoding.UTF8);
-        }
-
-        public static TS Transfer<TS>(Stream input, TS output, Encoding encoding) where TS : Stream
-        {
-            Check.NotNull(input,  "InputStream can not be null");
-            Check.NotNull(output, "OutputStream can not be null");
-
-            if (encoding == null)
-            {
-               encoding = Encoding.UTF8;
-            }
-
-            if(!input.CanRead)
-            {
-                throw new InvalidOperationException("Input Stream is not readable");
-            }
-
-            using (input)
-            {
-                PutBytes(GetBytes(input, BufferSize), output, encoding);
-                return output;
-            }
-        }
-
-        public static byte[] GetFileBytes(FileInfo fileInfo)
-        {
-            return GetBytes(fileInfo.OpenRead());
-        }
-
-        public static string GetFileText(FileInfo fileInfo)
-        {
-            return GetString(fileInfo.OpenRead());
-        }
-
-        public static string GetFileText(FileInfo fileInfo, Encoding encoding)
-        {
-            return GetString(fileInfo.OpenRead(), encoding);
-        }
-
         public static string GetString(Stream stream)
         {
             return Encoding.UTF8.GetString(GetBytes(stream, 1000));
@@ -81,8 +39,8 @@ namespace Core.IO
         /// <returns></returns>
         public static byte[] GetBytes(Stream s, int bufferSize)
         {
-            Check.NotNull(s, "Stream is null, please make sure Stream is reachable or the resource is Embedded Resource");
-            Check.NotEquals(0, bufferSize, "Buffer size must not be 0 or negative number.");
+            Checks.NotNull(s, "Stream is null, please make sure Stream is reachable or the resource is Embedded Resource");
+            Checks.NotEquals(0, bufferSize, "Buffer size must not be 0 or negative number.");
 
             if (!s.CanRead)
             {
@@ -96,15 +54,15 @@ namespace Core.IO
             
             using (var reader = new BinaryReader(s))
             {
-                return reader.ReadBytes(BufferSize);
+                return reader.ReadBytes(bufferSize);
             }
             
         }
 
         public static void PutBytes(byte[] data, Stream output, Encoding encoding)
         {
-            Check.NotEmpty(data , "Collection can not be empty");
-            Check.NotNull(output, "Output Stream can not be null.");
+            Checks.NotEmpty(data , "Collection can not be empty");
+            Checks.NotNull(output, "Output Stream can not be null.");
             
             if (!output.CanWrite)
             {
@@ -115,6 +73,33 @@ namespace Core.IO
             {
                 writer.Write(data);
                 writer.Flush();
+            }
+        }
+
+        public static TS Transfer<TS>(Stream input, TS output) where TS : Stream
+        {
+            return Transfer(input, output, Encoding.UTF8);
+        }
+
+        public static TS Transfer<TS>(Stream input, TS output, Encoding encoding) where TS : Stream
+        {
+            Checks.NotNull(input, "InputStream can not be null");
+            Checks.NotNull(output, "OutputStream can not be null");
+
+            if(encoding == null)
+            {
+                encoding = Encoding.UTF8;
+            }
+
+            if(!input.CanRead)
+            {
+                throw new InvalidOperationException("Input Stream is not readable");
+            }
+
+            using(input)
+            {
+                PutBytes(GetBytes(input, BufferSize), output, encoding);
+                return output;
             }
         }
 
