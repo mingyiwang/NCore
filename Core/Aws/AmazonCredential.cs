@@ -1,7 +1,7 @@
 ﻿namespace Core.Aws
 {
 
-    public sealed class AmazonCredential
+    public class AmazonCredential
     {
 
         public string AccessKey
