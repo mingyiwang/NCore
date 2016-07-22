@@ -36,7 +36,7 @@ namespace Core.IO
         /// <returns></returns>
         private static Stream GetStream(string fullPath)
         {
-            var assemblyName = Strings.SubString(fullPath, 0, fullPath.IndexOf(".", StringComparison.Ordinal));
+            var assemblyName = Strings.Substring(fullPath, 0, fullPath.IndexOf(".", StringComparison.Ordinal));
             var assembly = AppDomain.CurrentDomain.GetAssemblies().Single(a => a.GetName().Name.Equals(assemblyName));
             if(assembly == null)
             {
@@ -76,7 +76,7 @@ namespace Core.IO
         /// <returns>Resource</returns>
         private static Stream GetStream(string fileName, Type type)
         {
-            return type.Assembly.GetManifestResourceStream(type.Namespace + "." + fileName);
+            return type.Assembly.GetManifestResourceStream(type, fileName);
         }
 
     }

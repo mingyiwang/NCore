@@ -16,7 +16,7 @@ namespace Core.Test.Http {
         public void TestUrl()
         {
             var url = HttpUrl.From("https://google.com.au/");
-            Preconditions.CheckEquals(new Uri("https://google.com.au"), url.Uri);
+            Checks.Equals(new Uri("https://google.com.au"), url.Uri);
 
             var httpUrl = new HttpUrl()
                     .WithHost("google.com.au")
@@ -36,7 +36,7 @@ namespace Core.Test.Http {
         public void TestHost()
         {
             var url = HttpUrl.From("http://www.google.com.au");
-            Preconditions.CheckEquals(new Uri("http://www.google.com.au/"), url.Uri);
+            Checks.Equals(new Uri("http://www.google.com.au/"), url.Uri);
         }
 
         [Test]
@@ -65,7 +65,7 @@ namespace Core.Test.Http {
                 Console.WriteLine($"{pair.Key}|{pair.Value}");
             });
 
-            Preconditions.CheckEquals(true, response.Success);
+            Checks.Equals(true, response.Success);
         }
 
         [Test]

@@ -9,7 +9,7 @@ namespace Core.Template
 
         private const string PatternText = @"(\$\{([a-zA-Z0-9_]*)\})";
 
-        private readonly static Regex Pattern = new Regex(PatternText, RegexOptions.CultureInvariant);
+        private static readonly Regex Pattern = new Regex(PatternText, RegexOptions.CultureInvariant);
 
         private readonly string _source;
         private readonly LinkedList<SimpleSegment> _segments = new LinkedList<SimpleSegment>();

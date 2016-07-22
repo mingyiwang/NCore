@@ -75,8 +75,6 @@
     <Compile Include="Collection\Arrays.cs" />
     <Compile Include="Collection\CollectionExtension.cs" />
     <Compile Include="Collection\Collections.cs" />
-    <Compile Include="Collection\ConcurrentHashMap.cs" />
-    <Compile Include="Collection\ConcurrentHashSet.cs" />
     <Compile Include="Collection\ConcurrentLinkedQueue.cs" />
     <Compile Include="Collection\HashMap.cs" />
     <Compile Include="Collection\ReadWriteLinkedList.cs" />
@@ -86,7 +84,8 @@
     <Compile Include="Concurrent\Reentrant.cs" />
     <Compile Include="Concurrent\CAS.cs" />
     <Compile Include="Concurrent\Threads.cs" />
-    <Compile Include="DB\Criteria\CriteriaBuilder.cs" />
+    <Compile Include="Extension\StringExtension.cs" />
+    <Compile Include="Persist\CriteriaBuilder.cs" />
     <Compile Include="Http\Entities\ContentType.cs" />
     <Compile Include="Http\Entities\HttpEntity.cs" />
     <Compile Include="Http\Entities\MultipartFormDataEntity.cs" />
@@ -106,12 +105,13 @@
     <Compile Include="IO\Files.cs" />
     <Compile Include="IO\Properties.cs" />
     <Compile Include="IO\StringBuffer.cs" />
-    <Compile Include="Json\JSON.cs" />
+    <Compile Include="Json\JsonUtils.cs" />
     <Compile Include="Net\MimeTypes.cs" />
     <Compile Include="Collection\Bits.cs" />
-    <Compile Include="Primitive\NumberFormatter.cs" />
-    <Compile Include="DB\PersistentService.cs" />
-    <Compile Include="DB\IPersistentService.cs" />
+    <Compile Include="Primitive\Joiner.cs" />
+    <Compile Include="Primitive\Formatter\NumberFormatter.cs" />
+    <Compile Include="Persist\PersistentService.cs" />
+    <Compile Include="Persist\IPersistentService.cs" />
     <Compile Include="Expr\Eval\RoslynEvaluator.cs" />
     <Compile Include="Expr\Eval\SimpleEvaluator.cs" />
     <Compile Include="Collection\ReadWriteHashMap.cs" />
@@ -120,16 +120,16 @@
     <Compile Include="Aws\AmazonCredential.cs" />
     <Compile Include="Aws\AmazonS3Object.cs" />
     <Compile Include="Aws\IAmazonTransferService.cs" />
+    <Compile Include="Primitive\Splitter.cs" />
     <Compile Include="Reflect\Reflection.cs" />
     <Compile Include="IO\Resources.cs" />
-    <Compile Include="UUID.cs" />
-    <Compile Include="Preconditions.cs" />
+    <Compile Include="Guids.cs" />
+    <Compile Include="Checks.cs" />
     <Compile Include="Cache\ICache.cs" />
-    <Compile Include="Collection\ConcurrentLinkedList.cs" />
     <Compile Include="Csv\CsvReader.cs" />
     <Compile Include="Csv\CsvSerializer.cs" />
     <Compile Include="Csv\CsvWriter.cs" />
-    <Compile Include="Primitive\DateFormatter.cs" />
+    <Compile Include="Primitive\Formatter\DateFormatter.cs" />
     <Compile Include="Expr\Eval\BaseEvaluator.cs" />
     <Compile Include="Expr\Eval\DefaultEvaluator.cs" />
     <Compile Include="Expr\Eval\IEvaluator.cs" />
@@ -163,10 +163,11 @@
     <Compile Include="Predicates.cs" />
     <Compile Include="Primitive\Numbers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Security\Certificates.cs" />
+    <Compile Include="Security\Certificator.cs" />
+    <Compile Include="Security\Encoder.cs" />
     <Compile Include="Service\AbstractScheduleService.cs" />
     <Compile Include="Service\IScheduledFuture.cs" />
-    <Compile Include="Service\QuartazService.cs" />
+    <Compile Include="Service\QuartzService.cs" />
     <Compile Include="Service\IScheduleService.cs" />
     <Compile Include="Service\ScheduleService.cs" />
     <Compile Include="Security\Encryptor.cs" />
@@ -185,9 +186,14 @@
     <Compile Include="Xml\XmlUtils.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Net\mime.types" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Net\MimeTypes.resx">
+      <LastGenOutput>MimeTypeResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -1,9 +1,9 @@
 ﻿namespace Core.Primitive
 {
 
-    public class NumberFormatter
+    public class Splitter
     {
-         
+        
     }
 
 }

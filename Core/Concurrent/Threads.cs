@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 
 namespace Core.Concurrent
 {
@@ -22,7 +23,10 @@ namespace Core.Concurrent
             {
                 Thread.Sleep(ms);
             }
-            catch(ThreadInterruptedException) { }
+            catch (Exception)
+            {
+                
+            }
         }
 
     }

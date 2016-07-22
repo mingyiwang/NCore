@@ -25,8 +25,7 @@ namespace Core.Collection
 
         public int Count
         {
-            get
-            {
+            get {
                 return _lock.Read(() => _list.Count);
             }
         }
@@ -41,22 +40,57 @@ namespace Core.Collection
             return GetEnumerator();
         }
 
-        public void Add(T item) { _lock.Write(() => _list.Add(item)); }
-        public void Clear() { _lock.Write(() => _list.Clear()); }
+        public void Add(T item)
+        {
+            _lock.Write(() => _list.Add(item));
+        }
 
-        public bool Contains(T item) { return _lock.Read(() => _list.Contains(item)); }
-        public void CopyTo(T[] array, int arrayIndex) { _lock.Write(() => _list.CopyTo(array, arrayIndex)); }
+        public void Clear()
+        {
+            _lock.Write(() => _list.Clear());
+        }
 
-        public bool Remove(T item) { return _lock.Write(() => _list.Remove(item)); }
-        public int IndexOf(T item) { return _lock.Read(() => _list.IndexOf(item)); }
+        public bool Contains(T item)
+        {
+            return _lock.Read(() => _list.Contains(item));
+        }
 
-        public void Insert(int index, T item) { _lock.Write(() => _list.Insert(index, item)); }
-        public void RemoveAt(int index) { _lock.Write(() => RemoveAt(index)); }
+        public void CopyTo(T[] array, int arrayIndex)
+        {
+            _lock.Write(() => _list.CopyTo(array, arrayIndex));
+        }
+
+        public bool Remove(T item)
+        {
+            return _lock.Write(() => _list.Remove(item));
+        }
+
+        public int IndexOf(T item)
+        {
+            return _lock.Read(() => _list.IndexOf(item));
+        }
+
+        public void Insert(int index, T item)
+        {
+            _lock.Write(() => _list.Insert(index, item));
+        }
+
+        public void RemoveAt(int index)
+        {
+            _lock.Write(() => _list.RemoveAt(index));
+        }
 
         public T this[int index]
         {
-            get { return _lock.Read(() => _list[index]); }
-            set { _lock.Write(value, v => { _list[index] = v; }); }
+            get {
+                return _lock.Read(() => _list[index]);
+            }
+            set {
+                _lock.Write(value, v =>
+                {
+                    _list[index] = v;
+                });
+            }
         }
 
     }

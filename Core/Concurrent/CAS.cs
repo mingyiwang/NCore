@@ -4,20 +4,29 @@ using System.Threading;
 namespace Core.Concurrent
 {
 
-    /// <summary>
-    /// http://www.albahari.com/threading/part5.aspx#_SpinLock_and_SpinWait
-    /// </summary>
     public static class CAS
     {
 
-        public static void Update<T>(ref T location, T item) where T : class
+        public static bool TrySet<T>(ref T oldValue, T item) where T : class
+        {
+            var snapshot = oldValue;
+            return snapshot == Interlocked.CompareExchange(ref oldValue, item, snapshot);
+        }
+
+        public static bool TrySet<T>(ref T oldValue, Func<T> creator) where T : class
+        {
+            var newValue = creator();
+            var snapshot = oldValue;
+            return snapshot == Interlocked.CompareExchange(ref oldValue, newValue, snapshot);
+        }
+
+        public static void Set<T>(ref T oldValue, T item) where T : class
         {
             var spinWait = new SpinWait();
             while(true)
             {
-                var snapshot = location; // old location
-                var original = Interlocked.CompareExchange(ref location, item, snapshot); // before this operation , location might be changed
-                if(snapshot == original)
+                var snapshot = oldValue;
+                if(snapshot == Interlocked.CompareExchange(ref oldValue, item, snapshot))
                 {
                     return;
                 }
@@ -25,14 +34,14 @@ namespace Core.Concurrent
             }
         }
 
-        public static void Update<T>(ref T location, Func<T> creator) where T : class
+        public static void Set<T>(ref T location, Func<T> creator) where T : class
         {
+            var newValue = creator();
             var spinWait = new SpinWait();
             while(true)
             {
                 var snapshot = location;
-                var original = Interlocked.CompareExchange(ref location, creator(), snapshot);
-                if(snapshot == original)
+                if(snapshot == Interlocked.CompareExchange(ref location, newValue, snapshot))
                 {
                     return;
                 }
@@ -41,42 +50,15 @@ namespace Core.Concurrent
             }
         }
 
-        public static void Update<T>(ref T location, Func<T, T> updator) where T : class
+        public static bool TryCompareSet<T>(ref T oldValue, T newValue, T comparand) where T : class
         {
-            var spinWait = new SpinWait();
-            while(true)
-            {
-                var snapshot = location;
-                var original = Interlocked.CompareExchange(ref location, updator(snapshot), snapshot);
-                if(snapshot == original)
-                {
-                    return;
-                }
-                spinWait.SpinOnce();
-            }
+            return comparand == Interlocked.CompareExchange(ref oldValue, newValue, comparand);
         }
 
-        public static bool TryUpdate<T>(ref T location, T item) where T : class
+        public static bool TryCompareSet<T>(ref T oldValue, Func<T> creator, T comparand) where T : class
         {
-            var snapshot = location;
-            return snapshot == Interlocked.CompareExchange(ref location, item, snapshot);
-        }
-
-        public static bool TryUpdate<T>(ref T location, Func<T> creator) where T : class
-        {
-            var snapshot = location;
-            return snapshot == Interlocked.CompareExchange(ref location, creator(), snapshot);
-        }
-
-        public static bool TryUpdate<T>(ref T location, Func<T, T> updator) where T : class
-        {
-            var snapshot = location;
-            return snapshot == Interlocked.CompareExchange(ref location, updator(snapshot), snapshot);
-        }
-
-        public static bool TryCompareUpdate<T>(ref T location, T value, T comparand) where T : class
-        {
-            return comparand == Interlocked.CompareExchange(ref location, value, comparand);
+            var newValue = creator();
+            return comparand == Interlocked.CompareExchange(ref oldValue, newValue, comparand);
         }
 
     }

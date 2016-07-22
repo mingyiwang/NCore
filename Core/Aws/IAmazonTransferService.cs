@@ -12,7 +12,7 @@ namespace Core.Aws {
         string BucketName { get; }
 
         /// <summary>
-        /// Check an s3 object exist or not
+        /// Checks an s3 object exist or not
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>

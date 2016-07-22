@@ -4,6 +4,7 @@
     public sealed class Encryptor
     {
 
+
     }
 
 }

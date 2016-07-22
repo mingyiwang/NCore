@@ -32,6 +32,11 @@ namespace Core.Collection {
             }
         }
 
+        public static HashSet<T> ToHashSet<T>(this IEnumerable<T> collection)
+        {
+           return new HashSet<T>(collection);
+        }
+
         public static string AsString<T>(this IEnumerable<T> collection)
         {
             return Collections.Join(collection);

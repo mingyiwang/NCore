@@ -4,7 +4,7 @@ using System.Threading;
 namespace Core.Concurrent
 {
 
-    public sealed class ReadWrite
+    public sealed class ReadWrite : IDisposable
     {
 
         private readonly ReaderWriterLockSlim _readWriteLock = new ReaderWriterLockSlim();
@@ -147,7 +147,7 @@ namespace Core.Concurrent
 
         public void Dispose()
         {
-            _readWriteLock?.Dispose();
+            _readWriteLock.Dispose();
         }
 
     }

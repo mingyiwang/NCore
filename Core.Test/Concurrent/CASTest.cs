@@ -18,7 +18,7 @@ namespace Core.Test.Concurrent
             A b = new A(30);
 
             var count = Tests.Test(20, () => {
-                CAS.Update(ref a, b);
+                CAS.Set(ref a, b);
             });
 
             Console.WriteLine(count);
@@ -34,7 +34,7 @@ namespace Core.Test.Concurrent
             var p = t = tail;
 
             Tests.Test(10, () => {
-                CAS.Update(ref tail, new A(2));
+                CAS.Set(ref tail, new A(2));
             });
 
             Console.WriteLine(ReferenceEquals(t, tail));

@@ -20,9 +20,18 @@ namespace Core.Collection
 
         private readonly byte[] _bytes;
 
-        public bool IsIneger { get; }
-        public bool IsFloat  { get; }
-        public bool IsDouble { get; }
+        public bool IsIneger
+        {
+            get;
+        }
+        public bool IsFloat
+        {
+            get;
+        }
+        public bool IsDouble
+        {
+            get;
+        }
 
         public Bits() : this(0)
         {
@@ -31,7 +40,7 @@ namespace Core.Collection
         private Bits(int value) : this(BitConverter.GetBytes(value))
         {
             IsIneger = true;
-            IsFloat  = false;
+            IsFloat = false;
             IsDouble = false;
         }
 
@@ -57,12 +66,9 @@ namespace Core.Collection
             {
                 fixed (byte* p1 = _bytes, p2 = bits._bytes)
                 {
-                    var i1 = *((int*) p1);
-                    var i2 = *((int*) p2);
-                    checked
-                    {
-                        return new Bits(i1 | i2);
-                    }
+                    var i1 = *((int*)p1);
+                    var i2 = *((int*)p2);
+                    return new Bits(i1 | i2);
                 }
             }
         }
@@ -75,10 +81,7 @@ namespace Core.Collection
                 {
                     var i1 = *((int*)p1);
                     var i2 = *((int*)p2);
-                    checked
-                    {
-                        return new Bits(i1 & i2);
-                    }
+                    return new Bits(i1 & i2);
                 }
             }
         }
@@ -91,10 +94,7 @@ namespace Core.Collection
                 {
                     var i1 = *((int*)p1);
                     var i2 = *((int*)p2);
-                    checked
-                    {
-                        return new Bits(i1 ^ i2);
-                    }
+                    return new Bits(i1 ^ i2);
                 }
             }
         }
@@ -105,10 +105,7 @@ namespace Core.Collection
             {
                 fixed (byte* p1 = _bytes)
                 {
-                    checked
-                    {
-                        return new Bits(~(*((int*)p1)));
-                    }
+                    return new Bits(~(*((int*)p1)));
                 }
             }
         }
@@ -151,8 +148,8 @@ namespace Core.Collection
         }
 
         public Bits Remove(int index)
-        {   
-            Preconditions.CheckTrue(index < 32 && index > 0, "index is out of range.");
+        {
+            Checks.True(index < 32 && index > 0, "index is out of range.");
             return And(new Bits(1 << (index % 32)).Not());
         }
 
@@ -205,14 +202,14 @@ namespace Core.Collection
 
         public string AsString(bool isLittleEndian)
         {
-            return isLittleEndian 
-                 ? Arrays.Reverse(_bytes).Select(Numbers.BinaryOf).AsString() 
+            return isLittleEndian
+                 ? Arrays.Reverse(_bytes).Select(Numbers.BinaryOf).AsString()
                  : Arrays.CopyOf(_bytes).Select(Numbers.BinaryOf).AsString();
         }
 
         public override string ToString()
         {
-            return AsString(OS.IS_LITTLE_ENDIAN);
+            return AsString(OS.IsLittleEndian);
         }
 
         public static Bits From(int value)

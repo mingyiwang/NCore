@@ -1,15 +1,27 @@
-﻿namespace Core.Aws {
+﻿namespace Core.Aws
+{
 
-    public sealed class AmazonCredential {
+    public class AmazonCredential
+    {
 
-        public string AccessKey { get; private set; }
-        public string SecretKey { get; private set; }
-        
-        public AmazonCredential(string accessKey, string secretKey) {
+        public string AccessKey
+        {
+            get; private set;
+        }
+
+        public string SecretKey
+        {
+            get; private set;
+        }
+
+        public AmazonCredential(string accessKey, string secretKey)
+        {
             AccessKey = accessKey;
             SecretKey = secretKey;
+
         }
-        
+
     }
 
 }
+

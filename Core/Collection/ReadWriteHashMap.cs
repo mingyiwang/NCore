@@ -6,11 +6,7 @@ using Core.Concurrent;
 namespace Core.Collection
 {
 
-    /// <summary>
-    /// Thread safe dictionary with richer functionalities.
-    /// </summary>
-    /// <typeparam name="TKey"></typeparam>
-    /// <typeparam name="TValue"></typeparam>
+
     public class ReadWriteHashMap<TKey, TValue> : IDictionary<TKey, TValue>, IDisposable
     {
 
