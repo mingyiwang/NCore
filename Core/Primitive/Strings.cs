@@ -24,6 +24,7 @@ namespace Core.Primitive
 
         public static string Of<T>(T obj)
         {
+
             return Of(obj, string.Empty);
         }
 
