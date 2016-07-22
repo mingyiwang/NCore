@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using Core.Collection;
 
 namespace Core.IO
@@ -103,6 +102,11 @@ namespace Core.IO
                 && _mark     == other._mark
                 ;
         }
-        
+
+        public int CompareTo(Buffer<T> other)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }
