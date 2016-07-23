@@ -105,7 +105,7 @@
     <Compile Include="Collection\Bits.cs" />
     <Compile Include="Primitive\Chars.cs" />
     <Compile Include="Primitive\Joiner.cs" />
-    <Compile Include="Primitive\Formatter\NumberFormatter.cs" />
+    <Compile Include="Primitive\NumberFormatter.cs" />
     <Compile Include="Persist\PersistentService.cs" />
     <Compile Include="Persist\IPersistentService.cs" />
     <Compile Include="Expr\Eval\RoslynEvaluator.cs" />
@@ -124,7 +124,7 @@
     <Compile Include="Csv\CsvReader.cs" />
     <Compile Include="Csv\CsvSerializer.cs" />
     <Compile Include="Csv\CsvWriter.cs" />
-    <Compile Include="Primitive\Formatter\DateFormatter.cs" />
+    <Compile Include="Time\DateFormatter.cs" />
     <Compile Include="Expr\Eval\BaseEvaluator.cs" />
     <Compile Include="Expr\Eval\DefaultEvaluator.cs" />
     <Compile Include="Expr\Eval\IEvaluator.cs" />
@@ -168,6 +168,8 @@
     <Compile Include="Security\Encryptor.cs" />
     <Compile Include="Security\Hasher.cs" />
     <Compile Include="Service\IService.cs" />
+    <Compile Include="Time\DateTimes.cs" />
+    <Compile Include="Time\TimezoneOffset.cs" />
     <Compile Include="Transfer\PagingRequest.cs" />
     <Compile Include="Transfer\PagingResult.cs" />
     <Compile Include="Service\AbstractService.cs" />

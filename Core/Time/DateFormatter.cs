@@ -1,4 +1,4 @@
-﻿namespace Core.Primitive.Formatter
+﻿namespace Core.Time
 {
 
     public class DateFormatter

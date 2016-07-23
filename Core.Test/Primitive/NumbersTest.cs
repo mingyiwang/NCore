@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using NUnit.Framework;
 
 namespace Core.Test.Primitive {
@@ -9,12 +10,12 @@ namespace Core.Test.Primitive {
         [Test]
         public void TestDouble()
         {
-            decimal d1 = new decimal(1.0);
-            decimal d2 = new decimal(2.0);
-
-            Console.WriteLine((d1 / d2) * d2 == d1);
-
-            Console.WriteLine((1.0 / 103.0) * 103.0 < 1.0);
+            var dataTime = new DateTime();
+            var dataTimeOffset = new DateTimeOffset(dataTime);
+            var calendar = new GregorianCalendar();
+            Console.WriteLine("Is Day Light Saving => " + TimeZoneInfo.Local.IsDaylightSavingTime(DateTime.Now.AddMonths(-5)));
+            Console.WriteLine("Is Ambigous => " + TimeZoneInfo.Local.IsAmbiguousTime(DateTime.Now.AddMonths(-5)));
+                
         }
 
     }
