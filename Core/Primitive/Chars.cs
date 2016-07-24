@@ -3,7 +3,8 @@
 
     public class Chars
     {
-        public static readonly char Default = '�';
+
+        public static readonly int PlaceHolder = 0xfffd; //'�';
 
     }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Core.Time
 {
@@ -11,28 +12,6 @@ namespace Core.Time
         public const long TicksPerHour        = 36000000000L;
         public const long TicksPerDay         = 864000000000L;
         
-        public static DateTime To(DateTime source, TimeZoneInfo destinationZone)
-        {
-            return TimeZoneInfo.ConvertTime(source, destinationZone);
-        }
-
-        public static DateTime To(DateTimeOffset source, TimeZoneInfo destinationZone)
-        {
-            var ticks      = source.Ticks;
-            var offset     = source.Offset;
-            var baseOffset = destinationZone.BaseUtcOffset;
-            var adjusted   = DateTime.Now;
-
-            TimeZoneInfo.ConvertTime(source, destinationZone);
-            if (offset == baseOffset)
-            {
-                        
-            }
-
-            TimeZoneInfo.ConvertTime(source, TimeZoneInfo.Utc);
-            return TimeZoneInfo.ConvertTime(adjusted, TimeZoneInfo.Local, destinationZone);
-        }
-
         public static TimeSpan Diff(DateTime dateTime1, DateTime dateTime2)
         {
             var tick1 = dateTime1.ToUniversalTime().Ticks;
@@ -47,6 +26,17 @@ namespace Core.Time
             var tick2 = dateTime2.ToUniversalTime().Ticks;
             var diff  = Math.Abs(tick2 - tick1);
             return new TimeSpan(diff);
+        }
+
+        public static DateTime Normalize(DateTime dateTime, TimeZoneInfo timeZone)
+        {
+            // we move time forward by some delta
+            if (timeZone.IsInvalidTime(dateTime))
+            {
+                return dateTime.Add(TimeSpan.FromHours(1));
+            }
+            
+            return dateTime;
         }
 
     }

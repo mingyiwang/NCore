@@ -171,6 +171,7 @@
     <Compile Include="Service\IService.cs" />
     <Compile Include="Time\Dates.cs" />
     <Compile Include="Time\Offset.cs" />
+    <Compile Include="Time\TimeZones.cs" />
     <Compile Include="Transfer\PagingRequest.cs" />
     <Compile Include="Transfer\PagingResult.cs" />
     <Compile Include="Service\AbstractService.cs" />
