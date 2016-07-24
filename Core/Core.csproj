@@ -53,6 +53,7 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -124,7 +125,7 @@
     <Compile Include="Csv\CsvReader.cs" />
     <Compile Include="Csv\CsvSerializer.cs" />
     <Compile Include="Csv\CsvWriter.cs" />
-    <Compile Include="Time\DateFormatter.cs" />
+    <Compile Include="Time\DateFormat.cs" />
     <Compile Include="Expr\Eval\BaseEvaluator.cs" />
     <Compile Include="Expr\Eval\DefaultEvaluator.cs" />
     <Compile Include="Expr\Eval\IEvaluator.cs" />
@@ -168,8 +169,8 @@
     <Compile Include="Security\Encryptor.cs" />
     <Compile Include="Security\Hasher.cs" />
     <Compile Include="Service\IService.cs" />
-    <Compile Include="Time\DateTimes.cs" />
-    <Compile Include="Time\TimezoneOffset.cs" />
+    <Compile Include="Time\Dates.cs" />
+    <Compile Include="Time\Offset.cs" />
     <Compile Include="Transfer\PagingRequest.cs" />
     <Compile Include="Transfer\PagingResult.cs" />
     <Compile Include="Service\AbstractService.cs" />

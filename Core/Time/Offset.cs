@@ -3,11 +3,12 @@
 namespace Core.Time
 {
 
-    public class TimeZoneOffset
+    public class Offset
     {
 
         public static readonly TimeSpan NT = new TimeSpan(9, 0, 0);
 
     }
+
 
 }
