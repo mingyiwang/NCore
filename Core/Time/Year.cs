@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using Core.Primitive;
 
 namespace Core.Time
@@ -8,8 +7,8 @@ namespace Core.Time
     public sealed class Year
     {
 
-        public const int MinYear = 0;
-        public const int MaxYear = 9999;
+        public const int MinYear = 1;
+        public const int MaxYear = 9998;
 
         public static Year Now    => new Year(DateTime.Now.Year);
 

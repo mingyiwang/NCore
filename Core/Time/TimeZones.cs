@@ -24,7 +24,7 @@ namespace Core.Time
             );
         }
 
-        public static DaylightTime GetDaylightTime(TimeZoneInfo timeZone, int year)
+        internal static DaylightTime GetDaylightTime(TimeZoneInfo timeZone, int year)
         {
             
             var adjustRule = timeZone
@@ -34,7 +34,7 @@ namespace Core.Time
             // There is no Day Light Time Saving of this year in this time zone
             if (adjustRule == null)
             {
-                return new DaylightTime(DateTime.MinValue, DateTime.MinValue, TimeSpan.Zero);
+                return null;
             }
 
             DateTime endDate;
@@ -45,14 +45,12 @@ namespace Core.Time
                           ? Dates.Of(year, Month.Of(start.Month), start.Day).Add(TimeSpan.FromTicks(start.TimeOfDay.Ticks)) 
                           : GetTransitionTimeDay(start, year);
 
-          
             if (end.IsFixedDateRule)
             {
                 if (end.Day == 1 && end.Month == 1 && end.TimeOfDay == DateTime.MinValue)
                 {
                     endDate = DateTime.MaxValue;
-                }
-                else
+                } else
                 {
                     endDate = Dates.Of(year, Month.Of(end.Month), end.Day).Add(TimeSpan.FromTicks(end.TimeOfDay.Ticks));
                 }
@@ -63,7 +61,6 @@ namespace Core.Time
             }
 
             return new DaylightTime(startDate, endDate, adjustRule.DaylightDelta);
-
         }
 
         private static DateTime GetTransitionTimeDay(TimeZoneInfo.TransitionTime transitionTime, int year)

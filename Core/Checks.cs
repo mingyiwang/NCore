@@ -162,7 +162,7 @@ namespace Core
 
         public static void InRange(int min, int max, int actual, string message)
         {
-            if (actual <= min || actual >= max)
+            if (actual < min || actual > max)
             {
                 Fail<ArgumentOutOfRangeException>(message);
             }

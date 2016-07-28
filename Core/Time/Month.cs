@@ -3,7 +3,7 @@
 namespace Core.Time
 {
 
-    public class Month
+    public sealed class Month
     {
         
         public static readonly Month January   = new Month(1,  "January",   30);
@@ -23,10 +23,6 @@ namespace Core.Time
         private readonly int _month;
         private readonly int _days;
         private readonly string _name;
-
-        private Month()
-        {
-        }
 
         private Month(int month, string name, int days)
         {
@@ -73,6 +69,12 @@ namespace Core.Time
             }
 
             return _days;
+        }
+
+        public int CheckRange(int day, int year)
+        {
+            Checks.InRange(1, GetDays(year), day, $"{day} is out of range");
+            return day;
         }
 
     }

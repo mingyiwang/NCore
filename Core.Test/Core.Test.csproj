@@ -85,7 +85,7 @@
     <Compile Include="Service\AbstractServiceTest.cs" />
     <Compile Include="Primitive\StringsTest.cs" />
     <Compile Include="Tests.cs" />
-    <Compile Include="Time\TimeZoneTest.cs" />
+    <Compile Include="Time\DateTimeTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">

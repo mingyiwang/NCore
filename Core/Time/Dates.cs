@@ -21,7 +21,7 @@ namespace Core.Time
 
         public static DateTime Of(int year, Month month, int day, DateTimeKind kind)
         {
-            return DateTime.SpecifyKind(new DateTime(year, month.GetMonth(), day), kind);
+            return DateTime.SpecifyKind(new DateTime(Year.CheckRange(year), month.GetMonth(), month.CheckRange(day, year)), kind);
         }
 
         public static bool Equals(DateTime dateTime1, DateTime dateTime2)
@@ -36,8 +36,7 @@ namespace Core.Time
 
         public static TimeSpan Diff(DateTime dateTime1, DateTime dateTime2)
         {
-            if (TimeZoneInfo.Local.IsInvalidTime(dateTime1) 
-             || TimeZoneInfo.Local.IsInvalidTime(dateTime2))
+            if (TimeZoneInfo.Local.IsInvalidTime(dateTime1) || TimeZoneInfo.Local.IsInvalidTime(dateTime2))
             {
                 throw new ArgumentException("");
             }
@@ -50,8 +49,8 @@ namespace Core.Time
 
         public static TimeSpan Diff(DateTimeOffset dateTime1, DateTimeOffset dateTime2)
         {
-            if(TimeZoneInfo.Local.IsInvalidTime(dateTime1.LocalDateTime) 
-            || TimeZoneInfo.Local.IsInvalidTime(dateTime2.LocalDateTime))
+            if (TimeZoneInfo.Local.IsInvalidTime(dateTime1.LocalDateTime) 
+            ||  TimeZoneInfo.Local.IsInvalidTime(dateTime2.LocalDateTime))
             {
                 throw new ArgumentException("");
             }
@@ -59,7 +58,6 @@ namespace Core.Time
             var diff = Math.Abs(dateTime2.Ticks - dateTime1.Ticks);
             return new TimeSpan(diff);
         }
-
 
         public static TimeSpan From(DayOfWeek dayOfWeek)
         {
@@ -83,26 +81,7 @@ namespace Core.Time
                 return dateTime;
             }
 
-            if (dateTime.Kind == DateTimeKind.Local)
-            {
-                        
-            }
-
-            if (timeZone.IsInvalidTime(dateTime))
-            {
-                
-                
-            }
-
-            if (timeZone.IsDaylightSavingTime(dateTime) || timeZone.IsAmbiguousTime(dateTime))
-            {
-                return dateTime;
-            }
-
-            // we move time forward by some delta
-            if (!timeZone.IsInvalidTime(dateTime)) return dateTime;
-            dateTime.IsDaylightSavingTime();
-            //var dst = RuleOf(dateTime, timeZone);
+            var dalighLight = TimeZones.GetDaylightTime(timeZone, dateTime.Year);
             return dateTime;
         }
 

@@ -3,7 +3,7 @@
 namespace Core.Time
 {
 
-    public class ZonedDateTime
+    public struct ZonedDateTime : IComparable<ZonedDateTime>, IComparable, IFormattable, IEquatable<ZonedDateTime>
     {
 
         private DateTime _date;
@@ -60,6 +60,26 @@ namespace Core.Time
             var ticks = utcTicks + zone.BaseUtcOffset.Ticks;
             var local = new DateTime(ticks, DateTimeKind.Local);
             return new ZonedDateTime(local, zone);
+        }
+
+        public int CompareTo(ZonedDateTime other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int CompareTo(object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Equals(ZonedDateTime other)
+        {
+            throw new NotImplementedException();
         }
 
     }
