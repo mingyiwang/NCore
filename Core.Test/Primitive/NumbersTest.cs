@@ -16,7 +16,7 @@ namespace Core.Test.Primitive {
 
             var dateTime = new DateTime(2016, 10, 2, 2, 30, 0);
             Console.WriteLine(dateTime.Ticks);
-            Console.WriteLine("Normalized => " + Dates.Normalize(dateTime, TimeZoneInfo.Local).Ticks);
+            Console.WriteLine("Normalized => " + Dates.AdjustIn(dateTime, TimeZoneInfo.Local).Ticks);
 
             Console.WriteLine(TimeZoneInfo.Local.IsDaylightSavingTime(dateTime));
             Console.WriteLine(TimeZoneInfo.Local.IsAmbiguousTime(dateTime));

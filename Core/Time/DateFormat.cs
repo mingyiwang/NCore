@@ -1,12 +1,10 @@
-﻿using System.Runtime.Serialization;
-
-namespace Core.Time
+﻿namespace Core.Time
 {
 
     public class DateFormat
     {
 
-        public DateFormat()
+        private DateFormat()
         {
             
         }

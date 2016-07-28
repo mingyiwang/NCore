@@ -170,8 +170,12 @@
     <Compile Include="Security\Hasher.cs" />
     <Compile Include="Service\IService.cs" />
     <Compile Include="Time\Dates.cs" />
-    <Compile Include="Time\Offset.cs" />
+    <Compile Include="Time\IDateQuery.cs" />
+    <Compile Include="Time\IDateTime.cs" />
+    <Compile Include="Time\Month.cs" />
     <Compile Include="Time\TimeZones.cs" />
+    <Compile Include="Time\Year.cs" />
+    <Compile Include="Time\ZonedDateTime.cs" />
     <Compile Include="Transfer\PagingRequest.cs" />
     <Compile Include="Transfer\PagingResult.cs" />
     <Compile Include="Service\AbstractService.cs" />

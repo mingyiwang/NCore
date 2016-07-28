@@ -160,6 +160,14 @@ namespace Core
             }
         }
 
+        public static void InRange(int min, int max, int actual, string message)
+        {
+            if (actual <= min || actual >= max)
+            {
+                Fail<ArgumentOutOfRangeException>(message);
+            }
+        }
+
         public static void LessThan<T>(int expected, int actual, string message) where T : Exception
         {
             if (actual >= expected)
