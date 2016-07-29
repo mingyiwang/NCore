@@ -4,24 +4,20 @@ using Core.Primitive;
 namespace Core.Time
 {
 
-    public sealed class Year
+    public sealed class Year : IComparable<Year>, IComparable, IEquatable<Year>
     {
 
         public const int MinYear = 1;
-        public const int MaxYear = 9998;
+        public const int MaxYear = 9999;
 
-        public static Year Now    => new Year(DateTime.Now.Year);
-
-        public int HoursOfYear    => 24 * DayOfYear;
-        public int MinituesOfYear => 60 * HoursOfYear;
-        public int DayOfYear      => DateTime.IsLeapYear(_year) ? 366 : 365;
-
-        public static int CheckRange(int year)
+        public static Year Now
         {
-            Checks.InRange(MinYear, MaxYear, year, $"{year} is out of range.");
-            return year;
+            get
+            {
+                return new Year(DateTime.Now.Year);
+            }
         }
-
+        
         public static Year Of(int year)
         {
             CheckRange(year);
@@ -41,6 +37,50 @@ namespace Core.Time
             return new Year(dateTime.LocalDateTime.Year);
         }
 
+        public static Year Of(TimeZoneInfo zone)
+        {
+            return Of(TimeZoneInfo.ConvertTime(DateTime.Now, zone));
+        }
+
+        public static int CheckRange(int year)
+        {
+            Checks.InRange(MinYear, MaxYear, year, $"{year} is out of range.");
+            return year;
+        }
+
+        public int HoursOfYear
+        {
+            get
+            {
+                return 24* DaysOfYear;
+            }
+
+        }
+
+        public int MinituesOfYear
+        {
+            get
+            {
+                return 60*HoursOfYear;
+            }
+        }
+
+        public int DaysOfYear
+        {
+            get
+            {
+                return DateTime.IsLeapYear(_year) ? Dates.DaysOfLeapYear : Dates.DaysOfYear;
+            }
+        }
+
+        public bool IsLeap
+        {
+            get
+            {
+                return DateTime.IsLeapYear(_year);
+            }
+        }
+
         public Year Add(Year year)
         {
             return new Year(CheckRange(_year + year._year));
@@ -56,10 +96,60 @@ namespace Core.Time
             return _year;
         }
 
-        //Todo: Using Number Format
+        public bool IsAfter(Year year)
+        {
+            return _year > year._year;
+        }
+
+        public bool IsBefore(Year year)
+        {
+            return _year < year._year;
+        }
+
+        public int CompareTo(Year other)
+        {
+            return _year.CompareTo(other._year);
+        }
+
+        public int CompareTo(object obj)
+        {
+            Checks.NotNull(obj);
+            return ReferenceEquals(this, obj) ? 0 : CompareTo(obj as Year);
+        }
+
+        public bool Equals(Year other)
+        {
+            return _year == other._year;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(obj, null) || ReferenceEquals(this, null))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            var y = obj as Year;
+            return y != null && Equals(y);
+        }
+
         public override string ToString()
         {
             return Strings.Of(_year);
+        }
+
+        /// <summary>
+        /// The same year should have the same hashcode
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return _year;
         }
 
         private readonly int _year;

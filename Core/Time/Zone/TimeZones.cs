@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 
-namespace Core.Time
+namespace Core.Time.Zone
 {
 
     public class TimeZones
@@ -14,7 +14,7 @@ namespace Core.Time
         public static readonly Lazy<TimeZoneInfo> AuWest    = GetTimeZoneById("W. Australia Standard Time");
         public static readonly Lazy<TimeZoneInfo> China     = GetTimeZoneById("China Standard Time");
 
-        private static Lazy<TimeZoneInfo> GetTimeZoneById(string id)
+        public static Lazy<TimeZoneInfo> GetTimeZoneById(string id)
         {
             return new Lazy<TimeZoneInfo>(() =>
             {
@@ -36,21 +36,21 @@ namespace Core.Time
             {
                 return null;
             }
-
-            DateTime endDate;
-                    
+          
             var start = adjustRule.DaylightTransitionStart;
             var end   = adjustRule.DaylightTransitionEnd;
             var startDate = start.IsFixedDateRule 
                           ? Dates.Of(year, Month.Of(start.Month), start.Day).Add(TimeSpan.FromTicks(start.TimeOfDay.Ticks)) 
                           : GetTransitionTimeDay(start, year);
 
+            DateTime endDate;
             if (end.IsFixedDateRule)
             {
                 if (end.Day == 1 && end.Month == 1 && end.TimeOfDay == DateTime.MinValue)
                 {
-                    endDate = DateTime.MaxValue;
-                } else
+                    endDate = DateTime.MaxValue; // never end
+                }
+                else
                 {
                     endDate = Dates.Of(year, Month.Of(end.Month), end.Day).Add(TimeSpan.FromTicks(end.TimeOfDay.Ticks));
                 }

@@ -1,15 +1,15 @@
 ﻿using System;
 
-namespace Core.Time
+namespace Core.Time.Zone
 {
 
-    public struct ZonedDateTime : IComparable<ZonedDateTime>, IComparable, IFormattable, IEquatable<ZonedDateTime>
+    public struct ZonedDateTime : IComparable, IComparable<ZonedDateTime>
     {
 
+        private TimeZoneInfo _zone;
         private DateTime _date;
         private TimeSpan _offset;
-        private TimeZoneInfo _zone;
-
+        
         public long Ticks      => _date.Ticks;
         public Year Year       => Year.Of(_date.Year);
         public Month Month     => Month.Of(_date.Month);
@@ -64,24 +64,32 @@ namespace Core.Time
 
         public int CompareTo(ZonedDateTime other)
         {
-            throw new NotImplementedException();
+            return 0;
         }
 
         public int CompareTo(object obj)
         {
-            throw new NotImplementedException();
-        }
-
-        public string ToString(string format, IFormatProvider formatProvider)
-        {
-            throw new NotImplementedException();
+            return 0;
         }
 
         public bool Equals(ZonedDateTime other)
         {
-            throw new NotImplementedException();
+            return true;
         }
 
+        public override bool Equals(object obj)
+        {
+            return true;
+        }
+
+        public override int GetHashCode()
+        {
+            return 0;
+        }
+
+
     }
+
+
 
 }

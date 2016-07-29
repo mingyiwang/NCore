@@ -1,4 +1,5 @@
 ﻿using System;
+using Core.Time.Zone;
 
 namespace Core.Time
 {
@@ -11,8 +12,9 @@ namespace Core.Time
         public const long TicksPerMinute = 60 * TicksPerSecond;
         public const long TicksPerHour   = 60 * TicksPerMinute;
         public const long TicksPerDay    = 24 * TicksPerHour;
-
-        public const int DaysOfLeapYearMonth = 29;
+        public const int  DaysOfLeapYearMonth = 29;
+        public const int  DaysOfLeapYear = 366;
+        public const int  DaysOfYear = 365;
 
         public static DateTime Of(int year, Month month, int day)
         {
@@ -57,21 +59,6 @@ namespace Core.Time
 
             var diff = Math.Abs(dateTime2.Ticks - dateTime1.Ticks);
             return new TimeSpan(diff);
-        }
-
-        public static TimeSpan From(DayOfWeek dayOfWeek)
-        {
-            switch (dayOfWeek)
-            {
-                case DayOfWeek.Sunday    : return TimeSpan.FromDays(1);
-                case DayOfWeek.Monday    : return TimeSpan.FromDays(2);
-                case DayOfWeek.Tuesday   : return TimeSpan.FromDays(3);
-                case DayOfWeek.Wednesday : return TimeSpan.FromDays(4);
-                case DayOfWeek.Thursday  : return TimeSpan.FromDays(5);
-                case DayOfWeek.Friday    : return TimeSpan.FromDays(5);
-                case DayOfWeek.Saturday  : return TimeSpan.FromDays(7);
-                default                  : return TimeSpan.Zero;
-            }
         }
 
         public static DateTime AdjustIn(DateTime dateTime, TimeZoneInfo timeZone)

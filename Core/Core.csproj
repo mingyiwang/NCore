@@ -125,7 +125,7 @@
     <Compile Include="Csv\CsvReader.cs" />
     <Compile Include="Csv\CsvSerializer.cs" />
     <Compile Include="Csv\CsvWriter.cs" />
-    <Compile Include="Time\DateFormat.cs" />
+    <Compile Include="Time\Format\DateTimeFormatter.cs" />
     <Compile Include="Expr\Eval\BaseEvaluator.cs" />
     <Compile Include="Expr\Eval\DefaultEvaluator.cs" />
     <Compile Include="Expr\Eval\IEvaluator.cs" />
@@ -169,12 +169,14 @@
     <Compile Include="Security\Encryptor.cs" />
     <Compile Include="Security\Hasher.cs" />
     <Compile Include="Service\IService.cs" />
+    <Compile Include="Time\Format\DateTimeFormatterBuilder.cs" />
     <Compile Include="Time\Dates.cs" />
+    <Compile Include="Time\DateTimeRange.cs" />
     <Compile Include="Time\DayLightOfYear.cs" />
     <Compile Include="Time\Month.cs" />
-    <Compile Include="Time\TimeZones.cs" />
+    <Compile Include="Time\Zone\TimeZones.cs" />
     <Compile Include="Time\Year.cs" />
-    <Compile Include="Time\ZonedDateTime.cs" />
+    <Compile Include="Time\Zone\ZonedDateTime.cs" />
     <Compile Include="Transfer\PagingRequest.cs" />
     <Compile Include="Transfer\PagingResult.cs" />
     <Compile Include="Service\AbstractService.cs" />
