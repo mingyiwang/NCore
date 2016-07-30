@@ -1,20 +1,45 @@
 ﻿using System;
-using Core.Time.Zone;
 
 namespace Core.Time
 {
 
     public class Dates
     {
-
+  
         public const long TicksPerMillSeconds = 10000;
         public const long TicksPerSecond = TicksPerMillSeconds * 1000;
         public const long TicksPerMinute = 60 * TicksPerSecond;
         public const long TicksPerHour   = 60 * TicksPerMinute;
         public const long TicksPerDay    = 24 * TicksPerHour;
-        public const int  DaysOfLeapYearMonth = 29;
-        public const int  DaysOfLeapYear = 366;
-        public const int  DaysOfYear = 365;
+
+        // Number of days in Leap Year
+        public const int DaysPerLeapYear = 366;
+
+        // Number of day in Normal Year
+        public const int DaysPerYear = 365;
+
+        // Number of days in 4 years
+        public const int DaysPer4Years = DaysPerYear * 4 + 1;
+
+        // Number of days in 100 years
+        public const int DaysPer100Years = DaysPer4Years * 25 - 1;
+
+        // Number of days in 400 years
+        public const int DaysPer400Years = DaysPer100Years * 4 + 1;
+
+        // Number of days from 1/1/0001 to 12/31/1600 
+        public const int DaysTo1601 = DaysPer400Years * 4;
+
+        // Number of days from 1/1/0001 to 12/30/1899
+        public const int DaysTo1899  = DaysPer400Years * 4  + DaysPer100Years * 3 - 367;
+
+        // Number of days from 1/1/0001 to 12/31/9999
+        public const int DaysTo10000 = DaysPer400Years * 25 - 366;
+        
+        // Day of Week of 1/1/0001
+        public const DayOfWeek FirstDayOfWeek = DayOfWeek.Monday;
+
+        public static readonly DateTime FirstDay = new DateTime(0, DateTimeKind.Utc);
 
         public static DateTime Of(int year, Month month, int day)
         {
@@ -59,17 +84,6 @@ namespace Core.Time
 
             var diff = Math.Abs(dateTime2.Ticks - dateTime1.Ticks);
             return new TimeSpan(diff);
-        }
-
-        public static DateTime AdjustIn(DateTime dateTime, TimeZoneInfo timeZone)
-        {
-            if (dateTime.Kind == DateTimeKind.Utc)
-            {
-                return dateTime;
-            }
-
-            var dalighLight = TimeZones.GetDaylightTime(timeZone, dateTime.Year);
-            return dateTime;
         }
 
     }

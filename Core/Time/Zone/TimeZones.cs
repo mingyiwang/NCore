@@ -6,7 +6,7 @@ using System.Threading;
 namespace Core.Time.Zone
 {
 
-    public class TimeZones
+    public sealed class TimeZones
     {
 
         public static readonly Lazy<TimeZoneInfo> AuEast    = GetTimeZoneById("AUS Eastern Standard Time");
@@ -24,7 +24,7 @@ namespace Core.Time.Zone
             );
         }
 
-        internal static DaylightTime GetDaylightTime(TimeZoneInfo timeZone, int year)
+        public static DaylightTime GetDaylightTime(TimeZoneInfo timeZone, int year)
         {
             
             var adjustRule = timeZone
@@ -41,7 +41,9 @@ namespace Core.Time.Zone
             var end   = adjustRule.DaylightTransitionEnd;
             var startDate = start.IsFixedDateRule 
                           ? Dates.Of(year, Month.Of(start.Month), start.Day).Add(TimeSpan.FromTicks(start.TimeOfDay.Ticks)) 
-                          : GetTransitionTimeDay(start, year);
+                          : MonthOfYear.Of(start.Month, year)
+                                       .GetDayOfWeekDateInWeek(start.Week, start.DayOfWeek)
+                                       .Add(TimeSpan.FromTicks(start.TimeOfDay.Ticks));
 
             DateTime endDate;
             if (end.IsFixedDateRule)
@@ -57,31 +59,12 @@ namespace Core.Time.Zone
             }
             else
             {
-                endDate = GetTransitionTimeDay(end, year);
+                endDate = MonthOfYear.Of(end.Month, year)
+                                     .GetDayOfWeekDateInWeek(end.Week, end.DayOfWeek)
+                                     .Add(TimeSpan.FromTicks(end.TimeOfDay.Ticks));
             }
 
             return new DaylightTime(startDate, endDate, adjustRule.DaylightDelta);
-        }
-
-        private static DateTime GetTransitionTimeDay(TimeZoneInfo.TransitionTime transitionTime, int year)
-        {
-            DateTime endDate;
-            var endMonth = Month.Of(transitionTime.Month);
-            var lastDayOfMonth = Dates.Of(year, endMonth, 7 * (transitionTime.Week - 1) + 1); // get last day of this week
-
-            var firstDayOfLastWeek  = (int) lastDayOfMonth.DayOfWeek;
-            var targetDayOfThisWeek = (int) transitionTime.DayOfWeek;
-            
-            if (targetDayOfThisWeek == firstDayOfLastWeek)
-            {
-                endDate = lastDayOfMonth.Add(TimeSpan.FromTicks(transitionTime.TimeOfDay.Ticks));
-            }
-            else
-            {
-                var days = TimeSpan.FromDays(Math.Abs(targetDayOfThisWeek - firstDayOfLastWeek));
-                endDate  = lastDayOfMonth.Add(days).Add(TimeSpan.FromTicks(transitionTime.TimeOfDay.Ticks));
-            }
-            return endDate;
         }
 
         private TimeZones(){}

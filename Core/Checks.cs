@@ -7,6 +7,14 @@ namespace Core
     public sealed class Checks
     {
 
+        public static void Is(Type expectedType, object actual)
+        {
+            if (actual.GetType() != expectedType)
+            {
+                Fail<ArgumentException>($"Expected Type : {expectedType.Name} But was : {actual.GetType().Name}");
+            }
+        }
+
         public static void NotNull(object obj)
         {
             NotNull(obj, $"[Precondition Check Failed] - Object{obj.GetType()} can not be null.");
@@ -81,12 +89,12 @@ namespace Core
 
         public static void Equals(int expected, int actual)
         {
-            Equals<ArgumentException>(expected, actual, "[Precondition Checks Failed] - value must be equal.");
+            Equals<ArgumentException>(expected, actual, $"[Precondition Checks Failed] - Expected {expected} but was {actual}.");
         }
 
         public static void Equals(string expected, string actual)
         {
-            Equals<ArgumentException>(expected, actual, "[Precondition Checks Failed] - value must be equal.");
+            Equals<ArgumentException>(expected, actual, $"[Precondition Checks Failed] - Expected {expected} but was {actual}.");
         }
 
         public static void Equals<T>(T expected, T actual)

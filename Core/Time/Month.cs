@@ -3,37 +3,42 @@
 namespace Core.Time
 {
 
-    public sealed class Month : IComparable<Month>, IComparable, IEquatable<Month>
+    public sealed class Month : IDateTime, IComparable<Month>, IComparable, IEquatable<Month>
     {
 
         public const int MaxDaysOfLeapYearMonth = 29;
         public const int MinDayOfMonth = 1;
         public const int MaxDayOfMonth = 31;
 
-        public static readonly Month January   = new Month(1,  "January",  30);
-        public static readonly Month February  = new Month(2,  "February", 28);
-        public static readonly Month March     = new Month(3,  "March",    31);
-        public static readonly Month April     = new Month(4,  "April",    30);
-        public static readonly Month May       = new Month(5,  "May",      31);
-        public static readonly Month June      = new Month(6,  "June",     30);
-        public static readonly Month July      = new Month(7,  "July",     31);
-        public static readonly Month August    = new Month(8,  "August",   30);
-        public static readonly Month September = new Month(9,  "September",31);
-        public static readonly Month October   = new Month(10, "October",  30);
-        public static readonly Month November  = new Month(11, "November", 31);
-        public static readonly Month December  = new Month(12, "December", 30);
+        public static readonly Month January   = new Month(1,  "January",   31, 31);
+        public static readonly Month February  = new Month(2,  "February",  29, 28);
+        public static readonly Month March     = new Month(3,  "March",     31, 31);
+        public static readonly Month April     = new Month(4,  "April",     30, 30);
+        public static readonly Month May       = new Month(5,  "May",       31, 31);
+        public static readonly Month June      = new Month(6,  "June",      30, 30);
+        public static readonly Month July      = new Month(7,  "July",      31, 31);
+        public static readonly Month August    = new Month(8,  "August",    31, 31);
+        public static readonly Month September = new Month(9,  "September", 30, 30);
+        public static readonly Month October   = new Month(10, "October",   31, 31);
+        public static readonly Month November  = new Month(11, "November",  30, 30);
+        public static readonly Month December  = new Month(12, "December",  31, 31);
 
         private readonly string _name;
         private readonly int _month;
-        private readonly int _estimateDays;
+        private readonly int _daysOfLeapYear;
+        private readonly int _days;
        
-        private Month(int month, string name, int estimateDays)
+        private Month(int month, string name, int days, int daysOfLeapYear)
         {
             _name = name;
-            _estimateDays = estimateDays;
+            _daysOfLeapYear = daysOfLeapYear;
+            _days  = days;
             _month = month;
         }
 
+        /// <summary>
+        /// Construct Month in Loca Time Zone
+        /// </summary>
         public static Month Now
         {
             get
@@ -42,6 +47,11 @@ namespace Core.Time
             }
         }
 
+        /// <summary>
+        /// Construct <code>Month</code> by numberic Value of Month
+        /// </summary>
+        /// <param name="month">Integer Value of Month</param>
+        /// <returns>Month</returns>
         public static Month Of(int month)
         {
             switch(month)
@@ -60,6 +70,28 @@ namespace Core.Time
                 case 12: return December;
                 default: throw new ArgumentOutOfRangeException($"Invalid Month [{month}]");
             }
+        }
+
+        public static Month Of(DateTime dateTime)
+        {
+            return dateTime.Kind == DateTimeKind.Utc
+                 ? Of(TimeZoneInfo.ConvertTimeFromUtc(dateTime, TimeZoneInfo.Local).Month)
+                 : Of(dateTime.Month);
+        }
+
+        /// <summary>
+        /// Construct MonthOfYear by specified Year and This Month
+        /// </summary>
+        /// <param name="year"><code>int</code></param>
+        /// <returns><code>MonthOfYear</code></returns>
+        public MonthOfYear ForYear(int year)
+        {
+            return MonthOfYear.Of(Of(_month), Year.Of(year));
+        }
+
+        public MonthOfYear ForYear(Year year)
+        {
+            return MonthOfYear.Of(Of(_month), year);
         }
 
         /// <summary>
@@ -89,14 +121,49 @@ namespace Core.Time
         /// </summary>
         /// <param name="year"></param>
         /// <returns></returns>
-        public int GetDaysOfYear(int year)
+        public int GetTotalDaysInYear(int year)
         {
-            if(DateTime.IsLeapYear(Year.CheckRange(year)) && this == February)
-            {
-                return MaxDaysOfLeapYearMonth;
-            }
+            return DateTime.IsLeapYear(Year.CheckRange(year)) ? _daysOfLeapYear : _days;
+        }
 
-            return _estimateDays;
+        /// <summary>
+        /// Get Total Days From Start of This Year to The End of Previous Month
+        /// </summary>
+        /// <param name="year"></param>
+        /// <returns></returns>
+        public int GetDaysToStartOfMonthInYear(int year)
+        {
+            if (_month == 1)
+            {
+                return 0;
+            }
+            return GetDaysToEndOfMonthInYear(year) - GetTotalDaysInYear(year);
+        }
+
+        /// <summary>
+        /// Get Total Days From the Start Day to End of this Month in Year
+        /// </summary>
+        /// <param name="year"><code>int</code></param>
+        /// <returns><code>int</code></returns>
+        public int GetDaysToEndOfMonthInYear(int year)
+        {
+            var sum = 0;
+            for (var i = 1; i <= _month; i++)
+            {
+                sum += Of(i).GetTotalDaysInYear(year);
+            }
+            return sum;
+        }
+
+        /// <summary>
+        /// Check Day is valid of this month in specified year
+        /// </summary>
+        /// <param name="day">Day of Month</param>
+        /// <param name="year">Year</param>
+        /// <returns></returns>
+        public bool IsValid(int day, int year)
+        {
+            return day >= MinDayOfMonth && day <= GetTotalDaysInYear(year);
         }
 
         /// <summary>
@@ -107,11 +174,9 @@ namespace Core.Time
         /// <returns></returns>
         public int CheckRange(int day, int year)
         {
-            Checks.InRange(
-                MinDayOfMonth,
-                GetDaysOfYear(year),
-                MaxDayOfMonth,
-                $"{day} of {GetName()} in Year [{year}] must be within {MaxDayOfMonth} to {MaxDayOfMonth}"
+            var maxDays = GetTotalDaysInYear(year);
+            Checks.InRange(MinDayOfMonth, maxDays, day,
+                $"{day} of {GetName()} in Year [{year}] must be within {MaxDayOfMonth} to {maxDays}"
             );
             return day;
         }
@@ -137,7 +202,7 @@ namespace Core.Time
         /// <param name="obj">The object to compare with the current object. </param>
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(obj, null) || ReferenceEquals(this, null))
+            if (ReferenceEquals(obj, null))
             {
                 return false;
             }
@@ -159,6 +224,7 @@ namespace Core.Time
         {
             return _month;
         }
+
 
     }
 

@@ -81,6 +81,7 @@
     <Compile Include="Concurrent\Reentrant.cs" />
     <Compile Include="Concurrent\CAS.cs" />
     <Compile Include="Concurrent\Threads.cs" />
+    <Compile Include="Extension\LazyExtension.cs" />
     <Compile Include="Extension\StringExtension.cs" />
     <Compile Include="Persist\CriteriaBuilder.cs" />
     <Compile Include="Http\Entities\ContentType.cs" />
@@ -125,6 +126,9 @@
     <Compile Include="Csv\CsvReader.cs" />
     <Compile Include="Csv\CsvSerializer.cs" />
     <Compile Include="Csv\CsvWriter.cs" />
+    <Compile Include="Time\Extension\DateTimeExtension.cs" />
+    <Compile Include="Time\Extension\DayOfWeekExtension.cs" />
+    <Compile Include="Time\Format\DateTimePattern.cs" />
     <Compile Include="Time\Format\DateTimeFormatter.cs" />
     <Compile Include="Expr\Eval\BaseEvaluator.cs" />
     <Compile Include="Expr\Eval\DefaultEvaluator.cs" />
@@ -171,12 +175,12 @@
     <Compile Include="Service\IService.cs" />
     <Compile Include="Time\Format\DateTimeFormatterBuilder.cs" />
     <Compile Include="Time\Dates.cs" />
-    <Compile Include="Time\DateTimeRange.cs" />
-    <Compile Include="Time\DayLightOfYear.cs" />
+    <Compile Include="Time\Zone\DayLightOfYear.cs" />
+    <Compile Include="Time\IDateTime.cs" />
     <Compile Include="Time\Month.cs" />
+    <Compile Include="Time\MonthOfYear.cs" />
     <Compile Include="Time\Zone\TimeZones.cs" />
     <Compile Include="Time\Year.cs" />
-    <Compile Include="Time\Zone\ZonedDateTime.cs" />
     <Compile Include="Transfer\PagingRequest.cs" />
     <Compile Include="Transfer\PagingResult.cs" />
     <Compile Include="Service\AbstractService.cs" />

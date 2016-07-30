@@ -1,11 +1,10 @@
-﻿using System;
-
-namespace Core.Extension
+﻿namespace Core.Extension
 {
 
     public static class StringExtension
     {
 
     }
+
 
 }
