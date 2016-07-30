@@ -1,9 +1,10 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 
 namespace Core.Time.Format
 {
 
-    public class DateTimeFormatterBuilder
+    public class DateTimeFormatterBuilder : IFormatProvider
     {
 
         private readonly StringBuilder _builder;
@@ -18,7 +19,12 @@ namespace Core.Time.Format
             return this;
         }
 
-        
+
+        public object GetFormat(Type formatType)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 
 }
