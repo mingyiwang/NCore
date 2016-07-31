@@ -14,13 +14,13 @@
         public DateTimePattern Year;
         public DateTimePattern Month;
         public DateTimePattern DayOfMonth;
+        public DateTimePattern DayOfWeek;
         public DateTimePattern Hour;
         public DateTimePattern Minitues;
         public DateTimePattern Seconds;
         public DateTimePattern MillSeconds;
         public DateTimePattern Era;
         public DateTimePattern TimeZone;
-
 
     }
 

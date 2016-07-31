@@ -21,6 +21,11 @@ namespace Core.Time.Extension
             }
         }
 
+        public static DateTime ForWeekInMonthYear(this DayOfWeek dayOfWeek, int week, MonthOfYear my)
+        {
+            return my.GetDayOfWeekDateForWeek(week, dayOfWeek);
+        }
+
     }
 
 }

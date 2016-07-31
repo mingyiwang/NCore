@@ -135,7 +135,7 @@ namespace Core.Time
 
         }
 
-        public DateTime GetDayOfWeekDateInWeek(int week, DayOfWeek dayOfWeek)
+        public DateTime GetDayOfWeekDateForWeek(int week, DayOfWeek dayOfWeek)
         {
             Checks.InRange(1, 5, week, $"{week} is out of range in month {_month.GetName()} of Year {_year.GetYear()}");
             
