@@ -1,29 +1,58 @@
-﻿using System;
-using System.Text;
+﻿using System.Globalization;
+using Core.Primitive;
 
 namespace Core.Time.Format
 {
 
-    public class DateTimeFormatterBuilder : IFormatProvider
+    public class DateTimeFormatterBuilder
     {
 
-        private readonly StringBuilder _builder;
+        public string Pattern { get; private set; }
+        private DateTimeFormatInfo cultureInfo;
 
         public DateTimeFormatterBuilder()
         {
-            _builder = new StringBuilder("");
+
         }
 
-        public DateTimeFormatterBuilder Append()
+        public string GetPattern()
+        {
+            return Pattern;
+        }
+
+        public DateTimeFormatterBuilder Append(Symbol symbol)
         {
             return this;
         }
 
-
-        public object GetFormat(Type formatType)
+        public DateTimeFormatterBuilder Append(string pattern)
         {
-            throw new NotImplementedException();
+            Pattern = pattern;
+            return this;
         }
+
+        public DateTimeFormatterBuilder Append(DateTimePattern pattern)
+        {
+            return this;
+        }
+
+        public DateTimeFormatterBuilder With(CultureInfo info)
+        {
+            cultureInfo = DateTimeFormatInfo.GetInstance(info);
+            return this;
+        }
+
+        public DateTimeFormatter GetFormatter()
+        {
+            
+            return DateTimeFormatter.Of(this);
+        }
+
+        public override string ToString()
+        {
+            return string.Empty;
+        }
+
 
     }
 

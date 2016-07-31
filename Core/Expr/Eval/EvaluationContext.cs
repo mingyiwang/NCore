@@ -100,7 +100,7 @@ namespace Core.Expr.Eval {
             RegisterOperator("&&", () => new BinaryOperator("&&",  4, true, TokenKind.AndAlso));
             RegisterOperator("||", () => new BinaryOperator("||",  3, true, TokenKind.OrElse));
             RegisterOperator("?:", () => new TernaryOperator("?:", 2, TokenKind.Condition));
-            RegisterOperator("=",  () => new BinaryOperator("=",   1, false, TokenKind.Assign));
+            RegisterOperator("=",  () => new BinaryOperator("=",   1, false, TokenKind.Assignment));
 
             RegisterInstance("true",  true);
             RegisterInstance("True",  true);

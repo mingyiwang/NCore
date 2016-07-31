@@ -105,7 +105,7 @@
     <Compile Include="Json\JsonUtils.cs" />
     <Compile Include="Net\MimeTypes.cs" />
     <Compile Include="Collection\Bits.cs" />
-    <Compile Include="Primitive\ASCII.cs" />
+    <Compile Include="Primitive\Symbol.cs" />
     <Compile Include="Primitive\Chars.cs" />
     <Compile Include="Primitive\Joiner.cs" />
     <Compile Include="Primitive\NumberFormatter.cs" />

@@ -44,7 +44,7 @@ namespace Core.Expr.Eval {
                 case TokenKind.LogicalOr        : return Expression.Or(left, right);
                 case TokenKind.AndAlso          : return Expression.AndAlso(left, right);
                 case TokenKind.OrElse           : return Expression.OrElse(left, right);
-                case TokenKind.Assign           : return Expression.Assign(left, right);
+                case TokenKind.Assignment           : return Expression.Assign(left, right);
             }
 
             throw new NotSupportedException();

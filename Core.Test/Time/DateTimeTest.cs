@@ -1,5 +1,6 @@
 ﻿using System;
 using Core.Time;
+using Core.Time.Format;
 using NUnit.Framework;
 
 namespace Core.Test.Time
@@ -21,7 +22,8 @@ namespace Core.Test.Time
         [Test]
         public void TestMonth()
         {
-
+            DateTimeFormatter.Of("").Parse("");
+            DateTimeFormatter.Of("").Format(DateTime.Now);
         }
 
         [Test]

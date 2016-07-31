@@ -6,6 +6,8 @@ namespace Core.Time
     public class Dates
     {
 
+        public DateTime Nil = new DateTime(-1, DateTimeKind.Unspecified);
+
         //1 Tick = 100 nano Seconds
         public const double TicksPerNanoSeconds = 0.01;
 
@@ -95,7 +97,7 @@ namespace Core.Time
             if (TimeZoneInfo.Local.IsInvalidTime(dateTime1.LocalDateTime) 
             ||  TimeZoneInfo.Local.IsInvalidTime(dateTime2.LocalDateTime))
             {
-                throw new ArgumentException("");
+                throw new ArgumentException("DateTime must not be invalid");
             }
 
             var diff = Math.Abs(dateTime2.Ticks - dateTime1.Ticks);
