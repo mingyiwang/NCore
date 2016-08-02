@@ -43,10 +43,6 @@
       <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.2.3\lib\net45\NLog.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections.Immutable, Version=1.1.37.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Collections.Immutable.1.1.37\lib\dotnet\System.Collections.Immutable.dll</HintPath>
@@ -57,6 +53,7 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -84,6 +81,7 @@
     <Compile Include="Concurrent\Reentrant.cs" />
     <Compile Include="Concurrent\CAS.cs" />
     <Compile Include="Concurrent\Threads.cs" />
+    <Compile Include="Extension\LazyExtension.cs" />
     <Compile Include="Extension\StringExtension.cs" />
     <Compile Include="Persist\CriteriaBuilder.cs" />
     <Compile Include="Http\Entities\ContentType.cs" />
@@ -103,13 +101,14 @@
     <Compile Include="IO\Buffer.cs" />
     <Compile Include="IO\ByteBuffer.cs" />
     <Compile Include="IO\Files.cs" />
-    <Compile Include="IO\Properties.cs" />
     <Compile Include="IO\StringBuffer.cs" />
     <Compile Include="Json\JsonUtils.cs" />
     <Compile Include="Net\MimeTypes.cs" />
     <Compile Include="Collection\Bits.cs" />
+    <Compile Include="Primitive\Symbol.cs" />
+    <Compile Include="Primitive\Chars.cs" />
     <Compile Include="Primitive\Joiner.cs" />
-    <Compile Include="Primitive\Formatter\NumberFormatter.cs" />
+    <Compile Include="Primitive\NumberFormatter.cs" />
     <Compile Include="Persist\PersistentService.cs" />
     <Compile Include="Persist\IPersistentService.cs" />
     <Compile Include="Expr\Eval\RoslynEvaluator.cs" />
@@ -121,7 +120,6 @@
     <Compile Include="Aws\AmazonS3Object.cs" />
     <Compile Include="Aws\IAmazonTransferService.cs" />
     <Compile Include="Primitive\Splitter.cs" />
-    <Compile Include="Reflect\Reflection.cs" />
     <Compile Include="IO\Resources.cs" />
     <Compile Include="Guids.cs" />
     <Compile Include="Checks.cs" />
@@ -129,7 +127,10 @@
     <Compile Include="Csv\CsvReader.cs" />
     <Compile Include="Csv\CsvSerializer.cs" />
     <Compile Include="Csv\CsvWriter.cs" />
-    <Compile Include="Primitive\Formatter\DateFormatter.cs" />
+    <Compile Include="Time\Extension\DateTimeExtension.cs" />
+    <Compile Include="Time\Extension\DayOfWeekExtension.cs" />
+    <Compile Include="Time\Format\DateTimeFormatToken.cs" />
+    <Compile Include="Time\Format\DateTimeFormatter.cs" />
     <Compile Include="Expr\Eval\BaseEvaluator.cs" />
     <Compile Include="Expr\Eval\DefaultEvaluator.cs" />
     <Compile Include="Expr\Eval\IEvaluator.cs" />
@@ -173,6 +174,14 @@
     <Compile Include="Security\Encryptor.cs" />
     <Compile Include="Security\Hasher.cs" />
     <Compile Include="Service\IService.cs" />
+    <Compile Include="Time\Format\DateTimeFormatterBuilder.cs" />
+    <Compile Include="Time\Dates.cs" />
+    <Compile Include="Time\Zone\DayLightOfYear.cs" />
+    <Compile Include="Time\IDateTime.cs" />
+    <Compile Include="Time\Month.cs" />
+    <Compile Include="Time\MonthOfYear.cs" />
+    <Compile Include="Time\Zone\TimeZones.cs" />
+    <Compile Include="Time\Year.cs" />
     <Compile Include="Transfer\PagingRequest.cs" />
     <Compile Include="Transfer\PagingResult.cs" />
     <Compile Include="Service\AbstractService.cs" />
@@ -183,7 +192,6 @@
     <Compile Include="Template\SimpleTemplate.cs" />
     <Compile Include="Primitive\Strings.cs" />
     <Compile Include="Template\TemplateContext.cs" />
-    <Compile Include="Xml\XmlUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Net\mime.types" />

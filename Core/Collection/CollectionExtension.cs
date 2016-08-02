@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace Core.Collection {
@@ -40,6 +41,12 @@ namespace Core.Collection {
         public static string AsString<T>(this IEnumerable<T> collection)
         {
             return Collections.Join(collection);
+        }
+
+        public static void Clear<T>(this ConcurrentQueue<T> queue)
+        {
+            T result;
+            while (queue.TryDequeue(out result)){}
         }
 
     }

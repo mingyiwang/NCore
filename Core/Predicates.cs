@@ -35,7 +35,6 @@ namespace Core
             );
         }
 
-
         public static Expression<Func<T, bool>> And<T>(this Expression<Func<T, bool>> expr1,
             Expression<Func<T, bool>> expr2)
         {

@@ -7,16 +7,25 @@ namespace Core.Collection
 {
 
     /// <summary>
-    /// This class is used to working with int, float, double and decimal data type
-    /// int    : 32 bits which is 4 bytes
-    /// float  : 32 bits which is 4 bytes
-    /// double : 64 bits which is 8 bytes
-    /// 
+    /// This class is used to working with int, long, float, double ,decimal, char data type
+    /// int     : 32  bits which is 4  bytes
+    /// float   : 32  bits which is 4  bytes
+    /// double  : 64  bits which is 8  bytes
+    /// decimal : 128 bits which is 16 bytes;
+    /// char    : 16  bits which is 2  bytes
+    /// long    : 64  bits which is 4  bytes
     /// This class intend to be immutable 
-    /// and every operation will yield a new bit class
+    /// and operation will yield a new bit class
     /// </summary>
     public sealed class Bits : IEquatable<Bits>, IComparable<Bits>
     {
+
+        public const int BitsPerInteger = 32;
+        public const int BitsPerFloat   = 32;
+        public const int BitsPerDouble  = 64;
+        public const int BitsPerDecimal = 128;
+        public const int BitsPerChar    = 16;
+        public const int BitsPerLong    = 64;
 
         private readonly byte[] _bytes;
 
@@ -40,7 +49,7 @@ namespace Core.Collection
         private Bits(int value) : this(BitConverter.GetBytes(value))
         {
             IsIneger = true;
-            IsFloat = false;
+            IsFloat  = false;
             IsDouble = false;
         }
 

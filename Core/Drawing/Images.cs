@@ -60,7 +60,7 @@ namespace Core.Drawing
 
             var percent = nPercentH < nPercentW ? nPercentH : nPercentW;
 
-            var newWidth = (int)(srcWidth * percent);
+            var newWidth  = (int)(srcWidth * percent);
             var newHeight = (int)(srcWidth * percent);
 
             var b = new Bitmap(newWidth, newHeight, PixelFormat.Format24bppRgb);

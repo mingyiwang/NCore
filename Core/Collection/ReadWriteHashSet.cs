@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Core.Concurrent;
+using Core.Time.Format;
 
 namespace Core.Collection
 {
@@ -18,6 +19,18 @@ namespace Core.Collection
             get {
 
                 return _lock.Read(() => _hashSet.Count);
+            }
+        }
+
+        public ReadWriteHashSet()
+        {
+        }
+
+        public ReadWriteHashSet(IEnumerable<T> collection) : base()
+        {
+            foreach (var item in collection)
+            {
+                _hashSet.Add(item);
             }
         }
 
