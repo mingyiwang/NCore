@@ -1,58 +1,76 @@
-﻿using System.Globalization;
-using Core.Primitive;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Globalization;
+using System.Text;
+using Core.Collection;
 
 namespace Core.Time.Format
 {
 
-    public class DateTimeFormatterBuilder
+    public sealed class DateTimeFormatterBuilder : IDisposable
     {
 
-        public string Pattern { get; private set; }
-        private DateTimeFormatInfo cultureInfo;
-
+        private readonly ConcurrentQueue<DateTimeFormatToken> _tokens;
+        private CultureInfo _cultureInfo;
+        
         public DateTimeFormatterBuilder()
         {
-
+            _tokens = new ConcurrentQueue<DateTimeFormatToken>();
         }
 
-        public string GetPattern()
+        public DateTimeFormatterBuilder Append(char literal)
         {
-            return Pattern;
-        }
-
-        public DateTimeFormatterBuilder Append(Symbol symbol)
-        {
+            Checks.NotNull(literal);
+            _tokens.Enqueue(DateTimeFormatToken.Of(literal));
             return this;
         }
 
-        public DateTimeFormatterBuilder Append(string pattern)
+        public DateTimeFormatterBuilder Append(DateTimeFormatToken token)
         {
-            Pattern = pattern;
-            return this;
-        }
-
-        public DateTimeFormatterBuilder Append(DateTimePattern pattern)
-        {
+            Checks.NotNull(token);
+            _tokens.Enqueue(token);
             return this;
         }
 
         public DateTimeFormatterBuilder With(CultureInfo info)
         {
-            cultureInfo = DateTimeFormatInfo.GetInstance(info);
+            Checks.NotNull(info);
+            _cultureInfo = info;
             return this;
         }
 
         public DateTimeFormatter GetFormatter()
         {
-            
-            return DateTimeFormatter.Of(this);
+            if (_cultureInfo == null)
+            {
+                _cultureInfo = CultureInfo.CurrentCulture;
+            }
+            return new DateTimeFormatter(ToString(), _cultureInfo);
         }
 
         public override string ToString()
         {
-            return string.Empty;
+            var builder = new StringBuilder();
+            DateTimeFormatToken token;
+            while (_tokens.TryDequeue(out token))
+            {
+                builder.Append(token.GetCode());
+            }
+            return builder.ToString();
         }
 
+        public void Dispose()
+        {
+            try
+            {
+                _cultureInfo = null;
+                _tokens.Clear();
+            }
+            catch
+            {
+                //
+            }
+        }
 
     }
 

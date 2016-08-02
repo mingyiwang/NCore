@@ -129,7 +129,7 @@
     <Compile Include="Csv\CsvWriter.cs" />
     <Compile Include="Time\Extension\DateTimeExtension.cs" />
     <Compile Include="Time\Extension\DayOfWeekExtension.cs" />
-    <Compile Include="Time\Format\DateTimePattern.cs" />
+    <Compile Include="Time\Format\DateTimeFormatToken.cs" />
     <Compile Include="Time\Format\DateTimeFormatter.cs" />
     <Compile Include="Expr\Eval\BaseEvaluator.cs" />
     <Compile Include="Expr\Eval\DefaultEvaluator.cs" />
