@@ -68,7 +68,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aws\AmazonTransferServiceTest.cs" />
-    <Compile Include="Collection\BitsTest.cs" />
     <Compile Include="Collection\ConcurrentLinkedQueueTest.cs" />
     <Compile Include="Concurrent\CASTest.cs" />
     <Compile Include="IO\StreamsTest.cs" />
@@ -80,6 +79,7 @@
     <Compile Include="FileRepo\FileRepositoryTest.cs" />
     <Compile Include="Http\HttpRequestChannelTest.cs" />
     <Compile Include="Net\MimeTypesTest.cs" />
+    <Compile Include="Primitive\BitsTest.cs" />
     <Compile Include="Primitive\NumbersTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\AbstractServiceTest.cs" />

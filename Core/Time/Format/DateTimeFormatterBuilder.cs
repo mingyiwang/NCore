@@ -9,7 +9,6 @@ namespace Core.Time.Format
 
     public sealed class DateTimeFormatterBuilder : IDisposable
     {
-
         private readonly ConcurrentQueue<DateTimeFormatToken> _tokens;
         private CultureInfo _cultureInfo;
         
@@ -45,6 +44,7 @@ namespace Core.Time.Format
             {
                 _cultureInfo = CultureInfo.CurrentCulture;
             }
+
             return new DateTimeFormatter(ToString(), _cultureInfo);
         }
 

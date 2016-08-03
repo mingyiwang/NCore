@@ -23,8 +23,7 @@ namespace Core.Test.Time
         [Test]
         public void TestMonth()
         {
-            DateTimeFormatter.Of("").Parse("");
-            DateTimeFormatter.Of("").Format(DateTime.Now);
+            
         }
 
         [Test]
@@ -34,11 +33,9 @@ namespace Core.Test.Time
         }
 
         [Test]
-        public void TestDaylightSaving()
+        public void TestDayLightOfYear()
         {
-            Console.WriteLine(
-               DayLightOfYear.Of(Year.Of(2017)).InvalidTimeStart
-            );
+            
         }
 
         [Test]

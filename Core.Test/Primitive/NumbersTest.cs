@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Globalization;
-using System.Linq;
-using Core.Primitive;
-using Core.Time;
-using Core.Time.Zone;
+using Core.Concurrent;
 using NUnit.Framework;
 
 namespace Core.Test.Primitive {
@@ -14,9 +10,7 @@ namespace Core.Test.Primitive {
         [Test]
         public void TestDouble()
         {
-
-            
-
+            Console.WriteLine(OS.IsLittleEndian);
         }
 
     }

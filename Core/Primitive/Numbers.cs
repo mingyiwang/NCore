@@ -24,8 +24,8 @@ namespace Core.Primitive
             return parsed ? result : defaultValue;
         }
 
-        public static string BinaryOf(int value) {
-            return Bits.From(value).ToString();
+        public static string ToBinaryString(int value) {
+            return Bits.Of(value).ToString();
         }
 
         public static int IntOf(float value,  RoundKind round)
@@ -41,71 +41,6 @@ namespace Core.Primitive
         public static int IntOf(decimal value, RoundKind round)
         {
             return 0;
-        }
-
-        public static float FloatOf(int value)
-        {
-            return 0f;
-        }
-
-        public static float FloatOf(double value)
-        {
-            return 0f;
-        }
-
-        public static double DoubleOf(int value)
-        {
-            return 0d;
-        }
-
-        public static double DoubleOf(float value)
-        {
-            return 0d;
-        }
-
-        public static decimal DecimalOf(int value)
-        {
-            return 0;
-        }
-
-        public static decimal DecimalOf(float value)
-        {
-            return 0;
-        }
-
-        public static decimal DecimalOf(double value)
-        {
-            return 0;
-        }
-
-        public static string BinaryOf(byte value)
-        {
-            var bits = new Stack<int>(OS.BitsPerByte);
-            int quotient;
-            int input = value;
-            do
-            {
-                int remainder;
-                quotient = Math.DivRem(input, 2, out remainder);
-                input = quotient;
-                bits.Push(remainder);
-            }
-            while(
-                quotient != 0
-            );
-
-            var count = bits.Count;
-            if(count >= OS.BitsPerByte)
-            {
-                return bits.AsString();
-            }
-
-            for(var index = 1; index <= (OS.BitsPerByte - count); index++)
-            {
-                bits.Push(0);
-            }
-
-            return bits.AsString();
         }
 
     }
