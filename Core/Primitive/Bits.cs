@@ -119,13 +119,17 @@ namespace Core.Primitive
 
         public int ToInt()
         {
-            unsafe
+            if (IsInt32)
             {
-                fixed (byte* p = _bytes)
+                unsafe
                 {
-                    return *((int*)p);
+                    fixed (byte* p = _bytes)
+                    {
+                        return *(int*) p;
+                    }
                 }
             }
+            return 0;
         }
 
         public Bits Or(Bits bits)
@@ -229,8 +233,6 @@ namespace Core.Primitive
             return ToInt();
         }
 
-        
-
         public bool Equals(Bits other)
         {
             unsafe
@@ -282,8 +284,8 @@ namespace Core.Primitive
         public override string ToString()
         {
             return OS.IsLittleEndian
-                 ? Arrays.Reverse(_bytes).Select(Bits.ToBinaryString).AsString()
-                 : Arrays.CopyOf(_bytes).Select(Bits.ToBinaryString).AsString();
+                 ? Arrays.Reverse(_bytes).Select(ToBinaryString).AsString()
+                 : Arrays.CopyOf(_bytes).Select(ToBinaryString).AsString();
         }
 
         public static Bits Of(byte value)

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Core.Collection;
+﻿using Core.Collection;
 
 namespace Core.Time.Format
 {
@@ -83,6 +82,7 @@ namespace Core.Time.Format
             public DateTimeValueFormatToken(string baseCode, int baseKind) 
                 : base(baseCode, baseKind)
             {
+                string.Copy("");
                 IsValue = true;
             }
 
