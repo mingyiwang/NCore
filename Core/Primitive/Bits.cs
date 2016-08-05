@@ -9,7 +9,7 @@ namespace Core.Primitive
 
     /// <summary>
     /// This class is used to working with 
-    ///     int, short, long, float, double, decimal, char, bool
+    ///  int, short, long, float, double, decimal, char, bool
     /// int     : 32  bits which is 4  bytes
     /// short   : 16  bits which is 4  bytes
     /// float   : 32  bits which is 4  bytes
@@ -117,114 +117,91 @@ namespace Core.Primitive
             _typeInfo = 0; // means nothing
         }
 
+        public byte ToByte()
+        {
+            return 0;
+        }
+
         public int ToInt()
         {
-            if (IsInt32)
-            {
-                unsafe
-                {
-                    fixed (byte* p = _bytes)
-                    {
-                        return *(int*) p;
-                    }
-                }
-            }
+            // 1. For Float, Double and decimal we round to a integer
+            // 2. For Long, we return integer or overflow 
+            // 3. For char and boolean we can safely return the integer
+            // 4. For Short we return or overflow
+            return BitConverter.ToInt32(_bytes, 0);
+        }
+
+        public long ToLong()
+        {
             return 0;
+        }
+
+        public float ToFloat()
+        {
+            //1. For Int, Float, Short, and char, boolean we can safely returns float
+            //2. For double and long we return float or overflow
+            return BitConverter.ToSingle(_bytes, 0);
+        }
+
+        public double ToDouble()
+        {
+            return BitConverter.ToSingle(_bytes, 0);
+        }
+
+        public decimal ToDecimal()
+        {
+            // we can convert to long then decimal
+            return 0;
+        }
+
+        public char ToChar()
+        {
+            return (char) 0;
+        }
+
+        public bool ToBool()
+        {
+            return true;
         }
 
         public Bits Or(Bits bits)
         {
-            unsafe
-            {
-                fixed (byte* p1 = _bytes, p2 = bits._bytes)
-                {
-//                    var i1 = *((int*)p1);
-//                    var i2 = *((int*)p2);
-//                    return new Bits(i1 | i2);
-                    return null;
-                }
-            }
+            return null;
         }
 
         public Bits And(Bits bits)
         {
-            unsafe
-            {
-                fixed (byte* p1 = _bytes, p2 = bits._bytes)
-                {
-//                    var i1 = *((int*)p1);
-//                    var i2 = *((int*)p2);
-                    return null;
-                }
-            }
+            return null;
         }
 
         public Bits Xor(Bits bits)
         {
-            unsafe
-            {
-                fixed (byte* p1 = _bytes, p2 = bits._bytes)
-                {
-//                    var i1 = *((int*)p1);
-//                    var i2 = *((int*)p2);
-                    return null;
-                }
-            }
+            return null;
         }
 
         public Bits Not()
         {
-            unsafe
-            {
-                fixed (byte* p1 = _bytes)
-                {
-                    return null;
-                }
-            }
+            return null;
         }
 
         public Bits Plus(Bits bits)
         {
-            unsafe
-            {
-                fixed (byte* p1 = _bytes, p2 = bits._bytes)
-                {
-                    var i1 = *((int*)p1);
-                    var i2 = *((int*)p2);
-                    checked
-                    {
-                        return null;
-                    }
-                }
-            }
+            return null;
         }
 
         public Bits Minus(Bits bits)
         {
-            unsafe
-            {
-                fixed (byte* p1 = _bytes, p2 = bits._bytes)
-                {
-                    var i1 = *((int*)p1);
-                    var i2 = *((int*)p2);
-                    checked
-                    {
-                        return null;
-                    }
-                }
-            }
+            return null;
         }
 
         public Bits Set(int index)
         {
             return null;
-            //return Or(new Bits(1 << (index % 32)));
         }
 
         public Bits Clear(int index)
         {
             Checks.True(index < 32 && index > 0, "index is out of range.");
-            //return And(new Bits(1 << (index % 32)).Not());
             return null;
         }
 
@@ -235,15 +212,7 @@ namespace Core.Primitive
 
         public bool Equals(Bits other)
         {
-            unsafe
-            {
-                fixed (byte* p1 = _bytes, p2 = other._bytes)
-                {
-                    var i1 = *((int*)p1);
-                    var i2 = *((int*)p2);
-                    return i1 == i2;
-                }
-            }
+            return true;
         }
 
         public override bool Equals(object obj)
@@ -262,23 +231,14 @@ namespace Core.Primitive
             return b != null && Equals(b);
         }
 
+        public int CompareTo(Bits other)
+        {
+            return 0;
+        }
+
         public int CompareTo(object obj)
         {
             throw new NotImplementedException();
-        }
-
-        public int CompareTo(Bits other)
-        {
-            // comparing bytes should have the same length and the same type
-            unsafe
-            {
-                fixed (byte* p1 = _bytes, p2 = other._bytes)
-                {
-                    var i1 = *((int*)p1);
-                    var i2 = *((int*)p2);
-                    return i1.CompareTo(i2);
-                }
-            }
         }
 
         public override string ToString()
@@ -336,7 +296,6 @@ namespace Core.Primitive
                 _typeInfo = TYPE_DOUBLE
             };
         }
-
         
         public static Bits Of(decimal value)
         {
@@ -367,32 +326,6 @@ namespace Core.Primitive
             {
                 _typeInfo = TYPE_BOOLEAN
             };
-        }
-
-        public static string ToBinaryString(float value)
-        {
-            return string.Empty;
-        }
-
-        public static string ToBinaryString(double value)
-        {
-            return string.Empty;
-        }
-
-        public static string ToBinaryString(bool value)
-        {
-            return string.Empty;
-        }
-
-        public static string ToBinaryString(char value)
-        {
-            return string.Empty;
-        }
-
-        public static string ToBinaryString(int value)
-        {
-            // joining 4 bytes respresentation of integer
-            return string.Empty;
         }
 
         public static string ToBinaryString(byte value)
