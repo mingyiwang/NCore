@@ -46,6 +46,9 @@ namespace Core.Primitive
         public const int BytesPerBoolean = 1;
         public const int BitsPerBoolean  = BitsPerByte * BytesPerBoolean;
 
+        public const int MAX_FLOAT_EXPONENT = 127;
+        public const int MIN_FLOAT_EXPONENT = -126;
+
         private const short TYPE_UNDEFINED     = -1;
         private const short TYPE_BYTE          = 0;
         private const short TYPE_SHORT_INTEGER = 1;
@@ -124,7 +127,8 @@ namespace Core.Primitive
 
             if (IsFloat)
             {
-                var value = BitConverter.ToSingle(_bytes, 0);
+                var floatValue = BitConverter.ToSingle(_bytes, 0);
+                
             }
 
             if (IsDouble)
@@ -139,7 +143,7 @@ namespace Core.Primitive
 
             if (Length > BytesPerInt32)
             {
-                throw new OverflowException("");
+                throw new OverflowException("Integer can only hold 32 bits");
             }
 
             return BitConverter.ToInt32(_bytes, 0);
@@ -307,7 +311,7 @@ namespace Core.Primitive
         }
 
         /// <summary>
-        /// '^' Operator: when two bits are the same then '1' otherwise '0'
+        /// '^' Operator: when two bits are the same then '0' otherwise '1'
         /// </summary>
         /// <param name="bits"></param>
         /// <returns></returns>
@@ -337,30 +341,16 @@ namespace Core.Primitive
             return Of(ToInt() >> number);
         }
 
-        public override int GetHashCode()
+        /// <summary>
+        /// Convert byte array to binary string from high bit to low bit
+        /// Windows is using Litter Edianess so we need to reverse the bytes
+        /// </summary>
+        /// <returns></returns>
+        public string ToBinaryString(ByteOrder order = ByteOrder.LowerFirst)
         {
-            if (IsInt32 | IsByte | IsBoolean | IsChar | IsShort)
-            {
-                return ToInt();
-            }
-
-            if(IsFloat)
-            {
-                return BitConverter.ToInt32(_bytes, 0);
-            }
-
-            if (IsLong)
-            {
-                
-            }
-
-            if (IsDouble)
-            {
-
-                return (int) BitConverter.ToInt64(_bytes, 0);
-            }
-
-            return 0;
+            return order == ByteOrder.LowerFirst
+                 ? Arrays.CopyOf(_bytes).Select(b => b.ToBinaryString()).AsString()
+                 : Arrays.Reverse(_bytes).Select(b => b.ToBinaryString()).AsString();
         }
 
         public bool Equals(Bits other)
@@ -385,16 +375,28 @@ namespace Core.Primitive
             return b != null && Equals(b);
         }
 
-        /// <summary>
-        /// Convert byte array to binary string from high bit to low bit
-        /// Windows is using Litter Edianess so we need to reverse the bytes
-        /// </summary>
-        /// <returns></returns>
-        public string ToBinaryString(ByteOrder order = ByteOrder.LowerFirst)
+        public override int GetHashCode()
         {
-            return order == ByteOrder.LowerFirst 
-                 ? Arrays.CopyOf(_bytes).Select(b => b.ToBinaryString()).AsString() 
-                 : Arrays.Reverse(_bytes).Select(b => b.ToBinaryString()).AsString();
+            if(IsInt32 | IsByte | IsBoolean | IsChar | IsShort)
+            {
+                return ToInt();
+            }
+            if(IsFloat)
+            {
+                return Numbers.FloatToIntBits(ToFloat());
+            }
+            if(IsDouble)
+            {
+                var longValue = Numbers.DoubleToLongBits(ToDouble());
+                return (int)(longValue ^ (longValue >> 32));
+            }
+            if(IsLong)
+            {
+                var longValue = BitConverter.ToInt64(_bytes, 0);
+                return (int)(longValue ^ (longValue >> 32));
+            }
+
+            return 0;
         }
 
         public static Bits Of(byte value)

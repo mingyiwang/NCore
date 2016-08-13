@@ -16,6 +16,8 @@ namespace Core.Primitive
             return Convert.ToString(b,2).PadLeft(Bits.BitsPerByte, Chars.Zero);
         }
 
+        
+
     }
 
 
