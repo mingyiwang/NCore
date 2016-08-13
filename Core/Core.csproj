@@ -81,6 +81,7 @@
     <Compile Include="Concurrent\Reentrant.cs" />
     <Compile Include="Concurrent\CAS.cs" />
     <Compile Include="Concurrent\Threads.cs" />
+    <Compile Include="Delegates.cs" />
     <Compile Include="Extension\LazyExtension.cs" />
     <Compile Include="Extension\StringExtension.cs" />
     <Compile Include="Persist\CriteriaBuilder.cs" />
@@ -104,11 +105,15 @@
     <Compile Include="IO\StringBuffer.cs" />
     <Compile Include="Json\JsonUtils.cs" />
     <Compile Include="Net\MimeTypes.cs" />
+    <Compile Include="Primitive\BigDecimal.cs" />
+    <Compile Include="Primitive\BigInteger.cs" />
     <Compile Include="Primitive\Bits.cs" />
-    <Compile Include="Primitive\Symbol.cs" />
+    <Compile Include="Primitive\ByteExtenstion.cs" />
+    <Compile Include="Primitive\ByteOrder.cs" />
     <Compile Include="Primitive\Chars.cs" />
+    <Compile Include="Primitive\DoubleConverter.cs" />
     <Compile Include="Primitive\Joiner.cs" />
-    <Compile Include="Primitive\NumberFormatter.cs" />
+    <Compile Include="Primitive\Format\NumberFormatter.cs" />
     <Compile Include="Persist\PersistentService.cs" />
     <Compile Include="Persist\IPersistentService.cs" />
     <Compile Include="Expr\Eval\RoslynEvaluator.cs" />

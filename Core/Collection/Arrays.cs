@@ -52,7 +52,8 @@ namespace Core.Collection
             Checks.NotNull(array);
             var copy = Make<T>(array.Length);
             var j = 0;
-            for(var i = array.Length - 1; i >= 0; i--)
+
+            for (var i = array.Length - 1; i >= 0; i--)
             {
                 copy[j] = array[i];
                 j++;
@@ -122,6 +123,16 @@ namespace Core.Collection
                 target = Resize(ref target, (target.Length + (length - availableLength)));
                 Array.Copy(source, startIndex, target, targetStartIndex, length);
             }
+        }
+
+        public static T[] DeepCopyOf<T>(T[] source, int startIndex, int length)
+        {
+            return source;
+        }
+
+        public static T[] DeepCopyOf<T>(T[] source, int startIndex, int length, Func<T, T> copyFunc)
+        {
+            return source;
         }
 
         public static bool Equals<T>(T[] array1, T[] array2)

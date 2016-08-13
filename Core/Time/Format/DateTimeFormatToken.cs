@@ -82,7 +82,6 @@ namespace Core.Time.Format
             public DateTimeValueFormatToken(string baseCode, int baseKind) 
                 : base(baseCode, baseKind)
             {
-                string.Copy("");
                 IsValue = true;
             }
 

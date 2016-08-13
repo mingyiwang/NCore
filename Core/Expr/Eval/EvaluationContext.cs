@@ -83,8 +83,8 @@ namespace Core.Expr.Eval {
             RegisterOperator("/",  () => new BinaryOperator("/", 10, true, TokenKind.Division));
             RegisterOperator("%",  () => new BinaryOperator("%", 10, true, TokenKind.Modulus));
 
-            RegisterOperator("+",  () => new BinaryOperator("+", 9,  true, TokenKind.Addition));
-            RegisterOperator("-",  () => new BinaryOperator("-", 9,  true, TokenKind.Subtraction));
+            RegisterOperator("+",  () => new BinaryOperator("+",  9,  true, TokenKind.Addition));
+            RegisterOperator("-",  () => new BinaryOperator("-",  9,  true, TokenKind.Subtraction));
 
             RegisterOperator(">",  () => new BinaryOperator(">",  8, true, TokenKind.GreaterThan));
             RegisterOperator("<",  () => new BinaryOperator("<",  8, true, TokenKind.LessThan));
@@ -109,7 +109,6 @@ namespace Core.Expr.Eval {
 
             RegisterType("null",     typeof(object));
             RegisterType("Convert",  typeof(Convert));
-            RegisterType("DateTime", typeof(DateTime));
             RegisterType("Math",     typeof(Math));
             RegisterType("byte",     typeof(byte));
             RegisterType("long",     typeof(long));
@@ -120,7 +119,8 @@ namespace Core.Expr.Eval {
             RegisterType("double",   typeof(double));
             RegisterType("float",    typeof(float));
             RegisterType("decimal",  typeof(decimal));
-
+            RegisterType("char",     typeof(char));
+            RegisterType("DateTime", typeof(DateTime));
         }
 
         public abstract class Item {

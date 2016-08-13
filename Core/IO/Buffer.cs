@@ -3,7 +3,6 @@ using Core.Collection;
 
 namespace Core.IO
 {
-
     public abstract class Buffer<T> : IEquatable<Buffer<T>>
     {
         private const int MarkUnset = -1;
@@ -88,13 +87,8 @@ namespace Core.IO
             _mark  = MarkUnset;
         }
 
-        public bool Equals(Buffer<T> other)
+        public virtual bool Equals(Buffer<T> other)
         {
-            if (ReferenceEquals(this, other))
-            {
-                return true;
-            }
-            
             return Arrays.Equals(_store, other._store) 
                 && _position == other._position
                 && _capacity == other._capacity
@@ -103,9 +97,20 @@ namespace Core.IO
                 ;
         }
 
-        public int CompareTo(Buffer<T> other)
+        public sealed override bool Equals(object other)
         {
-            throw new NotImplementedException();
+            if (ReferenceEquals(other, null))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
+            var buf = other as Buffer<T>;
+            return buf != null && Equals(buf);
         }
 
     }

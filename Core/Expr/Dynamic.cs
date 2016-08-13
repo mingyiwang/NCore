@@ -105,9 +105,7 @@ namespace Core.Expr
                     throw new Exception("unrecognised token :" + token.Name);
                 }
             }
-
             return Expression.Lambda(stack.Pop());
-
         }
 
     }

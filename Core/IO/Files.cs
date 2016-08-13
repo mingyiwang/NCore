@@ -1,7 +1,4 @@
-﻿using System.IO;
-using System.Text;
-
-namespace Core.IO
+﻿namespace Core.IO
 {
     /// <summary>
     /// Utility Class used to control files

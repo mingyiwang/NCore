@@ -8,7 +8,7 @@ namespace Core.Template
     {
 
         private const string PatternText = @"(\$\{([a-zA-Z0-9_]*)\})";
-
+        
         private static readonly Regex Pattern = new Regex(PatternText, RegexOptions.CultureInvariant);
 
         private readonly string _source;
@@ -24,22 +24,33 @@ namespace Core.Template
             return string.Empty;
         }
 
-        public string Generate(string input, TemplateContext content)
+        public string Generate(string input, TemplateContext context)
         {
+            foreach (var segment in _segments)
+            {
+                if (segment.IsExpression)
+                {
+
+                }
+                else
+                {
+
+                }
+            }
             return string.Empty;
         }
 
         private void AddText(string value)
         {
-            _segments.AddLast(SimpleSegment.Create(value));
+            _segments.AddLast(SimpleSegment.Of(value));
         }
 
         private void AddExpression(string value)
         {
-            _segments.AddLast(SimpleSegment.Create(value, true));
+            _segments.AddLast(SimpleSegment.Of(value, true));
         }
 
-        public static SimpleTemplate Load(string input)
+        public static SimpleTemplate Of(string input)
         {
             var template = new SimpleTemplate(input);
             if(string.IsNullOrEmpty(input))
@@ -78,17 +89,18 @@ namespace Core.Template
             {
                 get; set;
             }
+
             public string Text
             {
                 get; set;
             }
 
-            public static SimpleSegment Create(string value)
+            public static SimpleSegment Of(string value)
             {
-                return Create(value, false);
+                return Of(value, false);
             }
 
-            public static SimpleSegment Create(string value, bool isExpression)
+            public static SimpleSegment Of(string value, bool isExpression)
             {
                 return new SimpleSegment
                 {
@@ -96,6 +108,7 @@ namespace Core.Template
                     IsExpression = isExpression
                 };
             }
+
         }
 
     }

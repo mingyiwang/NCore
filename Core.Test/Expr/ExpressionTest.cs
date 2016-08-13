@@ -14,6 +14,7 @@ namespace Core.Test.Expr {
         }
 
         public void TestEvaluate1() {
+            
             var context = new EvaluationContext();
             context.RegisterInstance("fn", new Function());
             var expr = Dynamic.Evaluate("false ? true || false : false", context);

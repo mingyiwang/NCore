@@ -1,13 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using Core.Collection;
-using Core.Concurrent;
 
 namespace Core.Primitive
 {
-   
+
+    public enum RoundKind
+    {
+        None     = 0,
+        Ceil     = 1,
+        Floor    = 1 << 1,
+        Up       = 1 << 2,
+        Down     = 1 << 3,
+        HalfUp   = 1 << 4,
+        HalfDown = 1 << 5,
+        HalfEven = 1 << 6
+    }
+
     public sealed class Numbers {
-       
+
+        public static bool IsInt<T>(T obj)
+        {
+            return typeof(T) == typeof(int);
+        }
+
         public static int IntOf(Enum input) {
             return Convert.ToInt32(input);
         }
@@ -21,7 +35,10 @@ namespace Core.Primitive
         {
             int result;
             var parsed = int.TryParse(value, out result);
-            return parsed ? result : defaultValue;
+            return parsed 
+                 ? result 
+                 : defaultValue
+                 ;
         }
 
         public static string ToBinaryString(int value) {
@@ -43,13 +60,16 @@ namespace Core.Primitive
             return 0;
         }
 
+        public static unsafe string ExponentOf(float value)
+        {
+            Convert.ToInt32(value);
+            var intBitsForFloat = *(int*)&value;
+            var exponent = (intBitsForFloat >> 23) & 0x00007ff;
+            return (exponent - 127).ToString();
+        }
+
     }
 
-    public enum RoundKind
-    {
-        Ceil,
-        Floor,
-        None
-    }
+    
 
 }
