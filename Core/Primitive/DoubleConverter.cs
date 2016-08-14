@@ -69,12 +69,6 @@ namespace Core.Primitive
                 for (int i = 0; i < -exponent; i++)
                 {
                     ad.MultiplyBy(5);
-                    Console.WriteLine(i + " : ");
-                    foreach(var b in ad.getDigits())
-                    {
-                        Console.Write(b);
-                    }
-                    Console.WriteLine("");
                 }
                 
                 ad.Shift(-exponent);
@@ -129,11 +123,6 @@ namespace Core.Primitive
                     digits[i] = (byte)(tmp[i] - '0');
                 }
 
-                Console.WriteLine("");
-                foreach (var b in digits)
-                {
-                    Console.Write(b);
-                }
                 Normalize();
             }
 
@@ -149,8 +138,6 @@ namespace Core.Primitive
                     var resultDigit = digits[i] * amount + result[i + 1];
                     result[i]     = (byte)(resultDigit / 10);
                     result[i + 1] = (byte)(resultDigit % 10);
-                    Console.WriteLine(resultDigit + "|" + result[i] + ":" +result[i+1]);
-                    Console.WriteLine("");
                 }
 
                 if(result[0] != 0)

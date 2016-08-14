@@ -80,7 +80,7 @@ namespace Core.Http
         public override string ToString()
         {
             var builder = new StringBuilder();
-            builder.Append(Schema.Of() + "://")
+            builder.Append(Schema + "://")
                    .Append(HostEncoding.Encode(HostEncoding.Encode(Host.Trim('/'))))
                    .Append("/")
                    .Append(PathEncoding.Encode(PathEncoding.Encode(Path.Trim('/'))));

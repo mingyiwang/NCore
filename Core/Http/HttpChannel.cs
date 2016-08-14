@@ -51,7 +51,7 @@ namespace Core.Http
             callback(Get());
         }
 
-        public static HttpChannel NewChannel(string url)
+        public static HttpChannel CreateChannel(string url)
         {
             return new DefaultHttpChannelImpl
             {
@@ -71,7 +71,7 @@ namespace Core.Http
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
-        public static HttpChannel NewChannel(HttpUrl url)
+        public static HttpChannel CreateChannel(HttpUrl url)
         {
             return new DefaultHttpChannelImpl
             {

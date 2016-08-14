@@ -99,51 +99,53 @@ namespace Core.Primitive
 
         public int ToInt()
         {
-            if (IsShort)
+            if (IsBoolean || IsByte)
+            {
+                return _bytes[0];
+            }
+
+            if (IsShort || IsChar)
             {
                 return BitConverter.ToInt16(_bytes, 0);
             }
 
-            if (IsInt32)
+            if(IsInt32)
             {
                 return BitConverter.ToInt32(_bytes, 0);
             }
 
-            if(IsChar)
+            if(IsFloat)
             {
-                return BitConverter.ToInt16(_bytes, 0);
-            }
-
-            if(IsBoolean)
-            {
-                return BitConverter.ToBoolean(_bytes, 0) ? 1 : 0;
+                var floatValue = BitConverter.ToSingle(_bytes, 0);
+                return FloatToIntBits(floatValue);
             }
 
             if (IsLong)
             {
-                var longInt = BitConverter.ToInt64(_bytes, 0);
-                if (longInt < 0x80000000L || longInt > 0x7fffffffL)
+                var longBits = BitConverter.ToInt64(_bytes, 0);
+                if (longBits < 0x80000000L || longBits > 0x7fffffffL)
                 {
-                    throw new OverflowException($"64 bits Integer [{longInt}] can not be converted to 32 bits Integer");
+                    throw new OverflowException($"64 bits Integer [{longBits}] can not be converted to 32 bits Integer");
                 }
 
-                return (int) longInt;
-            }
-
-            if (IsFloat)
-            {
-                var result = BitConverter.ToInt32(_bytes, 0);
-
+                return (int) longBits;
             }
 
             if (IsDouble)
             {
+                var longBits = ToLong();
+                if(longBits < 0x80000000L || longBits > 0x7fffffffL)
+                {
+                    throw new OverflowException($"64 bits Integer [{longBits}] can not be converted to 32 bits Integer");
+                }
 
+                return (int) longBits;
             }
 
             if (IsDecimal)
             {
-                 
+                var longInt = BitConverter.ToInt64(_bytes, 0);
+
             }
 
             if (Length > BytesPerInt32)
@@ -166,12 +168,12 @@ namespace Core.Primitive
                 return ToInt();
             }
             
-            if (IsDecimal)
+            if (IsDouble)
             {
-
+                return DoubleToLongBits(ToDouble());
             }
 
-            if (IsDouble)
+            if (IsDecimal)
             {
 
             }
@@ -186,9 +188,9 @@ namespace Core.Primitive
 
         public float ToFloat()
         {
-            if (IsByte  || IsChar || IsBoolean || IsInt32 || IsShort)
+            if (IsByte || IsChar || IsBoolean || IsInt32 || IsShort)
             {
-                return ToInt(); // Integer can always cast to float and stored correctly
+                return float.Parse(ToInt().ToString());
             }
 
             if (IsFloat)
@@ -215,14 +217,25 @@ namespace Core.Primitive
             {
                 return BitConverter.ToDouble(_bytes, 0);
             }
-            if (IsLong)
+
+            if (IsLong || IsInt32 || IsBoolean || IsByte || IsShort || IsChar)
             {
                 return Convert.ToDouble(ToLong());
             }
 
-            if(Length > BytesPerDouble)
+            if (IsFloat)
             {
-                throw new OverflowException("");
+
+            }
+
+            if (IsDecimal)
+            {
+
+            }
+
+            if (Length > BytesPerDouble)
+            {
+                throw new OverflowException($"{Length} is out of range.");
             }
 
             return BitConverter.ToDouble(_bytes, 0);
@@ -253,9 +266,14 @@ namespace Core.Primitive
         /// <returns></returns>
         public override string ToString()
         {
-            if (IsInt32 || IsShort || IsByte || IsShort)
+            if (IsInt32 || IsShort || IsByte || IsShort )
             {
                 return Convert.ToString(ToInt());
+            }
+
+            if(IsLong)
+            {
+                return Convert.ToString(ToLong());
             }
 
             if (IsChar)
@@ -268,10 +286,6 @@ namespace Core.Primitive
                 return Convert.ToString(ToBool());
             }
 
-            if (IsLong)
-            {
-                return Convert.ToString(ToLong());
-            }
 
             if (IsDecimal)
             {
@@ -285,7 +299,7 @@ namespace Core.Primitive
 
             if (IsDouble)
             {
-                return DoubleConverter.ToExactString(ToDouble());
+                return string.Empty;
             }
 
             return string.Empty;
@@ -351,7 +365,7 @@ namespace Core.Primitive
         /// Windows is using Litter Edianess so we need to reverse the bytes
         /// </summary>
         /// <returns></returns>
-        public string ToBinaryString(ByteOrder order = ByteOrder.LowerFirst)
+        public string ToBinaryString(ByteOrder order = ByteOrder.HigherFirst)
         {
             return order == ByteOrder.LowerFirst
                  ? Arrays.CopyOf(_bytes).Select(b => b.ToBinaryString()).AsString()
@@ -389,12 +403,12 @@ namespace Core.Primitive
 
             if(IsFloat)
             {
-                return Numbers.FloatToIntBits(ToFloat());
+                return FloatToIntBits(ToFloat());
             }
 
             if(IsDouble)
             {
-                var longValue = Numbers.DoubleToLongBits(ToDouble());
+                var longValue = DoubleToLongBits(ToDouble());
                 return (int)(longValue ^ (longValue >> 32));
             }
 
@@ -483,6 +497,84 @@ namespace Core.Primitive
             {
                 _type = TYPE_DECIMAL
             };
+        }
+
+        public static int GetExponent(float floatValue)
+        {
+            if (IsDenormalized(floatValue))
+            {
+                return -126;
+            }
+
+            var intBitsForFloat = FloatToIntBits(floatValue);
+            var exponent = (intBitsForFloat >> 23) & 0x000000ff;
+            return exponent - 127;
+        }
+
+        public static bool IsNaN(float floatValue)
+        {
+            var intRawValue = BitConverter.ToInt32(BitConverter.GetBytes(floatValue), 0);
+            return (intRawValue & FLOAT_EXPONENT_MASK) == FLOAT_EXPONENT_MASK
+                && (intRawValue & FLOAT_SIGNIFICANT_MASK) != FLOAT_SIGNIFICANT_MASK;
+        }
+
+        public static bool IsNaN(double doubleValue)
+        {
+            var intRawValue = BitConverter.ToInt64(BitConverter.GetBytes(doubleValue), 0);
+            return (intRawValue & DOUBLE_EXPONENT_MASK) == DOUBLE_EXPONENT_MASK
+                && (intRawValue & DOUBLE_SIGNIFICANT_MASK) != 0;
+        }
+
+        public static bool IsDenormalized(float floatValue)
+        {
+            var intRawValue = BitConverter.ToInt32(BitConverter.GetBytes(floatValue), 0);
+            return (intRawValue & FLOAT_EXPONENT_MASK) == 0     // exponent must be '0'
+                && (intRawValue & FLOAT_SIGNIFICANT_MASK) != 0; // significant must not be '0'
+        }
+
+        public static bool IsDenormalized(double doubleValue)
+        {
+            var intRawValue = BitConverter.ToInt64(BitConverter.GetBytes(doubleValue), 0);
+            return (intRawValue & DOUBLE_EXPONENT_MASK) == 0
+                && (intRawValue & DOUBLE_SIGNIFICANT_MASK) != 0;
+        }
+
+        private static int FloatToRawBits(float floatValue)
+        {
+            return BitConverter.ToInt32(BitConverter.GetBytes(floatValue), 0);
+        }
+
+        private static int FloatToIntBits(float floatValue)
+        {
+            var intRawValue = FloatToRawBits(floatValue);
+
+            // Pick up a NAN Number to represent all NAN Numbers
+            if((intRawValue  & FLOAT_EXPONENT_MASK) == FLOAT_EXPONENT_MASK
+             && (intRawValue & FLOAT_SIGNIFICANT_MASK) != 0)
+            {
+                return 0x7fc00000;
+            }
+
+            return intRawValue;
+        }
+
+        private static long DoubleToRawBits(double doubleValue)
+        {
+            return BitConverter.ToInt64(BitConverter.GetBytes(doubleValue), 0);
+        }
+
+        private static long DoubleToLongBits(double doubleValue)
+        {
+            var longRawValue = DoubleToRawBits(doubleValue);
+
+            // Pick up a NAN Number to represent all NAN Numbers
+            if((longRawValue  & DOUBLE_EXPONENT_MASK) == DOUBLE_EXPONENT_MASK
+             && (longRawValue & DOUBLE_SIGNIFICANT_MASK) != 0)
+            {
+                return 0x7ffc000000000000L;
+            }
+
+            return longRawValue;
         }
 
     }

@@ -42,7 +42,7 @@ namespace Core.Test.Http {
         [Test]
         public void TestGet()
         {
-            var response = HttpChannel.NewChannel(HttpUrl.From("http://www.expressone.com.au/zh-cn/"))
+            var response = HttpChannel.CreateChannel(HttpUrl.From("http://www.expressone.com.au/zh-cn/"))
                 .WithAccept("text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
                 .WithUserAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36")
                 .WithHeader(HttpRequestHeader.AcceptLanguage, "en-US,en;q=0.8")
@@ -80,7 +80,7 @@ namespace Core.Test.Http {
             Console.WriteLine(entity.ContentLength);
             Console.WriteLine(Encoding.UTF8.GetString(entity.GetBody()));
 
-            var response = HttpChannel.NewChannel("http://www.expressone.com.au/zh-cn//do/face.php")
+            var response = HttpChannel.CreateChannel("http://www.expressone.com.au/zh-cn//do/face.php")
                                       .WithAccept("text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
                                       .WithUserAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36")
                                       .WithCookie("PHPSESSI", "ed85be2b2c0d283b20dfaf95ec3d5e03")
