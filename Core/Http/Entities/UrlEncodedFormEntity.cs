@@ -9,7 +9,7 @@ namespace Core.Http.Entities
     public sealed class UrlEncodedFormEntity : HttpEntity
     {
 
-        public static readonly HttpCodec ENCODER = HttpCodec.NewInstance('&','=');
+        public static readonly HttpCodec ENCODER = HttpCodec.Of('&','=');
         private readonly HashMap<string, string> _parameters = new HashMap<string, string>();
 
         public override string ContentType => UrlEncodedForm;

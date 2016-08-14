@@ -9,9 +9,9 @@ namespace Core.Http
     public sealed class HttpUrl
     {
 
-        public static HttpCodec PathEncoding  = HttpCodec.NewInstance(Arrays.Empty<char>());
-        public static HttpCodec HostEncoding  = HttpCodec.NewInstance(Arrays.Empty<char>());
-        public static HttpCodec QueryEncoding = HttpCodec.NewInstance(Arrays.Empty<char>());
+        public static HttpCodec PathEncoding  = HttpCodec.Of(Arrays.Empty<char>());
+        public static HttpCodec HostEncoding  = HttpCodec.Of(Arrays.Empty<char>());
+        public static HttpCodec QueryEncoding = HttpCodec.Of(Arrays.Empty<char>());
         
         public HashMap<string, string> Query { get; }
         public HttpSchema Schema { get; private set; }
@@ -23,7 +23,7 @@ namespace Core.Http
 
         public HttpUrl()
         {
-            Schema = HttpSchema.HTTP;
+            Schema = HttpSchema.Http;
             Query  = new HashMap<string, string>();
             Host = string.Empty;
             Hash = string.Empty;
@@ -80,7 +80,7 @@ namespace Core.Http
         public override string ToString()
         {
             var builder = new StringBuilder();
-            builder.Append(Schema.GetSchema() + "://")
+            builder.Append(Schema.Of() + "://")
                    .Append(HostEncoding.Encode(HostEncoding.Encode(Host.Trim('/'))))
                    .Append("/")
                    .Append(PathEncoding.Encode(PathEncoding.Encode(Path.Trim('/'))));
@@ -120,7 +120,7 @@ namespace Core.Http
             var httpUrl = new HttpUrl
             {
                 Uri    = uri,
-                Schema = HttpSchema.GetSchema(uri.Scheme),
+                Schema = HttpSchema.Of(uri.Scheme),
                 Hash   = Strings.Of(uri.Fragment),
                 Host   = Strings.Of(uri.Host),
                 Path   = Strings.Of(uri.AbsolutePath),

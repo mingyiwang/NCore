@@ -28,7 +28,7 @@ namespace Core.Http.Entities
 
         protected override byte[] CreateBody()
         {
-            return Encoding.UTF8.GetBytes(HttpCodec.NewInstance().Encode(Strings.Of(Content)));
+            return Encoding.UTF8.GetBytes(HttpCodec.Of().Encode(Strings.Of(Content)));
         }
 
     }

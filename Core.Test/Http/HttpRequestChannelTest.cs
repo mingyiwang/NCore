@@ -20,7 +20,7 @@ namespace Core.Test.Http {
 
             var httpUrl = new HttpUrl()
                     .WithHost("google.com.au")
-                    .WithSchema(HttpSchema.HTTP)
+                    .WithSchema(HttpSchema.Http)
                     .WithHash("test")
                     .WithPath("/a/b/c")
                     .WithPort(123456)

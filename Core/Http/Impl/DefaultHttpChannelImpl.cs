@@ -7,7 +7,7 @@ using Core.Primitive;
 
 namespace Core.Http.Impl {
 
-    internal sealed class HttpChannelImpl : HttpChannel {
+    internal sealed class DefaultHttpChannelImpl : HttpChannel {
 
         public override HttpResponse Get() {
             try {

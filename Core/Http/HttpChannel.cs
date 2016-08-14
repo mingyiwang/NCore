@@ -53,7 +53,7 @@ namespace Core.Http
 
         public static HttpChannel NewChannel(string url)
         {
-            return new HttpChannelImpl
+            return new DefaultHttpChannelImpl
             {
                 HttpUrl        = HttpUrl.From(url),
                 Headers        = new HttpHeaders(),
@@ -73,7 +73,7 @@ namespace Core.Http
         /// <returns></returns>
         public static HttpChannel NewChannel(HttpUrl url)
         {
-            return new HttpChannelImpl
+            return new DefaultHttpChannelImpl
             {
                 HttpUrl        = url,
                 Authentication = null,

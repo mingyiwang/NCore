@@ -49,6 +49,11 @@ namespace Core.Primitive
         public const int MAX_FLOAT_EXPONENT = 127;
         public const int MIN_FLOAT_EXPONENT = -126;
 
+        public const int  FLOAT_EXPONENT_MASK     = 0x7f800000;
+        public const int  FLOAT_SIGNIFICANT_MASK  = 0x007fffff;
+        public const long DOUBLE_EXPONENT_MASK    = 0x7ff0000000000000L;
+        public const long DOUBLE_SIGNIFICANT_MASK = 0x000fffffffffffffL;
+
         private const short TYPE_UNDEFINED     = -1;
         private const short TYPE_BYTE          = 0;
         private const short TYPE_SHORT_INTEGER = 1;
@@ -92,7 +97,7 @@ namespace Core.Primitive
             return (byte) integer;
         }
 
-        public int ToInt(MidpointRounding rounding = MidpointRounding.ToEven)
+        public int ToInt()
         {
             if (IsShort)
             {
@@ -127,8 +132,8 @@ namespace Core.Primitive
 
             if (IsFloat)
             {
-                var floatValue = BitConverter.ToSingle(_bytes, 0);
-                
+                var result = BitConverter.ToInt32(_bytes, 0);
+
             }
 
             if (IsDouble)
@@ -280,7 +285,7 @@ namespace Core.Primitive
 
             if (IsDouble)
             {
-
+                return DoubleConverter.ToExactString(ToDouble());
             }
 
             return string.Empty;
@@ -381,15 +386,18 @@ namespace Core.Primitive
             {
                 return ToInt();
             }
+
             if(IsFloat)
             {
                 return Numbers.FloatToIntBits(ToFloat());
             }
+
             if(IsDouble)
             {
                 var longValue = Numbers.DoubleToLongBits(ToDouble());
                 return (int)(longValue ^ (longValue >> 32));
             }
+
             if(IsLong)
             {
                 var longValue = BitConverter.ToInt64(_bytes, 0);

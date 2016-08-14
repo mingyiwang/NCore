@@ -13,18 +13,18 @@ namespace Core.Security
         public static readonly Encoding UTF16LitterEndian = Encoding.Unicode;
         public static readonly Encoding UTF16 = OS.IsLittleEndian ? UTF16LitterEndian : UTF16BigEndian;
 
-        public static string GetString(byte[] dataBytes, Encoding encoding)
+        public static string ToString(byte[] dataBytes, Encoding encoding)
         {
-            var bytes = Encoding.Convert(EncodingOf(dataBytes), encoding, dataBytes);
+            var bytes = Encoding.Convert(GetEncoding(dataBytes), encoding, dataBytes);
             return encoding.GetString(bytes);
         }
 
-        public static byte[] GetBytes(string data, Encoding encoding)
+        public static byte[] ToBytes(string data, Encoding encoding)
         {
             return encoding.GetBytes(data);
         }
 
-        public static Encoding EncodingOf(byte[] dataBytes)
+        public static Encoding GetEncoding(byte[] dataBytes)
         {
             return UTF8;
         }

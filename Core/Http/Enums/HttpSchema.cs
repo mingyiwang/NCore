@@ -2,8 +2,8 @@
 {
     public sealed class HttpSchema
     {
-        public readonly static HttpSchema HTTP  = new HttpSchema("http");
-        public readonly static HttpSchema HTTPS = new HttpSchema("https");
+        public static readonly HttpSchema Http  = new HttpSchema("http");
+        public static readonly HttpSchema Https = new HttpSchema("https");
 
         private readonly string _type;
 
@@ -12,15 +12,16 @@
             _type = type;
         }
 
-        public string GetSchema()
+        public override string ToString()
         {
             return _type;
         }
 
-        public static HttpSchema GetSchema(string schema)
+        public static HttpSchema Of(string schema)
         {
-            return schema.ToLower().Equals("https") ? HTTPS : HTTP;
+            return schema.ToLower().Equals("https") ? Https : Http;
         }
+
     }
 
 }

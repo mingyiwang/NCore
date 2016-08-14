@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace Core.Security
+﻿namespace Core.Security
 {
 
     public sealed class Hasher

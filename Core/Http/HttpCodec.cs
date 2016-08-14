@@ -10,7 +10,7 @@ namespace Core.Http
     public sealed class HttpCodec
     {
 
-        public static HttpCodec NewInstance(params char[] legalChars)
+        public static HttpCodec Of(params char[] legalChars)
         {
             return new HttpCodec(legalChars);
         }
@@ -24,6 +24,12 @@ namespace Core.Http
             _legalChars.Add('*');
             _legalChars.Add('_');
             legalChars.ForEach(c => _legalChars.Add(c));
+        }
+
+        //  Re-use HttpUtility
+        public string Decode(string value)
+        {
+            return HttpUtility.UrlDecode(value);
         }
 
         /// 1. The alphanumeric characters "a" through "z", "A" through "Z" and "0" through "9" remain the same.
@@ -61,13 +67,6 @@ namespace Core.Http
 
             return value;
         }
-
-        //  Re-use HttpUtility
-        public string Decode(string value)
-        {
-            return HttpUtility.UrlDecode(value);
-        }
-        
 
     }
 

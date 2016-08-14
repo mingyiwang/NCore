@@ -98,7 +98,7 @@
     <Compile Include="Http\HttpResponse.cs" />
     <Compile Include="Http\Entities\UrlEncodedFormEntity.cs" />
     <Compile Include="Http\Enums\HttpSchema.cs" />
-    <Compile Include="Http\Impl\HttpChannelImpl.cs" />
+    <Compile Include="Http\Impl\DefaultHttpChannelImpl.cs" />
     <Compile Include="IO\Buffer.cs" />
     <Compile Include="IO\ByteBuffer.cs" />
     <Compile Include="IO\Files.cs" />

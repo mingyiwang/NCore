@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Net;
 using Core.Collection;
-using static Core.Collection.Collections;
 
 namespace Core.Http.Enums
 {
