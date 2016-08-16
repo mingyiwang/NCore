@@ -3,7 +3,7 @@
 namespace Core.Primitive
 {
 
-    public static class ByteExtenstion
+    public static class NumberExtenstion
     {
         /// <summary>
         /// Byte is the smallest unit of address so doesn't need to consider edianess
@@ -13,11 +13,9 @@ namespace Core.Primitive
         /// <returns></returns>
         public static string ToBinaryString(this byte b)
         {
-            return Convert.ToString(b,2).PadLeft(Bits.BitsPerByte, Chars.Zero);
+            return Convert.ToString(b, 2).PadLeft(Bits.BitsPerByte, Chars.Zero);
         }
-
         
-
     }
 
 

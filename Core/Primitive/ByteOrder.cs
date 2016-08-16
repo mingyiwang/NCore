@@ -2,8 +2,8 @@
 {
     public enum ByteOrder
     {
-        LowerFirst,  // Litter Edinan
-        HigherFirst  // Big Edian     
+        LowerBitsFirst, // Litter Edianess
+        HigherBitsFirst // Big Edianess     
     }
 
 }

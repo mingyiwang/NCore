@@ -108,7 +108,7 @@
     <Compile Include="Primitive\BigDecimal.cs" />
     <Compile Include="Primitive\BigInteger.cs" />
     <Compile Include="Primitive\Bits.cs" />
-    <Compile Include="Primitive\ByteExtenstion.cs" />
+    <Compile Include="Primitive\NumberExtenstion.cs" />
     <Compile Include="Primitive\ByteOrder.cs" />
     <Compile Include="Primitive\Chars.cs" />
     <Compile Include="Primitive\DoubleConverter.cs" />
