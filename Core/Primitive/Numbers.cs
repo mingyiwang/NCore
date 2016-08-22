@@ -22,22 +22,17 @@ namespace Core.Primitive
         public const int  FLOAT_SIGNIFICANT_MASK  = 0x007fffff;
         public const long DOUBLE_EXPONENT_MASK    = 0x7ff0000000000000L;
         public const long DOUBLE_SIGNIFICANT_MASK = 0x000fffffffffffffL;
-        
-        public static bool IsInt<T>(T obj)
-        {
-            return typeof(T) == typeof(int);
-        }
 
-        public static int IntOf(Enum input) {
+        public static int GetInt(Enum input) {
             return Convert.ToInt32(input);
         }
 
-        public static int IntOf(string value)
+        public static int GetInt(string value)
         {
-            return IntOf(value, 0);
+            return GetInt(value, 0);
         }
 
-        public static int IntOf(string value, int defaultValue)
+        public static int GetInt(string value, int defaultValue)
         {
             int result;
             var parsed = int.TryParse(value, out result);
@@ -47,26 +42,79 @@ namespace Core.Primitive
                  ;
         }
 
-        public static string ToBinaryString(int value) {
-            return Bits.Of(value).ToString();
+        public static string ToBinaryString(int value)
+        {
+            return Bits.Of(value).ToBinaryString();
         }
 
-        public static int IntOf(float value,  RoundKind round)
+        public static int GetInt(float value, RoundKind round)
+        {
+            if (value <= int.MinValue)
+            {
+                return int.MinValue;
+            }
+
+            if (value >= int.MaxValue)
+            {
+                return int.MaxValue;
+            }
+
+            var intValue = (int) value;
+            var diff = Math.Abs(value - intValue);
+
+            switch (round)
+            {
+                case RoundKind.Up :
+                {
+                    return (value < 0) || Equals(diff, 0f) ? intValue : 1 + intValue;
+                }
+                case RoundKind.Ceil :
+                {
+                    return (value < 0) || Equals(diff, 0f) ? intValue : 1 + intValue;
+                }
+                case RoundKind.Floor:
+                {
+                    return value < 0 ? intValue - 1 : intValue;
+                }
+                case RoundKind.HalfUp:
+                {
+                    return diff > 0.5f || Equals(diff, 0.5f) ? intValue + 1 : intValue;
+                }
+                case RoundKind.HalfDown:
+                {
+                    return diff < 0.5f || Equals(diff, 0.5f) ? intValue : intValue + 1;
+                }
+                case RoundKind.HalfEven:
+                {
+                    if (Equals(diff, 0.5f))
+                    {
+                        return (intValue & 1) == 0 ? intValue : intValue + 1;
+                    }
+                    return diff > 0.5f ? intValue + 1 : intValue;
+                }
+                default : return intValue;
+            }            
+        }
+
+        public static int GetLong(double value, RoundKind round)
+        {
+            var longValue = (long) value;
+            var diff = Math.Abs(value - longValue);
+            
+            if (longValue < int.MinValue || longValue > int.MaxValue)
+            {
+
+            }
+
+            return 0;
+        }
+
+        public static int GetInt(decimal value, RoundKind round)
         {
             return 0;
         }
 
-        public static int IntOf(double value,  RoundKind round)
-        {
-            return 0;
-        }
-
-        public static int IntOf(decimal value, RoundKind round)
-        {
-            return 0;
-        }
-
-        public static decimal ToDecimal(byte[] bytes)
+        public static decimal GetDecimal(byte[] bytes)
         {
             Checks.NotNull(bytes);
             Checks.Equals(16, bytes.Length);
@@ -75,6 +123,28 @@ namespace Core.Primitive
             var hi    = BitConverter.ToInt32(new[] { bytes[8],  bytes[9],  bytes[10], bytes[11] }, 0);
             var flags = BitConverter.ToInt32(new[] { bytes[12], bytes[13], bytes[14], bytes[15] }, 0);
             return new decimal(lo, mid, hi, (flags & 0x80000000) == 1, bytes[14]);
+        }
+
+        public static bool Equals(float v1, float v2)
+        {
+            if (Bits.IsNaN(v1) || Bits.IsNaN(v2))
+            {
+                return false;
+            }
+            var v1Bits = Bits.Of(v1).ToIntBits();
+            var v2Bits = Bits.Of(v2).ToIntBits();
+            return v1Bits == v2Bits;
+        }
+
+        public static bool Equals(double v1, double v2)
+        {
+            if(Bits.IsNaN(v1) || Bits.IsNaN(v2))
+            {
+                return false;
+            }
+            var v1Bits = Bits.Of(v1).ToLongBits();
+            var v2Bits = Bits.Of(v2).ToLongBits();
+            return v1Bits == v2Bits;
         }
 
     }

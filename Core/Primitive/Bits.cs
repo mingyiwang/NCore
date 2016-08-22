@@ -118,15 +118,14 @@ namespace Core.Primitive
             if (IsFloat)
             {
                 var floatValue = BitConverter.ToSingle(_bytes, 0);
-                var intValue   = (int) floatValue;
-                return intValue;
+                return Numbers.GetInt(floatValue, RoundKind.Up);
             }
 
             if (IsDouble)
             {
                 var doubleValue = BitConverter.ToDouble(_bytes, 0);
-                var longValue   = (long) doubleValue;
-                return (int)longValue;
+                var longValue = (long) doubleValue;
+                return (int) longValue;
             }
 
             if (IsLong)
@@ -136,12 +135,13 @@ namespace Core.Primitive
                 {
                     throw new OverflowException($"64 bits Integer [{longBits}] can not be converted to 32 bits Integer");
                 }
+
                 return (int) longBits;
             }
 
             if (IsDecimal)
             {
-                return Convert.ToInt32(Numbers.ToDecimal(_bytes));
+                return Convert.ToInt32(Numbers.GetDecimal(_bytes));
             }
 
             if (Length > BytesPerInt32)
@@ -167,13 +167,13 @@ namespace Core.Primitive
             if (IsDouble)
             {
                 var doubleValue = BitConverter.ToDouble(_bytes, 0);
-                var longValue = (long)doubleValue;
+                var longValue = (long) doubleValue;
                 return (int)longValue;
             }
 
             if (IsDecimal)
             {
-                return Convert.ToInt64(Numbers.ToDecimal(_bytes));
+                return Convert.ToInt64(Numbers.GetDecimal(_bytes));
             }
 
             if (Length > BytesPerLong)
@@ -233,7 +233,7 @@ namespace Core.Primitive
 
             if (IsDecimal)
             {
-                return Convert.ToDouble(Numbers.ToDecimal(_bytes));
+                return Convert.ToDouble(Numbers.GetDecimal(_bytes));
             }
 
             if (Length > BytesPerDouble)
@@ -248,7 +248,7 @@ namespace Core.Primitive
         {
             if (IsDecimal)
             {
-                return Numbers.ToDecimal(_bytes);
+                return Numbers.GetDecimal(_bytes);
             }
 
             if (IsBoolean || IsByte || IsChar || IsShort || IsInt32)
@@ -320,13 +320,14 @@ namespace Core.Primitive
                 return FloatToIntBits(BitConverter.ToSingle(_bytes, 0));
             }
 
-            if(IsDouble)
+            if (IsDouble)
             {
                 var longBits = DoubleToLongBits(ToDouble());
                 if(longBits < int.MinValue || longBits > int.MaxValue)
                 {
                     throw new OverflowException($"64 bits Integer [{longBits}] can not be converted to 32 bits Integer");
                 }
+
                 return (int)longBits;
             }
 
@@ -581,7 +582,7 @@ namespace Core.Primitive
 
             // Pick up a NAN Number to represent all NAN Numbers
             if((intRawValue  & FLOAT_EXPONENT_MASK) == FLOAT_EXPONENT_MASK
-             && (intRawValue & FLOAT_SIGNIFICANT_MASK) != 0)
+             &&(intRawValue & FLOAT_SIGNIFICANT_MASK) != 0)
             {
                 return 0x7fc00000;
             }

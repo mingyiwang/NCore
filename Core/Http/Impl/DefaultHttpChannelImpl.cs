@@ -17,7 +17,7 @@ namespace Core.Http.Impl {
                             Success    = false,
                             Error      = new NullReferenceException("Response is null."),
                             Response   = null,
-                            StatusCode = Numbers.IntOf(HttpStatusCode.InternalServerError)
+                            StatusCode = Numbers.GetInt(HttpStatusCode.InternalServerError)
                         };
                     }
 
@@ -25,7 +25,7 @@ namespace Core.Http.Impl {
                         Success = true,
                         Error = null,
                         Response = Streams.GetBytes(response.GetResponseStream()),
-                        StatusCode = Numbers.IntOf(response.StatusCode),
+                        StatusCode = Numbers.GetInt(response.StatusCode),
                     }
                     .PutCookies(response.Cookies)
                     .PutHeaders(response.Headers);
@@ -52,7 +52,7 @@ namespace Core.Http.Impl {
                                 Success = false,
                                 Error = new NullReferenceException("Response is null."),
                                 Response = null,
-                                StatusCode = Numbers.IntOf(HttpStatusCode.ServiceUnavailable)
+                                StatusCode = Numbers.GetInt(HttpStatusCode.ServiceUnavailable)
                             };
                         }
 
@@ -60,7 +60,7 @@ namespace Core.Http.Impl {
                             Success = true,
                             Error = null,
                             Response = Streams.GetBytes(response.GetResponseStream()),
-                            StatusCode = Numbers.IntOf(response.StatusCode),
+                            StatusCode = Numbers.GetInt(response.StatusCode),
                         }
                        .PutCookies(response.Cookies)
                        .PutHeaders(response.Headers);
@@ -143,7 +143,7 @@ namespace Core.Http.Impl {
                     return new HttpResponse {
                         Error      = new Exception($"NetworkError[{webException.Status}]"),
                         Response   = Streams.GetBytes(webException.Response?.GetResponseStream()),
-                        StatusCode = Numbers.IntOf(HttpStatusCode.ServiceUnavailable),
+                        StatusCode = Numbers.GetInt(HttpStatusCode.ServiceUnavailable),
                         Success    = false
                     };
                 }
@@ -154,7 +154,7 @@ namespace Core.Http.Impl {
                         Success    = false,
                         Error      = webException,
                         Response   = Streams.GetBytes(response?.GetResponseStream()),
-                        StatusCode = Numbers.IntOf(response?.StatusCode)
+                        StatusCode = Numbers.GetInt(response?.StatusCode)
                     };
                 }
 
@@ -162,14 +162,14 @@ namespace Core.Http.Impl {
                 return new HttpResponse {
                     Error      = new Exception($"Unexpected Error[{webException.Status}]"),
                     Response   = Streams.GetBytes(response?.GetResponseStream()),
-                    StatusCode = Numbers.IntOf(HttpStatusCode.ServiceUnavailable),
+                    StatusCode = Numbers.GetInt(HttpStatusCode.ServiceUnavailable),
                     Success    = false
                 };
             }
 
             return new HttpResponse {
                 Error      = exception,
-                StatusCode = Numbers.IntOf(HttpStatusCode.ServiceUnavailable),
+                StatusCode = Numbers.GetInt(HttpStatusCode.ServiceUnavailable),
                 Success    = false
             };
 

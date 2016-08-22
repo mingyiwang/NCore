@@ -10,14 +10,15 @@ namespace Core.Test.Primitive {
         [Test]
         public void TestFloat()
         {
-            Console.WriteLine(decimal.ToInt32(4.5m));
-            Console.WriteLine(decimal.ToInt32(-4.5m));
-            Console.WriteLine(Convert.ToInt32(-4.5m));
+           Console.WriteLine(Numbers.GetInt(-4.3f, RoundKind.Floor));
+           Console.WriteLine(Numbers.GetInt(4.3f, RoundKind.Floor));
+           Console.WriteLine(Math.Floor(-4.3f));
+           Console.WriteLine(Math.Floor(4.3f));
 
-            Console.WriteLine(Bits.Of(1.5m).ToDecimal());
-            Console.WriteLine(Bits.Of(129.95f * 10.0f).ToDouble());
-            Console.WriteLine(Bits.Of(129.95f).ToBinaryString());
-
+           Console.WriteLine(Numbers.GetInt(-4.3f, RoundKind.Ceil));
+           Console.WriteLine(Numbers.GetInt(4.3f,  RoundKind.Ceil));
+           Console.WriteLine(Math.Ceiling(-4.3f));
+           Console.WriteLine(Math.Ceiling(4.3f));
         }
 
     }
