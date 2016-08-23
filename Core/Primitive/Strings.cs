@@ -19,7 +19,7 @@ namespace Core.Primitive
 
         public static string Of<T>(T obj, string defaultIfNull)
         {
-            return obj == null ? defaultIfNull : Of(obj.ToString(), defaultIfNull);
+            return obj == null ? defaultIfNull : obj.ToString();
         }
 
         public static string Of<T>(T obj)

@@ -1,7 +1,7 @@
 ﻿namespace Core.Primitive
 {
 
-    public class Splitter
+    public sealed class Splitter
     {
         
     }

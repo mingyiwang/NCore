@@ -52,8 +52,10 @@ namespace Core.Primitive
 
         public const int  FLOAT_EXPONENT_MASK     = 0x7f800000;
         public const int  FLOAT_SIGNIFICANT_MASK  = 0x007fffff;
+        public const int  FLOAT_NAN_BITS          = 0x7fc00000;
         public const long DOUBLE_EXPONENT_MASK    = 0x7ff0000000000000L;
         public const long DOUBLE_SIGNIFICANT_MASK = 0x000fffffffffffffL;
+        public const long DOUBLE_NAN_BITS         = 0x7ffc000000000000L;
 
         private const short TYPE_UNDEFINED     = -1;
         private const short TYPE_BYTE          = 0;
@@ -320,18 +322,18 @@ namespace Core.Primitive
                 return FloatToIntBits(BitConverter.ToSingle(_bytes, 0));
             }
 
-            if (IsDouble)
+            if (IsDecimal)
             {
-                var longBits = DoubleToLongBits(ToDouble());
-                if(longBits < int.MinValue || longBits > int.MaxValue)
-                {
-                    throw new OverflowException($"64 bits Integer [{longBits}] can not be converted to 32 bits Integer");
-                }
-
-                return (int)longBits;
+                var de = Numbers.GetDecimal(_bytes);
+                return Numbers.GetInt(decimal.ToInt64(de));
             }
 
-            return ToInt();
+            if (!IsDouble)
+            {
+                return ToInt();
+            }
+            
+            return Numbers.GetInt(DoubleToLongBits(ToDouble()));
         }
 
         public long ToLongBits()
@@ -341,12 +343,12 @@ namespace Core.Primitive
                 return FloatToIntBits(BitConverter.ToSingle(_bytes, 0));
             }
 
-            if (IsDouble)
+            if (!IsDouble)
             {
-                return DoubleToLongBits(ToDouble());
+                return ToLong();
             }
 
-            return ToLong();
+            return DoubleToLongBits(ToDouble());
         }
 
         /// <summary>
@@ -390,7 +392,7 @@ namespace Core.Primitive
                 return Convert.ToString(ToDouble(), CultureInfo.InvariantCulture);
             }
 
-            return string.Empty;
+            return ToBinaryString();
         }
 
         /// <summary>
@@ -407,7 +409,7 @@ namespace Core.Primitive
 
         public bool Equals(Bits other)
         {
-            return ToBinaryString().Equals(other.ToBinaryString()) && _type == other._type;
+            return _type == other._type && ToBinaryString().Equals(other.ToBinaryString());
         }
 
         public override bool Equals(object obj)
@@ -520,10 +522,10 @@ namespace Core.Primitive
         public static Bits Of(decimal value)
         {
             var bytes = new List<byte>();
-            foreach(var integral in decimal.GetBits(value))
+            decimal.GetBits(value).ForEach(integral =>
             {
                 bytes.AddRange(BitConverter.GetBytes(integral));
-            }
+            });
 
             return new Bits(bytes.ToArray())
             {
@@ -539,14 +541,13 @@ namespace Core.Primitive
             }
 
             var intBitsForFloat = FloatToIntBits(floatValue);
-            var exponent = (intBitsForFloat >> 23) & 0x000000ff;
-            return exponent - 127;
+            return ((intBitsForFloat >> 23) & 0x000000ff) - 127;
         }
 
         public static bool IsNaN(float floatValue)
         {
             var intRawValue = BitConverter.ToInt32(BitConverter.GetBytes(floatValue), 0);
-            return (intRawValue & FLOAT_EXPONENT_MASK) == FLOAT_EXPONENT_MASK
+            return (intRawValue & FLOAT_EXPONENT_MASK) == FLOAT_EXPONENT_MASK 
                 && (intRawValue & FLOAT_SIGNIFICANT_MASK) != FLOAT_SIGNIFICANT_MASK;
         }
 
@@ -576,15 +577,14 @@ namespace Core.Primitive
             return BitConverter.ToInt32(BitConverter.GetBytes(floatValue), 0);
         }
 
-        private static int FloatToIntBits(float floatValue)
+        public static int FloatToIntBits(float floatValue)
         {
             var intRawValue = FloatToRawBits(floatValue);
 
             // Pick up a NAN Number to represent all NAN Numbers
-            if((intRawValue  & FLOAT_EXPONENT_MASK) == FLOAT_EXPONENT_MASK
-             &&(intRawValue & FLOAT_SIGNIFICANT_MASK) != 0)
+            if((intRawValue & FLOAT_EXPONENT_MASK) == FLOAT_EXPONENT_MASK && (intRawValue & FLOAT_SIGNIFICANT_MASK) != 0)
             {
-                return 0x7fc00000;
+                return FLOAT_NAN_BITS;
             }
 
             return intRawValue;
@@ -595,15 +595,14 @@ namespace Core.Primitive
             return BitConverter.ToInt64(BitConverter.GetBytes(doubleValue), 0);
         }
 
-        private static long DoubleToLongBits(double doubleValue)
+        public static long DoubleToLongBits(double doubleValue)
         {
             var longRawValue = DoubleToRawBits(doubleValue);
 
             // Pick up a NAN Number to represent all NAN Numbers
-            if((longRawValue & DOUBLE_EXPONENT_MASK) == DOUBLE_EXPONENT_MASK
-             &&(longRawValue & DOUBLE_SIGNIFICANT_MASK) != 0)
+            if((longRawValue & DOUBLE_EXPONENT_MASK) == DOUBLE_EXPONENT_MASK && (longRawValue & DOUBLE_SIGNIFICANT_MASK) != 0)
             {
-                return 0x7ffc000000000000L;
+                return DOUBLE_NAN_BITS;
             }
 
             return longRawValue;

@@ -42,6 +42,11 @@ namespace Core.Primitive
                  ;
         }
 
+        public static int GetInt(long longValue)
+        {
+            return checked((int) longValue);
+        }
+
         public static string ToBinaryString(int value)
         {
             return Bits.Of(value).ToBinaryString();
@@ -96,7 +101,7 @@ namespace Core.Primitive
             }            
         }
 
-        public static int GetLong(double value, RoundKind round)
+        public static long GetLong(double value, RoundKind round)
         {
             var longValue = (long) value;
             var diff = Math.Abs(value - longValue);
@@ -111,6 +116,7 @@ namespace Core.Primitive
 
         public static int GetInt(decimal value, RoundKind round)
         {
+
             return 0;
         }
 
@@ -118,6 +124,7 @@ namespace Core.Primitive
         {
             Checks.NotNull(bytes);
             Checks.Equals(16, bytes.Length);
+
             var lo    = BitConverter.ToInt32(new[] { bytes[0],  bytes[1],  bytes[2],  bytes[3]  }, 0);
             var mid   = BitConverter.ToInt32(new[] { bytes[4],  bytes[5],  bytes[6],  bytes[7]  }, 0);
             var hi    = BitConverter.ToInt32(new[] { bytes[8],  bytes[9],  bytes[10], bytes[11] }, 0);
@@ -131,6 +138,7 @@ namespace Core.Primitive
             {
                 return false;
             }
+
             var v1Bits = Bits.Of(v1).ToIntBits();
             var v2Bits = Bits.Of(v2).ToIntBits();
             return v1Bits == v2Bits;
@@ -142,6 +150,7 @@ namespace Core.Primitive
             {
                 return false;
             }
+
             var v1Bits = Bits.Of(v1).ToLongBits();
             var v2Bits = Bits.Of(v2).ToLongBits();
             return v1Bits == v2Bits;

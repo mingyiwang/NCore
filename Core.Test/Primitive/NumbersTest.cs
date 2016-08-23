@@ -10,15 +10,21 @@ namespace Core.Test.Primitive {
         [Test]
         public void TestFloat()
         {
-           Console.WriteLine(Numbers.GetInt(-4.3f, RoundKind.Floor));
-           Console.WriteLine(Numbers.GetInt(4.3f, RoundKind.Floor));
-           Console.WriteLine(Math.Floor(-4.3f));
-           Console.WriteLine(Math.Floor(4.3f));
+           
+            Console.WriteLine("4.5m => "  + decimal.ToInt32(4.5m));
+            Console.WriteLine("4.6m => "  + decimal.ToInt32(4.6m));
+            Console.WriteLine("4.3m => "  + decimal.ToInt32(4.3m));
+            Console.WriteLine("4m => "    + decimal.ToInt32(4m));
+            Console.WriteLine("0m => "    + decimal.ToInt32(0m));
+            Console.WriteLine("-4.5m => " + decimal.ToInt32(-4.5m));
+            Console.WriteLine("-4.6m => " + decimal.ToInt32(-4.6m));
+            Console.WriteLine("-4.3m => " + decimal.ToInt32(-4.3m));
 
-           Console.WriteLine(Numbers.GetInt(-4.3f, RoundKind.Ceil));
-           Console.WriteLine(Numbers.GetInt(4.3f,  RoundKind.Ceil));
-           Console.WriteLine(Math.Ceiling(-4.3f));
-           Console.WriteLine(Math.Ceiling(4.3f));
+            Console.WriteLine(int.MaxValue);
+            Console.WriteLine(float.MaxValue);
+            Console.WriteLine(double.MaxValue);
+            Console.WriteLine(long.MaxValue);
+
         }
 
     }

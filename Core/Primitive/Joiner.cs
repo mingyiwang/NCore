@@ -2,17 +2,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using Core.Collection;
 
 namespace Core.Primitive
 {
     public sealed class Joiner
     {
 
-        private readonly string _seperator;
+        private readonly string _joiner;
 
-        private Joiner(string seperator)
+        private Joiner(string joiner)
         {
-            _seperator = seperator;
+            _joiner = joiner;
         }
 
         public static Joiner On(char character)
@@ -23,12 +24,6 @@ namespace Core.Primitive
         public static Joiner On(string texts)
         {
             return new Joiner(Strings.Of(texts));
-        }
-
-        public string Join(IList items, Func<object, string> generator = null)
-        {
-            
-            return null;
         }
 
         public string Join<T>(IEnumerable<T> enumerable, Func<T, string> generator = null)
@@ -51,12 +46,10 @@ namespace Core.Primitive
                 var item = enumerator.Current;
                 builder.Append(generator == null ? Strings.Of(item) : generator(item));
             }
-            return builder.ToString();
-        }
 
-        
+            return builder.ToString();
+        }  
 
     }
-
 
 }
