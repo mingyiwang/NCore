@@ -120,7 +120,7 @@ namespace Core.Primitive
             if (IsFloat)
             {
                 var floatValue = BitConverter.ToSingle(_bytes, 0);
-                return Numbers.GetInt(floatValue, RoundKind.Up);
+                return Numbers.GetInt(floatValue, RoundKind.Ceil);
             }
 
             if (IsDouble)
