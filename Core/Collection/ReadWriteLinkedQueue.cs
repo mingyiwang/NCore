@@ -8,7 +8,7 @@ namespace Core.Collection
     {
 
          private readonly ReadWrite _lock  = new ReadWrite();
-         private readonly Queue<T>  _queue = new Queue<T>();
+         private readonly LinkedList<T> _list;
 
     }
 

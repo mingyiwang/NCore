@@ -1,4 +1,4 @@
-﻿namespace Core.Csv
+﻿namespace Core.Document
 {
 
     public class CsvWriter

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Core.Csv
+namespace Core.Document
 {
 
     public class CsvReader : IDisposable

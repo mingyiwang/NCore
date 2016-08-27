@@ -83,7 +83,6 @@
     <Compile Include="Concurrent\Threads.cs" />
     <Compile Include="Delegates.cs" />
     <Compile Include="Extension\LazyExtension.cs" />
-    <Compile Include="Extension\StringExtension.cs" />
     <Compile Include="Persist\CriteriaBuilder.cs" />
     <Compile Include="Http\Entities\ContentType.cs" />
     <Compile Include="Http\Entities\HttpEntity.cs" />
@@ -129,9 +128,9 @@
     <Compile Include="Guids.cs" />
     <Compile Include="Checks.cs" />
     <Compile Include="Cache\ICache.cs" />
-    <Compile Include="Csv\CsvReader.cs" />
-    <Compile Include="Csv\CsvSerializer.cs" />
-    <Compile Include="Csv\CsvWriter.cs" />
+    <Compile Include="Document\CsvReader.cs" />
+    <Compile Include="Document\CsvSerializer.cs" />
+    <Compile Include="Document\CsvWriter.cs" />
     <Compile Include="Time\Extension\DateTimeExtension.cs" />
     <Compile Include="Time\Extension\DayOfWeekExtension.cs" />
     <Compile Include="Time\Format\DateTimeFormatToken.cs" />

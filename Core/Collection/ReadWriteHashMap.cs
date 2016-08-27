@@ -6,7 +6,6 @@ using Core.Concurrent;
 namespace Core.Collection
 {
 
-
     public class ReadWriteHashMap<TKey, TValue> : IDictionary<TKey, TValue>, IDisposable
     {
 

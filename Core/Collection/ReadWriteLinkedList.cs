@@ -31,7 +31,9 @@ namespace Core.Collection
 
         public T this[int index]
         {
-            get {
+            get
+            {
+
                 throw new System.NotImplementedException();
             }
             set {

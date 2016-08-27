@@ -137,18 +137,28 @@ namespace Core.Collection
 
         public static bool Equals<T>(T[] array1, T[] array2)
         {
-            if(ReferenceEquals(array1, array2))
+            if (array1 == null || array2 == null)
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(array1, array2))
             {
                 return true;
             }
 
-            if(array1.Length != array2.Length)
+            if (array1.Length != array2.Length)
             {
                 return false;
             }
 
             for (var i = 0; i < array1.Length; i++)
             {
+                if (array1[i] == null || array2[i] == null)
+                {
+                    return false;
+                }
+
                 if(!array1[i].Equals(array2[i]))
                 {
                     return false;

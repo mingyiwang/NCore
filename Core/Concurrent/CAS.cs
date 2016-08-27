@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Threading;
 
 namespace Core.Concurrent
@@ -39,10 +38,10 @@ namespace Core.Concurrent
         {
             var newValue = creator();
             var spinWait = new SpinWait();
-            while(true)
+            while (true)
             {
                 var snapshot = location;
-                if(snapshot == Interlocked.CompareExchange(ref location, newValue, snapshot))
+                if (snapshot == Interlocked.CompareExchange(ref location, newValue, snapshot))
                 {
                     return;
                 }
