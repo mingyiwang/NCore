@@ -100,7 +100,7 @@ namespace Core.Primitive
             return (byte) integer;
         }
 
-        public int ToInt()
+        public int ToInt(RoundKind kind = RoundKind.HalfUp)
         {
             if (IsBoolean || IsByte)
             {
@@ -120,14 +120,13 @@ namespace Core.Primitive
             if (IsFloat)
             {
                 var floatValue = BitConverter.ToSingle(_bytes, 0);
-                return Numbers.GetInt(floatValue, RoundKind.Ceil);
+                return Numbers.GetInt(floatValue, kind);
             }
 
             if (IsDouble)
             {
                 var doubleValue = BitConverter.ToDouble(_bytes, 0);
-                var longValue = (long) doubleValue;
-                return (int) longValue;
+                return (int) Numbers.GetLong(doubleValue, kind);
             }
 
             if (IsLong)
@@ -137,13 +136,12 @@ namespace Core.Primitive
                 {
                     throw new OverflowException($"64 bits Integer [{longBits}] can not be converted to 32 bits Integer");
                 }
-
                 return (int) longBits;
             }
 
             if (IsDecimal)
             {
-                return Convert.ToInt32(Numbers.GetDecimal(_bytes));
+                return Numbers.GetInt(Numbers.GetDecimal(_bytes), kind);
             }
 
             if (Length > BytesPerInt32)
@@ -154,7 +152,7 @@ namespace Core.Primitive
             return BitConverter.ToInt32(_bytes, 0);
         }
 
-        public long ToLong()
+        public long ToLong(RoundKind kind = RoundKind.HalfUp)
         {
             if (IsLong)
             {
@@ -168,14 +166,12 @@ namespace Core.Primitive
             
             if (IsDouble)
             {
-                var doubleValue = BitConverter.ToDouble(_bytes, 0);
-                var longValue = (long) doubleValue;
-                return (int)longValue;
+                return Numbers.GetLong(ToDouble(), kind);
             }
 
             if (IsDecimal)
             {
-                return Convert.ToInt64(Numbers.GetDecimal(_bytes));
+                return Numbers.GetLong(Numbers.GetDecimal(_bytes), kind);
             }
 
             if (Length > BytesPerLong)
@@ -190,7 +186,7 @@ namespace Core.Primitive
         {
             if (IsByte || IsChar || IsBoolean || IsInt32 || IsShort)
             {
-                return float.Parse(ToInt().ToString());
+                return ToInt();
             }
 
             if (IsFloat)
@@ -201,6 +197,11 @@ namespace Core.Primitive
             if (IsDouble || IsLong)
             {
                 return Convert.ToSingle(ToDouble());
+            }
+
+            if (IsDecimal)
+            {
+                return decimal.ToSingle(Numbers.GetDecimal(_bytes));
             }
 
             if (Length > BytesPerFloat)
@@ -220,22 +221,22 @@ namespace Core.Primitive
 
             if (IsInt32 || IsBoolean || IsByte || IsShort || IsChar)
             {
-                return Convert.ToDouble(ToInt());
+                return ToInt();
             }
 
             if (IsLong)
             {
-                return Convert.ToDouble(ToLong());
+                return ToLong();
             }
 
             if (IsFloat)
             {
-                return Convert.ToDouble(ToFloat());
+                return ToFloat();
             }
 
             if (IsDecimal)
             {
-                return Convert.ToDouble(Numbers.GetDecimal(_bytes));
+                return decimal.ToDouble(Numbers.GetDecimal(_bytes));
             }
 
             if (Length > BytesPerDouble)
@@ -277,6 +278,7 @@ namespace Core.Primitive
             {
                 throw new OverflowException();
             }
+
             return 0;
         }
 
