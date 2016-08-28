@@ -104,9 +104,8 @@
     <Compile Include="IO\StringBuffer.cs" />
     <Compile Include="Json\JsonUtils.cs" />
     <Compile Include="Net\MimeTypes.cs" />
-    <Compile Include="Primitive\BigDecimal.cs" />
-    <Compile Include="Primitive\BigInteger.cs" />
     <Compile Include="Primitive\Bits.cs" />
+    <Compile Include="Primitive\IntBits.cs" />
     <Compile Include="Primitive\NumberExtenstion.cs" />
     <Compile Include="Primitive\ByteOrder.cs" />
     <Compile Include="Primitive\Chars.cs" />

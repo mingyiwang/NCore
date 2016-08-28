@@ -23,6 +23,17 @@ namespace Core.Test.Primitive {
 
            
             //Console.WriteLine(decimal.ToInt32(decimal.MaxValue));
+            var f = -1.5f;
+            var f2 = 1.5f;
+            var z = 0f;
+            Console.WriteLine(f.IsNegative());
+            Console.WriteLine(f2.IsNegative());
+            Console.WriteLine(z.IsNegative());
+            Console.WriteLine(Bits.Of(f).ToIntBits());
+            Console.WriteLine(Convert.ToString(0x80000000, 2));
+
+            Console.WriteLine(int.MaxValue);
+            Console.WriteLine(int.MinValue);
         }
 
     }

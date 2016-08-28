@@ -47,36 +47,36 @@ namespace Core.Primitive
         public const int BytesPerBoolean = 1;
         public const int BitsPerBoolean  = BitsPerByte * BytesPerBoolean;
 
-        public const int MAX_FLOAT_EXPONENT = 127;
-        public const int MIN_FLOAT_EXPONENT = -126;
+        public const int MaxFloatExponent = 127;
+        public const int MinFloatExponent = -126;
 
-        public const int  FLOAT_EXPONENT_MASK     = 0x7f800000;
-        public const int  FLOAT_SIGNIFICANT_MASK  = 0x007fffff;
-        public const int  FLOAT_NAN_BITS          = 0x7fc00000;
-        public const long DOUBLE_EXPONENT_MASK    = 0x7ff0000000000000L;
-        public const long DOUBLE_SIGNIFICANT_MASK = 0x000fffffffffffffL;
-        public const long DOUBLE_NAN_BITS         = 0x7ffc000000000000L;
+        public const int  FloatExponentMask     = 0x7f800000;
+        public const int  FloatSignificantMask  = 0x007fffff;
+        public const int  FloatNanBits          = 0x7fc00000;
+        public const long DoubleExponentMask    = 0x7ff0000000000000L;
+        public const long DoubleSignificantMask = 0x000fffffffffffffL;
+        public const long DoubleNanBits         = 0x7ffc000000000000L;
 
-        private const short TYPE_UNDEFINED     = -1;
-        private const short TYPE_BYTE          = 0;
-        private const short TYPE_SHORT_INTEGER = 1;
-        private const short TYPE_INTEGER       = 1 << 1;
-        private const short TYPE_LONG          = 1 << 2;
-        private const short TYPE_FLOAT         = 1 << 3;
-        private const short TYPE_DOUBLE        = 1 << 4;
-        private const short TYPE_DECIMAL       = 1 << 5;
-        private const short TYPE_CHAR          = 1 << 6;
-        private const short TYPE_BOOLEAN       = 1 << 7;
+        private const short TypeUndefined     = -1;
+        private const short TypeByte          = 0;
+        private const short TypeShortInteger  = 1;
+        private const short TypeInteger       = 1 << 1;
+        private const short TypeLong          = 1 << 2;
+        private const short TypeFloat         = 1 << 3;
+        private const short TypeDouble        = 1 << 4;
+        private const short TypeDecimal       = 1 << 5;
+        private const short TypeChar          = 1 << 6;
+        private const short TypeBoolean       = 1 << 7;
 
-        public bool IsByte    => _type == TYPE_BYTE;
-        public bool IsLong    => _type == TYPE_LONG;
-        public bool IsChar    => _type == TYPE_CHAR;
-        public bool IsShort   => _type == TYPE_SHORT_INTEGER;
-        public bool IsInt32   => _type == TYPE_INTEGER;
-        public bool IsFloat   => _type == TYPE_FLOAT;
-        public bool IsDouble  => _type == TYPE_DOUBLE;
-        public bool IsDecimal => _type == TYPE_DECIMAL;
-        public bool IsBoolean => _type == TYPE_BOOLEAN;
+        public bool IsByte    => _type == TypeByte;
+        public bool IsLong    => _type == TypeLong;
+        public bool IsChar    => _type == TypeChar;
+        public bool IsShort   => _type == TypeShortInteger;
+        public bool IsInt32   => _type == TypeInteger;
+        public bool IsFloat   => _type == TypeFloat;
+        public bool IsDouble  => _type == TypeDouble;
+        public bool IsDecimal => _type == TypeDecimal;
+        public bool IsBoolean => _type == TypeBoolean;
 
         public int  Length => _bytes.Length;
 
@@ -87,19 +87,70 @@ namespace Core.Primitive
         {
             Checks.NotNull(bytes);
             _bytes = bytes;
-            _type  = TYPE_UNDEFINED; // means nothing
+            _type  = TypeUndefined;
         }
 
-        public byte ToByte()
+        /// <summary>
+        /// Returns byte array
+        /// </summary>
+        /// <returns><code>byte[]</code></returns>
+        public byte[] ToBytes()
         {
-            var integer = ToInt();
-            if (integer > byte.MaxValue || integer < byte.MinValue)
-            {
-                throw new OverflowException($"Integer : [{integer}] can not be converted to byte.");
-            }
-            return (byte) integer;
+            return Arrays.CopyOf(_bytes);
         }
 
+        /// <summary>
+        /// Returns char of this bits
+        /// </summary>
+        /// <returns><code>char</code></returns>
+        public char ToChar()
+        {
+            if (IsChar || IsShort || IsByte)
+            {
+                return (char) ToInt();
+            }
+
+            if (IsInt32)
+            {
+                var intValue = ToInt();
+                if (intValue < char.MinValue || intValue > char.MaxValue)
+                {
+                    throw new OverflowException("Value can not be represented as Char.");
+                }
+                return (char) intValue;
+            }
+
+            if (IsLong)
+            {
+                var longValue = ToLong();
+                if (longValue < char.MinValue || longValue > char.MaxValue)
+                {
+                    throw new OverflowException("Value can not be represented as Char.");
+                }
+                return (char)longValue;
+            }
+
+            throw new ArgumentException("Value can not be represented as Char.");
+        }
+
+        /// <summary>
+        /// Returns boolean representation
+        /// </summary>
+        /// <returns><code>bool</code></returns>
+        public bool ToBool()
+        {
+            if (IsBoolean)
+            {
+                return BitConverter.ToBoolean(_bytes, 0);
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Returns integer representation
+        /// </summary>
+        /// <param name="kind"><code>RoundKind</code></param>
+        /// <returns><code>int</code></returns>
         public int ToInt(RoundKind kind = RoundKind.HalfUp)
         {
             if (IsBoolean || IsByte)
@@ -118,40 +169,38 @@ namespace Core.Primitive
             }
 
             if (IsFloat)
-            {
-                var floatValue = BitConverter.ToSingle(_bytes, 0);
-                return Numbers.GetInt(floatValue, kind);
+            { 
+                return Numbers.GetInt(ToFloat(), kind);
             }
 
             if (IsDouble)
             {
-                var doubleValue = BitConverter.ToDouble(_bytes, 0);
-                return (int) Numbers.GetLong(doubleValue, kind);
+                return Numbers.GetInt(ToDouble(), kind);
             }
 
             if (IsLong)
             {
-                var longBits = BitConverter.ToInt64(_bytes, 0);
-                if (longBits < int.MinValue || longBits > int.MaxValue)
-                {
-                    throw new OverflowException($"64 bits Integer [{longBits}] can not be converted to 32 bits Integer");
-                }
-                return (int) longBits;
+                return checked((int) ToLong());
             }
 
             if (IsDecimal)
             {
-                return Numbers.GetInt(Numbers.GetDecimal(_bytes), kind);
+                return Numbers.GetInt(ToDecimal(), kind);
             }
 
-            if (Length > BytesPerInt32)
+            if (Length != BytesPerInt32)
             {
-                throw new OverflowException("Integer can only hold 32 bits");
+                throw new OverflowException("Value can not be represented as Int32.");
             }
 
             return BitConverter.ToInt32(_bytes, 0);
         }
 
+        /// <summary>
+        /// Returns long representation
+        /// </summary>
+        /// <param name="kind"></param>
+        /// <returns></returns>
         public long ToLong(RoundKind kind = RoundKind.HalfUp)
         {
             if (IsLong)
@@ -159,11 +208,16 @@ namespace Core.Primitive
                 return BitConverter.ToInt64(_bytes, 0);
             }
 
-            if (IsInt32 || IsByte || IsShort || IsChar || IsBoolean || IsFloat)
+            if (IsInt32 || IsByte || IsShort || IsChar || IsBoolean)
             {
                 return ToInt();
             }
-            
+
+            if (IsFloat)
+            {
+                return Numbers.GetLong(ToFloat(), kind);
+            }
+
             if (IsDouble)
             {
                 return Numbers.GetLong(ToDouble(), kind);
@@ -171,42 +225,51 @@ namespace Core.Primitive
 
             if (IsDecimal)
             {
-                return Numbers.GetLong(Numbers.GetDecimal(_bytes), kind);
+                return Numbers.GetLong(ToDecimal(), kind);
             }
 
-            if (Length > BytesPerLong)
+            if (Length != BytesPerLong)
             {
-                throw new OverflowException("");
+                throw new OverflowException("Value can not be represented as Long.");
             }
 
             return BitConverter.ToInt64(_bytes, 0);
         }
 
+        /// <summary>
+        /// Returns float representation
+        /// </summary>
+        /// <returns></returns>
         public float ToFloat()
         {
-            if (IsByte || IsChar || IsBoolean || IsInt32 || IsShort)
-            {
-                return ToInt();
-            }
-
             if (IsFloat)
             {
                 return BitConverter.ToSingle(_bytes, 0);
             }
 
-            if (IsDouble || IsLong)
+            if (IsByte || IsChar || IsBoolean || IsShort || IsInt32)
             {
-                return Convert.ToSingle(ToDouble());
+                return ToInt();
+            }
+
+            if (IsLong)
+            {
+                return ToLong();
+            }
+
+            if (IsDouble)
+            {
+                return Numbers.GetFloat(ToDouble());
             }
 
             if (IsDecimal)
             {
-                return decimal.ToSingle(Numbers.GetDecimal(_bytes));
+                return Numbers.GetFloat(ToDecimal());
             }
 
-            if (Length > BytesPerFloat)
+            if (Length != BytesPerFloat)
             {
-                throw new OverflowException("");
+                throw new OverflowException("Value can not be represented as Float");
             }
 
             return BitConverter.ToSingle(_bytes, 0);
@@ -231,27 +294,37 @@ namespace Core.Primitive
 
             if (IsFloat)
             {
-                return ToFloat();
+                return Numbers.GetDouble(ToFloat());
             }
 
             if (IsDecimal)
             {
-                return decimal.ToDouble(Numbers.GetDecimal(_bytes));
+                return Numbers.GetDouble(ToDecimal());
             }
 
-            if (Length > BytesPerDouble)
+            if (Length != BytesPerDouble)
             {
-                throw new OverflowException($"{Length} is out of range.");
+                throw new OverflowException("Value can not be represented as Double.");
             }
 
             return BitConverter.ToDouble(_bytes, 0);
         }
 
+        /// <summary>
+        /// Returns decimal representation
+        /// </summary>
+        /// <returns></returns>
         public decimal ToDecimal()
         {
             if (IsDecimal)
             {
-                return Numbers.GetDecimal(_bytes);
+                return new decimal(new []
+                {
+                    BitConverter.ToInt32(new[] { _bytes[0],  _bytes[1],  _bytes[2],  _bytes[3]  }, 0),
+                    BitConverter.ToInt32(new[] { _bytes[4],  _bytes[5],  _bytes[6],  _bytes[7]  }, 0),
+                    BitConverter.ToInt32(new[] { _bytes[8],  _bytes[9],  _bytes[10], _bytes[11] }, 0),
+                    BitConverter.ToInt32(new[] { _bytes[12], _bytes[13], _bytes[14], _bytes[15] }, 0)
+                });
             }
 
             if (IsBoolean || IsByte || IsChar || IsShort || IsInt32)
@@ -274,83 +347,42 @@ namespace Core.Primitive
                 return new decimal(ToDouble());
             }
 
-            if (Length > BytesPerDecimal)
-            {
-                throw new OverflowException();
-            }
-
-            return 0;
+            throw new OverflowException("Value can not be represented as Decimal.");
         }
 
-        public char ToChar()
-        {
-            if (IsChar || IsShort)
-            {
-                return BitConverter.ToChar(_bytes, 0);
-            }
-
-            if (IsByte || IsBoolean)
-            {
-                return (char)ToInt();
-            }
-
-            if (IsInt32 || IsLong)
-            {
-                var integral = ToInt();
-                if (integral < char.MinValue || integral > char.MaxValue)
-                {
-                    throw new OverflowException();
-                }
-                return (char) integral;
-            }
-
-            if (IsDecimal || IsFloat || IsDouble)
-            {
-                throw new InvalidCastException("Can not cast float or double to char");
-            }
-
-            return  IsChar ? BitConverter.ToChar(_bytes, 0) : '0';
-        }
-
-        public bool ToBool()
-        {
-            return IsBoolean && BitConverter.ToBoolean(_bytes, 0);
-        }
-
-        public int ToIntBits()
-        {
-            if(IsFloat)
-            {
-                return FloatToIntBits(BitConverter.ToSingle(_bytes, 0));
-            }
-
-            if (IsDecimal)
-            {
-                var de = Numbers.GetDecimal(_bytes);
-                return Numbers.GetInt(decimal.ToInt64(de));
-            }
-
-            if (!IsDouble)
-            {
-                return ToInt();
-            }
-            
-            return Numbers.GetInt(DoubleToLongBits(ToDouble()));
-        }
-
-        public long ToLongBits()
+        /// <summary>
+        /// Returns Int bits
+        /// </summary>
+        /// <returns></returns>
+        public IntBits ToIntBits()
         {
             if (IsFloat)
             {
-                return FloatToIntBits(BitConverter.ToSingle(_bytes, 0));
+                return IntBits.Of(FloatToIntBits(ToFloat()));
             }
 
-            if (!IsDouble)
+            if (IsLong)
             {
-                return ToLong();
+                var longBits = ToLong();
+                var bytes    = BitConverter.GetBytes(longBits);
+                var lowInt   = BitConverter.ToInt32(new[] { bytes[0], bytes[1], bytes[2], bytes[3] }, 0);
+                var highInt  = BitConverter.ToInt32(new[] { bytes[4], bytes[5], bytes[6], bytes[7] }, 0);
+                return IntBits.Of(lowInt, highInt);
             }
 
-            return DoubleToLongBits(ToDouble());
+            if (IsDouble)
+            {
+                var longBits = DoubleToLongBits(ToDouble());
+                var bytes    = BitConverter.GetBytes(longBits);
+                var lowInt   = BitConverter.ToInt32(new[] { bytes[0], bytes[1], bytes[2], bytes[3] }, 0);
+                var highInt  = BitConverter.ToInt32(new[] { bytes[4], bytes[5], bytes[6], bytes[7] }, 0);
+                return IntBits.Of(lowInt, highInt);
+            }
+
+            return IsDecimal 
+                 ? IntBits.Of(decimal.GetBits(ToDecimal())) 
+                 : IntBits.Of(ToInt())
+                 ;
         }
 
         /// <summary>
@@ -396,16 +428,16 @@ namespace Core.Primitive
 
             return ToBinaryString();
         }
-
+        
         /// <summary>
         /// Convert byte array to binary string from high bit to low bit
         /// Windows is using Litter Edianess so we need to reverse the bytes
         /// </summary>
         /// <returns></returns>
-        public string ToBinaryString(ByteOrder order = ByteOrder.HigherBitsFirst)
+        public string ToBinaryString(ByteOrder order = ByteOrder.BigEndian)
         {
-            return order == ByteOrder.LowerBitsFirst
-                 ? Arrays.CopyOf(_bytes).Select(b => b.ToBinaryString()).AsString()
+            return order == ByteOrder.LittleEndian
+                 ? Arrays.CopyOf(_bytes).Select(b  => b.ToBinaryString()).AsString()
                  : Arrays.Reverse(_bytes).Select(b => b.ToBinaryString()).AsString();
         }
 
@@ -441,7 +473,7 @@ namespace Core.Primitive
             {
                 return FloatToIntBits(ToFloat());
             }
-
+            
             if (IsDouble)
             {
                 var longValue = DoubleToLongBits(ToDouble());
@@ -461,7 +493,7 @@ namespace Core.Primitive
         {
             return new Bits(new[] { value })
             {
-                _type = TYPE_BYTE
+                _type = TypeByte
             };
         }
 
@@ -469,7 +501,7 @@ namespace Core.Primitive
         {
             return new Bits(BitConverter.GetBytes(value))
             {
-                _type = TYPE_BOOLEAN
+                _type = TypeBoolean
             };
         }
 
@@ -477,7 +509,7 @@ namespace Core.Primitive
         {
             return new Bits(null)
             {
-                _type = TYPE_SHORT_INTEGER
+                _type = TypeShortInteger
             };
         }
 
@@ -485,7 +517,7 @@ namespace Core.Primitive
         {
             return new Bits(BitConverter.GetBytes(value))
             {
-                _type = TYPE_CHAR
+                _type = TypeChar
             };
         }
 
@@ -493,7 +525,7 @@ namespace Core.Primitive
         {
             return new Bits(BitConverter.GetBytes(value))
             {
-                _type = TYPE_INTEGER
+                _type = TypeInteger
             };
         }
 
@@ -501,7 +533,7 @@ namespace Core.Primitive
         {
             return new Bits(BitConverter.GetBytes(value))
             {
-                _type = TYPE_FLOAT
+                _type = TypeFloat
             };
         }
 
@@ -509,7 +541,7 @@ namespace Core.Primitive
         {
             return new Bits(BitConverter.GetBytes(value))
             {
-                _type = TYPE_LONG
+                _type = TypeLong
             };
         }
 
@@ -517,21 +549,21 @@ namespace Core.Primitive
         {
             return new Bits(BitConverter.GetBytes(value))
             {
-                _type = TYPE_DOUBLE
+                _type = TypeDouble
             };
         }
         
         public static Bits Of(decimal value)
         {
             var bytes = new List<byte>();
-            decimal.GetBits(value).ForEach(integral =>
+            decimal.GetBits(value).ForEach(integer =>
             {
-                bytes.AddRange(BitConverter.GetBytes(integral));
+                bytes.AddRange(BitConverter.GetBytes(integer));
             });
 
             return new Bits(bytes.ToArray())
             {
-                _type = TYPE_DECIMAL
+                _type = TypeDecimal
             };
         }
 
@@ -542,36 +574,35 @@ namespace Core.Primitive
                 return -126;
             }
 
-            var intBitsForFloat = FloatToIntBits(floatValue);
-            return ((intBitsForFloat >> 23) & 0x000000ff) - 127;
+            return ((FloatToIntBits(floatValue) >> 23) & 0x000000ff) - 127;
         }
 
         public static bool IsNaN(float floatValue)
         {
             var intRawValue = BitConverter.ToInt32(BitConverter.GetBytes(floatValue), 0);
-            return (intRawValue & FLOAT_EXPONENT_MASK) == FLOAT_EXPONENT_MASK 
-                && (intRawValue & FLOAT_SIGNIFICANT_MASK) != FLOAT_SIGNIFICANT_MASK;
+            return (intRawValue & FloatExponentMask) == FloatExponentMask 
+                && (intRawValue & FloatSignificantMask) != FloatSignificantMask;
         }
 
         public static bool IsNaN(double doubleValue)
         {
             var intRawValue = BitConverter.ToInt64(BitConverter.GetBytes(doubleValue), 0);
-            return (intRawValue & DOUBLE_EXPONENT_MASK) == DOUBLE_EXPONENT_MASK
-                && (intRawValue & DOUBLE_SIGNIFICANT_MASK) != 0;
+            return (intRawValue & DoubleExponentMask) == DoubleExponentMask
+                && (intRawValue & DoubleSignificantMask) != 0;
         }
 
         public static bool IsDenormalized(float floatValue)
         {
             var intRawValue = BitConverter.ToInt32(BitConverter.GetBytes(floatValue), 0);
-            return (intRawValue & FLOAT_EXPONENT_MASK) == 0     // exponent must be '0'
-                && (intRawValue & FLOAT_SIGNIFICANT_MASK) != 0; // significant must not be '0'
+            return (intRawValue & FloatExponentMask) == 0     // exponent must be '0'
+                && (intRawValue & FloatSignificantMask) != 0; // significant must not be '0'
         }
 
         public static bool IsDenormalized(double doubleValue)
         {
             var intRawValue = BitConverter.ToInt64(BitConverter.GetBytes(doubleValue), 0);
-            return (intRawValue & DOUBLE_EXPONENT_MASK) == 0
-                && (intRawValue & DOUBLE_SIGNIFICANT_MASK) != 0;
+            return (intRawValue & DoubleExponentMask) == 0
+                && (intRawValue & DoubleSignificantMask) != 0;
         }
 
         private static int FloatToRawBits(float floatValue)
@@ -584,9 +615,9 @@ namespace Core.Primitive
             var intRawValue = FloatToRawBits(floatValue);
 
             // Pick up a NAN Number to represent all NAN Numbers
-            if((intRawValue & FLOAT_EXPONENT_MASK) == FLOAT_EXPONENT_MASK && (intRawValue & FLOAT_SIGNIFICANT_MASK) != 0)
+            if((intRawValue & FloatExponentMask) == FloatExponentMask && (intRawValue & FloatSignificantMask) != 0)
             {
-                return FLOAT_NAN_BITS;
+                return FloatNanBits;
             }
 
             return intRawValue;
@@ -602,13 +633,16 @@ namespace Core.Primitive
             var longRawValue = DoubleToRawBits(doubleValue);
 
             // Pick up a NAN Number to represent all NAN Numbers
-            if((longRawValue & DOUBLE_EXPONENT_MASK) == DOUBLE_EXPONENT_MASK && (longRawValue & DOUBLE_SIGNIFICANT_MASK) != 0)
+            if((longRawValue & DoubleExponentMask) == DoubleExponentMask 
+            && (longRawValue & DoubleSignificantMask) != 0)
             {
-                return DOUBLE_NAN_BITS;
+                return DoubleNanBits;
             }
 
             return longRawValue;
         }
+        
+
 
     }
 

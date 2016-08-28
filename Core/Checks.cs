@@ -11,7 +11,7 @@ namespace Core
         {
             if (actual.GetType() != expectedType)
             {
-                Fail<ArgumentException>($"Expected Type : {expectedType.Name} But was : {actual.GetType().Name}");
+                Fail<ArgumentException>($"Expected Type {expectedType.Name} But was {actual.GetType().Name}");
             }
         }
 
@@ -89,19 +89,19 @@ namespace Core
 
         public static void Equals(int expected, int actual)
         {
-            Equals<ArgumentException>(expected, actual, $"[Precondition Checks Failed] - Expected {expected} but was {actual}.");
+            Equals<ArgumentException>(expected, actual, $"Expected {expected} but was {actual}.");
         }
 
         public static void Equals(string expected, string actual)
         {
-            Equals<ArgumentException>(expected, actual, $"[Precondition Checks Failed] - Expected {expected} but was {actual}.");
+            Equals<ArgumentException>(expected, actual, $"Expected {expected} but was {actual}.");
         }
 
         public static void Equals<T>(T expected, T actual)
         {
             if(!expected.Equals(actual))
             {
-                Fail<ArgumentException>($"[Precondition Check Failed] - value must be equal. expected {expected} but was {actual}");
+                Fail<ArgumentException>($"Expected {expected} but was {actual}.");
             }
         }
 
@@ -172,7 +172,7 @@ namespace Core
         {
             if (actual < min || actual > max)
             {
-                Fail<ArgumentOutOfRangeException>(message);
+                Fail<OverflowException>(message);
             }
         }
 
@@ -202,7 +202,7 @@ namespace Core
 
         public static void GreaterThanOrEqual<T>(int expected, int actual, string message) where T : Exception
         {
-            if(actual < expected)
+            if (actual < expected)
             {
                 Fail<T>(message);
             }
@@ -211,11 +211,12 @@ namespace Core
         private static void Fail<T>(string message) where T : Exception
         {
             var type = typeof(T);
+
             var constructor = type.GetConstructor(new[]{
                 typeof(string)
             });
             
-            if(constructor == null)
+            if (constructor == null)
             {
                 throw new ArgumentException("Exception[" + type.FullName + "] must have a constructor of a single string parameter");
             }

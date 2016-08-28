@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using Core.Collection;
 
 namespace Core.Primitive
 {
@@ -44,6 +42,7 @@ namespace Core.Primitive
             while (enumerator.MoveNext())
             {
                 var item = enumerator.Current;
+                builder.Append(_joiner);
                 builder.Append(generator == null ? Strings.Of(item) : generator(item));
             }
 
