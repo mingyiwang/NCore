@@ -58,6 +58,11 @@ namespace Core.Primitive
             return bytes.ToArray();
         }
 
+        public string ToBinaryString()
+        {
+            return Joiner.On("-").Join(Arrays.Reverse(GetBytes()), bytes => bytes.ToBinaryString());
+        }
+
         public bool Equals(IntBits other)
         {
             return Arrays.Equals(_bits, other._bits);
@@ -81,12 +86,10 @@ namespace Core.Primitive
 
         public override int GetHashCode()
         {
-            return (_bits != null ? _bits.GetHashCode() : 0);
-        }
-
-        public string ToBinaryString()
-        {
-            return Joiner.On("-").Join(Arrays.Reverse(GetBytes()), bytes => bytes.ToBinaryString());
+            unchecked
+            {
+                return _bits.Aggregate(0, (current, bit) => current * 37 ^ bit);
+            }
         }
 
         public override string ToString()

@@ -19,12 +19,12 @@ namespace Core.Primitive
 
         public static bool IsNegative(this float value)
         {
-            return (Bits.Of(value).ToIntBits().Last() & Numbers.FloatSignMask) == Numbers.FloatSignMask;            
+            return (Bits.Of(value).ToIntBits().Last() & Numbers.NegativeSignMask) == Numbers.NegativeSignMask;            
         }
 
         public static bool IsNegative(this double value)
         {
-            return (Bits.Of(value).ToIntBits().Last() & Numbers.FloatSignMask) == Numbers.FloatSignMask;
+            return (Bits.Of(value).ToIntBits().Last() & Numbers.NegativeSignMask) == Numbers.NegativeSignMask;
         }
 
     }

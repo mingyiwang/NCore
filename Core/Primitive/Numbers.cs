@@ -3,39 +3,6 @@
 namespace Core.Primitive
 {
 
-    public enum RoundKind
-    {
-        /// <summary>
-        /// No rounding, cut off all the digits after decimal point 
-        /// </summary>
-        None = 0,      
-
-        /// <summary>
-        /// The smallest interger greater or equal to current number
-        /// </summary>
-        Ceil = 1,
-
-        /// <summary>
-        /// The largest integer smaller or equal to current number
-        /// </summary>
-        Floor = 1 << 1,
-
-        /// <summary>
-        /// When there is a half of 1, then use the smallest integer greater than current number 
-        /// </summary>
-        HalfUp = 1 << 2,
-
-        /// <summary>
-        /// when there is a half of 1, then use the largest integer smaller than current number 
-        /// </summary>
-        HalfDown = 1 << 3,
-
-        /// <summary>
-        /// when there is a half of 1, then use nearest even number 
-        /// </summary>
-        HalfEven = 1 << 4  
-    }
-
     public sealed class Numbers
     {
 
@@ -44,7 +11,7 @@ namespace Core.Primitive
         public const long DoubleExponentMask    = 0x7ff0000000000000L;
         public const long DoubleSignificantMask = 0x000fffffffffffffL;
 
-        public const int    FloatSignMask   = int.MinValue;
+        public const int    NegativeSignMask   = int.MinValue;
         public const float  FloatHalfOfOne  = 0.5f;
         public const double DoubleHalfOfOne = 0.5d;
 
@@ -60,36 +27,46 @@ namespace Core.Primitive
             return v1Bits.Equals(v2Bits);
         }
 
-        public static bool Equals(double v1, double v2)
+        public static bool Equals(double d1, double d2)
         {
-            if (Bits.IsNaN(v1) || Bits.IsNaN(v2))
+            if (Bits.IsNaN(d1) || Bits.IsNaN(d2))
             {
                 return false;
             }
 
-            var v1Bits = Bits.Of(v1).ToIntBits();
-            var v2Bits = Bits.Of(v2).ToIntBits();
-            return v1Bits.Equals(v2Bits);
+            var d1Bits = Bits.Of(d1).ToIntBits();
+            var d2Bits = Bits.Of(d2).ToIntBits();
+            return d1Bits.Equals(d2Bits);
         }
 
+        /// <summary>
+        /// Returns Integer representation of Enum
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public static int GetInt(Enum input) {
             return Convert.ToInt32(input);
         }
 
+        /// <summary>
+        /// Returns Integer of String
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static int GetInt(string value)
         {
             return GetInt(value, 0);
+        }
+
+        public static int GetInt(long longValue)
+        {
+            return checked((int) longValue);
         }
 
         public static int GetInt(string value, int defaultValue)
         {
             int result;
             return int.TryParse(value, out result) ? result : defaultValue;
-        }
-
-        public static int GetInt(long longValue)
-        {
-            return checked((int) longValue);
         }
 
         public static int GetInt(float value, RoundKind round = RoundKind.HalfUp)
@@ -123,7 +100,7 @@ namespace Core.Primitive
                 }
                 case RoundKind.HalfDown:
                 {
-                    return diff < FloatHalfOfOne || Equals(diff, FloatHalfOfOne) ? intValue : intValue + 1;
+                    return diff < FloatHalfOfOne || Equals(diff, FloatHalfOfOne) || value < 0f ? intValue : intValue + 1;
                 }
                 case RoundKind.HalfEven:
                 {
@@ -139,30 +116,47 @@ namespace Core.Primitive
 
         public static int GetInt(decimal value, RoundKind round)
         {
-            if(value <= int.MinValue || value >= int.MaxValue)
+            if(value <= -2147483649m || value >= 2147483648m)
             {
-                throw new OverflowException("Value was either too large or too small for an Int64.");
+                throw new OverflowException("Value was either too large or too small for an Int32.");
             }
 
             var intValue = decimal.ToInt32(value);
             var diff = Math.Abs(value - intValue);
+            if(diff == decimal.Zero || intValue == int.MinValue || intValue == int.MaxValue)
+            {
+                return intValue;
+            }
+
             switch(round)
             {
                 case RoundKind.Ceil:
                 {
-                    return (value < 0) || diff == 0m ? intValue : 1 + intValue;
+                    return value < 0 || intValue == int.MaxValue 
+                         ? intValue 
+                         : 1 + intValue
+                         ;
                 }
                 case RoundKind.Floor:
                 {
-                    return value < 0 ? intValue - 1 : intValue;
+                    return value < 0 && intValue != int.MinValue 
+                         ? intValue - 1 
+                         : intValue
+                         ;
                 }
                 case RoundKind.HalfUp:
                 {
-                    return diff >= 0.5m ? intValue + 1 : intValue;
+                    return diff > 0.5m || diff == 0.5m 
+                         ? intValue + 1
+                         : intValue
+                         ;
                 }
                 case RoundKind.HalfDown:
                 {
-                    return diff <= 0.5m ? intValue : intValue + 1;
+                    return diff < 0.5m || diff == 0.5m
+                         ? intValue
+                         : value < 0 ?  intValue - 1 : intValue + 1
+                         ;
                 }
                 case RoundKind.HalfEven:
                 {
@@ -170,7 +164,11 @@ namespace Core.Primitive
                     {
                         return (intValue & 1) == 0 ? intValue : intValue + 1;
                     }
-                    return diff > 0.5m ? intValue + 1 : intValue;
+
+                    return diff > 0.5m 
+                         ? intValue + 1 
+                         : intValue
+                         ;
                 }
                 default:
                 return intValue;
@@ -326,13 +324,45 @@ namespace Core.Primitive
             }
         }
 
-      
         public static string GetBinaryString(int value)
         {
             return Bits.Of(value).ToBinaryString();
         }
 
 
+    }
+
+    public enum RoundKind
+    {
+        /// <summary>
+        /// No rounding, cut off all the digits after decimal point 
+        /// </summary>
+        None = 0,
+
+        /// <summary>
+        /// The smallest interger greater or equal to current number
+        /// </summary>
+        Ceil = 1,
+
+        /// <summary>
+        /// The largest integer smaller or equal to current number
+        /// </summary>
+        Floor = 1 << 1,
+
+        /// <summary>
+        /// When there is a half of 1, then use the smallest integer greater than current number 
+        /// </summary>
+        HalfUp = 1 << 2,
+
+        /// <summary>
+        /// when there is a half of 1, then use the largest integer smaller than current number 
+        /// </summary>
+        HalfDown = 1 << 3,
+
+        /// <summary>
+        /// when there is a half of 1, then use nearest even number 
+        /// </summary>
+        HalfEven = 1 << 4
     }
 
 

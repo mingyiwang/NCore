@@ -180,7 +180,7 @@ namespace Core.Primitive
 
             if (IsLong)
             {
-                return checked((int) ToLong());
+                return Numbers.GetInt(ToLong());
             }
 
             if (IsDecimal)
