@@ -58,6 +58,12 @@ namespace Core.Primitive
             return bytes.ToArray();
         }
 
+        public IntBits Reverse()
+        {
+            var reversed = _bits.Select(BitConverter.GetBytes).Reverse().ToArray();
+            return Of(0);
+        }
+
         public string ToBinaryString()
         {
             return Joiner.On("-").Join(Arrays.Reverse(GetBytes()), bytes => bytes.ToBinaryString());

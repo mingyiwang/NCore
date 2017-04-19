@@ -111,7 +111,7 @@
     <Compile Include="Primitive\Chars.cs" />
     <Compile Include="Primitive\DoubleConverter.cs" />
     <Compile Include="Primitive\Joiner.cs" />
-    <Compile Include="Primitive\Format\NumberFormatter.cs" />
+    <Compile Include="Primitive\NumberFormatter.cs" />
     <Compile Include="Persist\PersistentService.cs" />
     <Compile Include="Persist\IPersistentService.cs" />
     <Compile Include="Expr\Eval\RoslynEvaluator.cs" />

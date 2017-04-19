@@ -1,4 +1,4 @@
-﻿namespace Core.Primitive.Format
+﻿namespace Core.Primitive
 {
 
     public class NumberFormatter

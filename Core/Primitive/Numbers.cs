@@ -48,19 +48,14 @@ namespace Core.Primitive
             return Convert.ToInt32(input);
         }
 
-        /// <summary>
-        /// Returns Integer of String
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static int GetInt(string value)
-        {
-            return GetInt(value, 0);
-        }
-
         public static int GetInt(long longValue)
         {
             return checked((int) longValue);
+        }
+
+        public static int GetInt(string value)
+        {
+            return GetInt(value, 0);
         }
 
         public static int GetInt(string value, int defaultValue)
@@ -71,13 +66,12 @@ namespace Core.Primitive
 
         public static int GetInt(float value, RoundKind round = RoundKind.HalfUp)
         {
-
             if (value <= -2147483649f || value >= 2147483648f)
             {
                 throw new OverflowException("Value was either too large or too small for an Int32.");
             }
 
-            var intValue = (int)value;
+            var intValue = (int) value;
             var diff = Math.Abs(value - intValue);
             if (Equals(diff, 0f) || intValue == int.MinValue || intValue == int.MaxValue)
             {
@@ -86,29 +80,47 @@ namespace Core.Primitive
 
             switch (round)
             {
+                case RoundKind.Up:
+                {
+                    return value.IsNegative() ? intValue - 1 : intValue + 1;
+                }
+                case RoundKind.Down:
+                {
+                    return intValue;
+                }
                 case RoundKind.Ceil :
                 {
-                    return value.IsNegative() || intValue == int.MaxValue ? intValue : 1 + intValue;
+                    return value.IsNegative() ? intValue : intValue + 1;
                 }
                 case RoundKind.Floor:
                 {
-                    return value.IsNegative() && intValue != int.MinValue ? intValue - 1 : intValue;
+                    return value.IsNegative() ? intValue - 1 : intValue;
                 }
                 case RoundKind.HalfUp:
                 {
-                    return diff > FloatHalfOfOne || Equals(diff, FloatHalfOfOne) ? intValue + 1 : intValue;
+                    return diff < FloatHalfOfOne 
+                          ? intValue 
+                          : value.IsNegative() ? intValue - 1 : intValue + 1;
                 }
                 case RoundKind.HalfDown:
                 {
-                    return diff < FloatHalfOfOne || Equals(diff, FloatHalfOfOne) || value < 0f ? intValue : intValue + 1;
+                    return diff < FloatHalfOfOne || Equals(diff, FloatHalfOfOne)
+                         ? intValue
+                         : value.IsNegative() ? intValue - 1 : intValue + 1;
                 }
                 case RoundKind.HalfEven:
                 {
                     if (Equals(diff, FloatHalfOfOne))
                     {
-                        return (intValue & 1) == 0 ? intValue : intValue + 1;
+                        return (intValue & 1) == 0 
+                              ? intValue 
+                              : value.IsNegative() ? intValue - 1 : intValue + 1;
                     }
-                    return diff > FloatHalfOfOne ? intValue + 1 : intValue;
+
+                    return diff > FloatHalfOfOne 
+                         ? value.IsNegative() ? intValue - 1 : intValue + 1 
+                         : intValue
+                         ;
                 }
                 default : return intValue;
             }            
@@ -217,11 +229,6 @@ namespace Core.Primitive
             return double.TryParse(value, out result) ? result : defaultValue;
         }
 
-        public static decimal GetDecimal(int value)
-        {
-            return new decimal(value);
-        }
-
         public static decimal GetDecimal(string value)
         {
             return GetDecimal(value, decimal.Zero);
@@ -283,52 +290,10 @@ namespace Core.Primitive
             }
         }
        
-        public static long GetLong(decimal value, RoundKind round)
-        {
-            if(value <= long.MinValue || value >= long.MaxValue)
-            {
-                throw new OverflowException("Value was either too large or too small for an Int64.");
-            }
-
-            var longValue = decimal.ToInt64(value);
-            var diff = Math.Abs(value - longValue);
-
-            switch (round)
-            {
-                case RoundKind.Ceil:
-                {
-                    return (value < 0) || diff == 0 ? longValue : 1 + longValue;
-                }
-                case RoundKind.Floor:
-                {
-                    return value < 0 ? longValue - 1 : longValue;
-                }
-                case RoundKind.HalfUp:
-                {
-                    return diff > 0.5m || diff == 0.5m ? longValue + 1 : longValue;
-                }
-                case RoundKind.HalfDown:
-                {
-                    return diff < 0.5m || diff == 0.5m ? longValue : longValue + 1;
-                }
-                case RoundKind.HalfEven:
-                {
-                    if(Equals(diff, 0.5m))
-                    {
-                        return (longValue & 1) == 0 ? longValue : longValue + 1;
-                    }
-                    return diff > 0.5m ? longValue + 1 : longValue;
-                }
-                default:
-                return longValue;
-            }
-        }
-
         public static string GetBinaryString(int value)
         {
             return Bits.Of(value).ToBinaryString();
         }
-
 
     }
 
@@ -340,29 +305,43 @@ namespace Core.Primitive
         None = 0,
 
         /// <summary>
-        /// The smallest interger greater or equal to current number
+        /// Away from Zero, if positive then interger part plus 1 else then interger part minus 1
         /// </summary>
-        Ceil = 1,
+        Up = 1,
+
+        /// <summary>
+        /// Twards to Zero, just the integer part of current number
+        /// </summary>
+        Down = 1 << 1,
+
+        /// <summary>
+        /// The smallest interger greater or equal to current number
+        /// When number is poistive then similiar to Up
+        /// When number is negative then similiar to Down
+        /// </summary>
+        Ceil = 1 << 2,
 
         /// <summary>
         /// The largest integer smaller or equal to current number
+        /// When number is positive then similiar to Down
+        /// When number is negative then similiar to Up
         /// </summary>
-        Floor = 1 << 1,
+        Floor = 1 << 3,
 
         /// <summary>
         /// When there is a half of 1, then use the smallest integer greater than current number 
         /// </summary>
-        HalfUp = 1 << 2,
+        HalfUp = 1 << 4,
 
         /// <summary>
         /// when there is a half of 1, then use the largest integer smaller than current number 
         /// </summary>
-        HalfDown = 1 << 3,
+        HalfDown = 1 << 5,
 
         /// <summary>
         /// when there is a half of 1, then use nearest even number 
         /// </summary>
-        HalfEven = 1 << 4
+        HalfEven = 1 << 6
     }
 
 

@@ -115,7 +115,7 @@ namespace Core.Primitive
                 var intValue = ToInt();
                 if (intValue < char.MinValue || intValue > char.MaxValue)
                 {
-                    throw new OverflowException("Value can not be represented as Char.");
+                    throw new OverflowException("Value was either too large or too small for an char.");
                 }
                 return (char) intValue;
             }
@@ -125,12 +125,12 @@ namespace Core.Primitive
                 var longValue = ToLong();
                 if (longValue < char.MinValue || longValue > char.MaxValue)
                 {
-                    throw new OverflowException("Value can not be represented as Char.");
+                    throw new OverflowException("Value was either too large or too small for an char.");
                 }
                 return (char)longValue;
             }
 
-            throw new ArgumentException("Value can not be represented as Char.");
+            throw new ArgumentException("Value was either too large or too small for an char.");
         }
 
         /// <summary>
@@ -190,7 +190,7 @@ namespace Core.Primitive
 
             if (Length != BytesPerInt32)
             {
-                throw new OverflowException("Value can not be represented as Int32.");
+                throw new OverflowException("Value was either too large or too small for an Int32.");
             }
 
             return BitConverter.ToInt32(_bytes, 0);
@@ -225,12 +225,12 @@ namespace Core.Primitive
 
             if (IsDecimal)
             {
-                return Numbers.GetLong(ToDecimal(), kind);
+                return (long) ToDecimal();
             }
 
             if (Length != BytesPerLong)
             {
-                throw new OverflowException("Value can not be represented as Long.");
+                throw new OverflowException("Value was either too large or too small for an Long.");
             }
 
             return BitConverter.ToInt64(_bytes, 0);
@@ -269,7 +269,7 @@ namespace Core.Primitive
 
             if (Length != BytesPerFloat)
             {
-                throw new OverflowException("Value can not be represented as Float");
+                throw new OverflowException("Value was either too large or too small for an Float");
             }
 
             return BitConverter.ToSingle(_bytes, 0);
@@ -304,7 +304,7 @@ namespace Core.Primitive
 
             if (Length != BytesPerDouble)
             {
-                throw new OverflowException("Value can not be represented as Double.");
+                throw new OverflowException("Value was either too large or too small for an Double.");
             }
 
             return BitConverter.ToDouble(_bytes, 0);
@@ -347,7 +347,7 @@ namespace Core.Primitive
                 return new decimal(ToDouble());
             }
 
-            throw new OverflowException("Value can not be represented as Decimal.");
+            throw new OverflowException("Value was either too large or too small for an Decimal.");
         }
 
         /// <summary>
